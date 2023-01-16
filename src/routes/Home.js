@@ -1,7 +1,10 @@
+import Header from "../components/Header";
+
+
 function Home() {
-    return (
-      <h1 className="text-3xl font-bold underline">hello world</h1>
-    );
-  }
+  return (
+    <Header />
+  );
+}
 
 export default Home
