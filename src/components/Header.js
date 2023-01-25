@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { baseUrl, getCookie } from "../api";
+import LogIn from "./LogIn";
 
 function Header() {
-    const [permission, setPermission] = useState(true);
+    const [permission, setPermission] = useState(false);
+    const [isLogIn, setIsLogIn] = useState(false);
     const [user, setUser] = useState({});
     async function userProfile() {
         let response = await fetch(`${baseUrl}/users`, {
@@ -13,9 +15,9 @@ function Header() {
             },
         });
         let data = await response.json();
-        if (!response.ok) {
-            setPermission(false);
-        } else {
+        if (response.ok) {
+            setPermission(true);
+            setIsLogIn(true);
             setUser(data);
         }
     }
@@ -38,22 +40,25 @@ function Header() {
     }
     useEffect(() => {
         userProfile();
-    }, [permission]);
+    }, [permission, isLogIn]);
     return (
-        <div className="flex justify-between h-28 items-center border-b-2">
-            <span className="text-5xl">Manager</span>
-            <div className="flex space-x-4 items-center">
-                {permission ? 
-                    <>
-                        <span className="w-24">{user.name}</span>
-                        {user.is_staff ? <button className="border-solid border-2 rounded-md w-32 h-12 border-purple-300 text-black">Management</button>: null}
-                        <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white" onClick={logOut}>Log Out</button> 
-                    </> :
-                    <>
-                        <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white">Sign Up</button>
-                    </>
-                }
+        <div>
+            <div className="flex justify-between h-28 items-center border-b-2">
+                <span className="text-5xl">Manager</span>
+                <div className="flex space-x-4 items-center">
+                    {permission ? 
+                        <>
+                            <span className="w-24">{user.name}</span>
+                            {user.is_staff ? <button className="border-solid border-2 rounded-md w-32 h-12 border-purple-300 text-black">Management</button>: null}
+                            <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white" onClick={logOut}>Log Out</button> 
+                        </> :
+                        <>
+                            <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white">Sign Up</button>
+                        </>
+                    }
+                </div>
             </div>
+            <LogIn permission={permission} isLogIn={isLogIn} />
         </div>
     );
 }
