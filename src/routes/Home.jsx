@@ -34,7 +34,7 @@ function Home() {
     return (
         <div>
             { permission ?
-                <Link to={"branad"}>
+                <Link to={"brand"}>
                     <div className="flex flex-col mt-32 justify-center items-center">
                         <span>Go to Brand &rarr;</span>
                     </div>
