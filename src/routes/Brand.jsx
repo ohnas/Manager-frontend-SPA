@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { baseUrl } from "../api";
 
 
@@ -21,7 +22,9 @@ function Brand() {
     return (
         <div className="flex flex-col mt-32 justify-center items-center">
             { brands.map((brand) =>
-                <li key={brand.pk} className="list-none mb-10">{brand.name}</li>
+                <Link to={`/brands/${brand.pk}`} key={brand.pk}>
+                    <li className="list-none mb-10">{brand.name}</li>
+                </Link>
                 )
             }
         </div>

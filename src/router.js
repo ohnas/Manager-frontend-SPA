@@ -3,6 +3,7 @@ import Root from "./components/Root";
 import NotFound from "./routes/NotFound";
 import Home from "./routes/Home";
 import Brand from "./routes/Brand";
+import BrandDetail from "./routes/BrandDetail";
 
 const router = createBrowserRouter([
     {
@@ -15,8 +16,12 @@ const router = createBrowserRouter([
                 element: <Home />,
             },
             {
-                path: "brand",
+                path: "brands",
                 element: <Brand />,
+            },
+            {
+                path: "brands/:brandPk",
+                element: <BrandDetail />,
             },
         ]
     }
