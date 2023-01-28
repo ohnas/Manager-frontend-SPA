@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { baseUrl, getCookie } from "../api";
 import Header from "./Header";
 
 function Root() {
     const [permission, setPermission] = useState(false);
     const [user, setUser] = useState({});
+    const navigate = useNavigate();
     async function logOut() {
         let csrftoken = getCookie('csrftoken');
         let response = await fetch(`${baseUrl}/users/log-out` , {
@@ -19,8 +20,7 @@ function Root() {
         if(response.ok) {
             alert("로그아웃");
             setPermission(false);
-        } else {
-            alert("확인해주세요");
+            return navigate("");
         }
     }
     async function userProfile() {
