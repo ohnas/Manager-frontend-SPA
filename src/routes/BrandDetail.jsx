@@ -14,36 +14,42 @@ function BrandDetail() {
             },
         });
         let data = await response.json();
-        console.log(data);
         setBrand(data);
     }
-    console.log(brandPk);
     useEffect(() => {
         brandDetail();
     }, []);
     return (
-        <div>
-            { brand.product_set.map((product) => 
-                <div key={product.pk}>
-                    <select>
-                        <option>{product.name}</option>
-                    </select>
-                    <br></br>
-                    <span>{product.cost}</span>
+        <>
+            { Object.keys(brand).length === 0 ? 
+                    <div className="flex flex-col mt-32 justify-center items-center">
+                        <span>There is no Brand Detail.</span>
+                    </div>
+                :
+                <div>
+                    { brand.product_set.map((product) => 
+                        <div key={product.pk}>
+                            <select>
+                                <option>{product.name}</option>
+                            </select>
+                            <br></br>
+                            <span>{product.cost}</span>
+                        </div>
+                        )
+                    }
+                    { brand.site_set.map((site) => 
+                        <div key={site.pk}>
+                            <select>
+                                <option>{site.name}</option>
+                            </select>
+                            <br></br>
+                            <span>{site.url}</span>
+                        </div>
+                        )
+                    }
                 </div>
-                )
             }
-            { brand.site_set.map((site) => 
-                <div key={site.pk}>
-                    <select>
-                        <option>{site.name}</option>
-                    </select>
-                    <br></br>
-                    <span>{site.url}</span>
-                </div>
-                )
-            }
-        </div>
+        </>
     );
 }
 
