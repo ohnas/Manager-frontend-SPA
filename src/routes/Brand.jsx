@@ -20,14 +20,22 @@ function Brand() {
         myBrand();
     }, []);
     return (
-        <div className="flex flex-col mt-32 justify-center items-center">
-            { brands.map((brand) =>
-                <Link to={`/brands/${brand.pk}`} key={brand.pk}>
-                    <li className="list-none mb-10">{brand.name}</li>
-                </Link>
-                )
+        <>
+            { brands.length === 0 ? 
+                    <div className="flex flex-col mt-32 justify-center items-center">
+                        <span>There is no brand.</span>
+                    </div>
+                :
+                    <div className="flex flex-col mt-32 justify-center items-center">
+                        { brands.map((brand) =>
+                            <Link to={`/brands/${brand.pk}`} key={brand.pk}>
+                                <li className="list-none mb-10">{brand.name}</li>
+                            </Link>
+                            )
+                        }
+                    </div>
             }
-        </div>
+        </>
     );
 }
 

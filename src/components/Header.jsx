@@ -1,7 +1,7 @@
 function Header({permission, user, logOut}) {
     return (
         <div className="flex justify-between h-28 items-center border-b-2">
-            <span className="text-5xl">Manager</span>
+            <span className="text-3xl">Manager</span>
             <div className="flex space-x-4 items-center">
                 { permission ? 
                     <>
