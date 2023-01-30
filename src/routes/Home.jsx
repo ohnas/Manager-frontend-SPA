@@ -1,19 +1,12 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { Link, useOutletContext } from "react-router-dom";
 import { baseUrl, getCookie } from "../api";
 import LogIn from "../components/LogIn";
 
 function Home() {
     const [permission, setPermission] = useOutletContext();
-    const [logInData, setLogInData] = useState();
-    function onChange(event) {
-        setLogInData({
-            ...logInData,
-            [event.target.name]: event.target.value,
-        });
-      }
-    async function onLogIn(event) {
-        event.preventDefault();
+    const { register, handleSubmit } = useForm();
+    async function onLogIn(logInData) {
         let csrftoken = getCookie('csrftoken');
         let response = await fetch(`${baseUrl}/users/log-in` , {
             method : "POST",
@@ -25,7 +18,6 @@ function Home() {
             body : JSON.stringify(logInData),
         });
         if (response.ok) {
-            setLogInData("");
             setPermission(true);
         } else {
             alert("id 와 pw 를 확인하세요")
@@ -40,7 +32,7 @@ function Home() {
                     </div>
                 </Link>
             : 
-                <LogIn onChange={onChange} onLogIn={onLogIn} />
+                <LogIn register={register} handleSubmit={handleSubmit} onLogIn={onLogIn} />
             }
         </div>
     );
