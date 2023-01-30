@@ -4,6 +4,7 @@ import NotFound from "./routes/NotFound";
 import Home from "./routes/Home";
 import Brand from "./routes/Brand";
 import BrandDetail from "./routes/BrandDetail";
+import SignUp from "./routes/SignUp";
 
 const router = createBrowserRouter([
     {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
             {
                 path: "brands/:brandPk",
                 element: <BrandDetail />,
+            },
+            {
+                path: "signup",
+                element: <SignUp />,
             },
         ]
     }

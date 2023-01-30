@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 function Header({permission, user, logOut}) {
     return (
         <div className="flex justify-between h-28 items-center border-b-2">
@@ -14,7 +16,9 @@ function Header({permission, user, logOut}) {
                         <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white" onClick={logOut}>Log Out</button> 
                     </> :
                     <>
-                        <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white">Sign Up</button>
+                        <Link to={"/signup"}>
+                            <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white">Sign Up</button>
+                        </Link>
                     </>
                 }
             </div>

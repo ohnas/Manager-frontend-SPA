@@ -3,6 +3,7 @@ import { baseUrl } from "../api";
 
 function Detail({brand}) {
     const [retrieve, setRetrieve] = useState({});
+    const [retrieveSaleData, setRetrieveSaleData] = useState([]);
     function onChange(event) {
         setRetrieve({
             ...retrieve,
@@ -18,13 +19,14 @@ function Detail({brand}) {
                 'Content-Type': 'application/json',
             },
         });
-        let data = await response.json();
+        let saleData = await response.json();
         if (response.ok) {
-            console.log(data);
+            setRetrieveSaleData(saleData);
         }
     }
     return (
         <>
+        <div>
             { Object.keys(brand).length === 0 ? 
                     <div className="flex flex-col mt-32 justify-center items-center">
                         <span>There is no Brand Detail.</span>
@@ -63,6 +65,34 @@ function Detail({brand}) {
                     <button>Retrieve</button>
                 </form>
             }
+        </div>
+        <div>
+            <table className="table-auto">
+                <thead>
+                    <tr>
+                        <th>name</th>
+                        <th>count</th>
+                        <th>price</th>
+                        <th>delivery_price</th>
+                        <th>order_time</th>
+                        <th>pay_time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {retrieveSaleData.map((data) => 
+                        <tr key={data.product.pk}>
+                            <td>{data.product.name}</td>
+                            <td>{data.count}</td>
+                            <td>{data.price}</td>
+                            <td>{data.delivery_price}</td>
+                            <td>{data.order_time}</td>
+                            <td>{data.pay_time}</td>
+                        </tr>
+                        )
+                    }
+                </tbody>
+            </table>
+        </div>
         </>
     );
 }
