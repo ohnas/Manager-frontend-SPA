@@ -1,18 +1,10 @@
-import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { baseUrl } from "../api";
 
 function Detail({brand}) {
-    const [retrieve, setRetrieve] = useState({});
-    const [retrieveSaleData, setRetrieveSaleData] = useState([]);
-    function onChange(event) {
-        setRetrieve({
-            ...retrieve,
-            [event.target.name]: event.target.value,
-        });
-    }
-    async function onRetrieve(event) {
-        event.preventDefault();
-        let response = await fetch(`${baseUrl}/sales/?product=${retrieve.product}&site=${retrieve.site}&date=${retrieve.date}`, {
+    const { register, handleSubmit } = useForm();
+    async function onSubmit(retrieveData) {
+        let response = await fetch(`${baseUrl}/sales/?product=${retrieveData.product}&site=${retrieveData.saleSite}&date=${retrieveData.dateFrom}`, {
             method : "GET",
             credentials: "include",
             headers : {
@@ -21,7 +13,7 @@ function Detail({brand}) {
         });
         let saleData = await response.json();
         if (response.ok) {
-            setRetrieveSaleData(saleData);
+            console.log(saleData);
         }
     }
     return (
@@ -32,15 +24,15 @@ function Detail({brand}) {
                         <span>There is no Brand Detail.</span>
                     </div>
                 :
-                <form className="flex items-center justify-evenly" onSubmit={onRetrieve}>
-                    <select onChange={onChange} name="product">
+                <form onSubmit={handleSubmit(onSubmit)} className="flex items-center justify-evenly mt-5" >
+                    <select {...register("product", {required:true})} name="product">
                         <option value="">Choose a product</option>
                         { brand.product_set.map((product) => 
                             <option key={product.pk} value={product.pk}>{product.name}</option>
                             )
                         }
                     </select>
-                    <select onChange={onChange} name="site">
+                    <select {...register("saleSite", {required:true})} name="saleSite">
                         <option value="">Choose a sale site</option>
                         { brand.site_set.map((site) => (
                             site.kind === "sale_site" ? 
@@ -49,7 +41,7 @@ function Detail({brand}) {
                                 null
                         ))}
                     </select>
-                    <select>
+                    <select {...register("advertisingSite", {required:true})} name="advertisingSite">
                         <option value="">Choose an advertising site</option>
                         { brand.site_set.map((site) => (
                             site.kind === "advertising_site" ? 
@@ -58,15 +50,15 @@ function Detail({brand}) {
                                 null
                         ))}
                     </select>
-                    <label htmlFor="retrieve_date_from">START</label>
-                    <input onChange={onChange} name="date" id="retrieve_date_from" type={"date"} />
-                    <label htmlFor="retrieve_date_to">END</label>
-                    <input id="retrieve_date_to" type={"date"} />
+                    <label htmlFor="dateFrom">FROM</label>
+                    <input {...register("dateFrom", {required:true})} name="dateFrom" id="dateFrom" type={"date"}  />
+                    <label htmlFor="retrieve_date_to">TO</label>
+                    <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} />
                     <button>Retrieve</button>
                 </form>
             }
         </div>
-        <div>
+        {/* <div>
             <table className="table-auto">
                 <thead>
                     <tr>
@@ -92,7 +84,7 @@ function Detail({brand}) {
                     }
                 </tbody>
             </table>
-        </div>
+        </div> */}
         </>
     );
 }
