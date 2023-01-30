@@ -1,15 +1,22 @@
 import { Link } from "react-router-dom";
 
-function Header({permission, user, logOut}) {
+function Header({permission, user, logOut, brandName}) {
     return (
         <div className="flex justify-between h-28 items-center border-b-2">
             <span className="text-3xl">Manager</span>
+            { brandName ? 
+                    <span className="text-5xl">{brandName}</span>
+                :
+                    null
+            }
             <div className="flex space-x-4 items-center">
                 { permission ? 
                     <>
                         <span className="w-24">{user.name}</span>
                         {user.is_staff ? 
-                            <button className="border-solid border-2 rounded-md w-32 h-12 border-purple-300 text-black">Management</button>
+                            <Link to={"/management"}>
+                                <button className="border-solid border-2 rounded-md w-32 h-12 border-purple-300 text-black">Management</button>
+                            </Link>
                             :
                             null
                         }

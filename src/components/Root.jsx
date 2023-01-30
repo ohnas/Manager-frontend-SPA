@@ -6,6 +6,7 @@ import Header from "./Header";
 function Root() {
     const [permission, setPermission] = useState(false);
     const [user, setUser] = useState({});
+    const [brandName, setBrandName] = useState();
     const navigate = useNavigate();
     async function logOut() {
         let csrftoken = getCookie('csrftoken');
@@ -42,8 +43,13 @@ function Root() {
     }, [permission]);
     return (
         <div>
-            <Header permission={permission} user={user} logOut={logOut} />
-            <Outlet context={[permission, setPermission]} />
+            <Header permission={permission} user={user} logOut={logOut} brandName={brandName} />
+            <Outlet context={{
+                        isPermission:[permission, setPermission],
+                        userData:[user],
+                        brandName: [setBrandName],
+                    }
+                } />
         </div>
     );
 }

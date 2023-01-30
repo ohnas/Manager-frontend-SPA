@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useOutletContext, useParams } from "react-router-dom";
 import { baseUrl } from "../api";
 import Detail from "../components/Detail";
 
 function BrandDetail() {
+    const { 
+        brandName: [setBrandName],
+    } = useOutletContext();
     let {brandPk} = useParams();
     const [brand, setBrand] = useState({});
     async function brandDetail() {
@@ -16,6 +19,7 @@ function BrandDetail() {
         });
         let data = await response.json();
         setBrand(data);
+        setBrandName(data.name);
     }
     useEffect(() => {
         brandDetail();

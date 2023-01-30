@@ -5,6 +5,7 @@ import Home from "./routes/Home";
 import Brand from "./routes/Brand";
 import BrandDetail from "./routes/BrandDetail";
 import SignUp from "./routes/SignUp";
+import Management from "./routes/Management";
 
 const router = createBrowserRouter([
     {
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
             {
                 path: "signup",
                 element: <SignUp />,
+            },
+            {
+                path: "management",
+                element: <Management />,
             },
         ]
     }

@@ -4,7 +4,9 @@ import { baseUrl, getCookie } from "../api";
 import LogIn from "../components/LogIn";
 
 function Home() {
-    const [permission, setPermission] = useOutletContext();
+    const { 
+        isPermission:[permission, setPermission],
+    } = useOutletContext();
     const { register, handleSubmit } = useForm();
     async function onLogIn(logInData) {
         let csrftoken = getCookie('csrftoken');
