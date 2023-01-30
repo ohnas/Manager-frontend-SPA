@@ -4,7 +4,9 @@ import { useNavigate, useOutletContext } from "react-router-dom";
 import { baseUrl, getCookie } from "../api";
 
 function SignUp() {
-    const [permission] = useOutletContext();
+    const { 
+        isPermission:[permission],
+    } = useOutletContext();
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
     function goHome() {

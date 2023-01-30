@@ -21,6 +21,7 @@ function Root() {
         if(response.ok) {
             alert("로그아웃");
             setPermission(false);
+            setBrandName("");
             return navigate("");
         }
     }
