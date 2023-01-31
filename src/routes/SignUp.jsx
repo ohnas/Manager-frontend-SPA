@@ -53,7 +53,7 @@ function SignUp() {
                     <input {...register("name", {required: true, pattern: /^[가-힣]/})} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                     <label htmlFor="email">E-MAIL</label>
                     <input {...register("email", {required: true})} id="email" type="email" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                    <button className="border-solid border-2 rounded-md w-72 h-12 bg-purple-700 text-white">Sign up</button>
+                    <button className="w-56 h-12 hover:border-b-2 border-purple-500">Sign Up</button>
                 </form>
             }
         </div>

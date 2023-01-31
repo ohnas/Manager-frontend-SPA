@@ -1,8 +1,24 @@
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { baseUrl } from "../api";
 
 function Detail({brand}) {
     const { register, handleSubmit } = useForm();
+    const [maxDate, setMaxDate] = useState();
+    const maxDateVale = (() => {
+        const today = new Date();
+        const yesterday = new Date(today.setDate(today.getDate() - 1));
+        let month = yesterday.getMonth() + 1;
+        if(month < 10) {
+            month = `0${month}`
+        }
+        let date = yesterday.getDate();
+        if(date < 10) {
+            date = `0${date}`
+        }
+        const yesterdayValue = `${yesterday.getFullYear()}-${month}-${date}`;
+        setMaxDate(yesterdayValue);
+    });
     async function onSubmit(retrieveData) {
         let response = await fetch(`${baseUrl}/sales/?product=${retrieveData.product}&site=${retrieveData.saleSite}&date=${retrieveData.dateFrom}`, {
             method : "GET",
@@ -16,6 +32,9 @@ function Detail({brand}) {
             console.log(saleData);
         }
     }
+    useEffect(() => {
+        maxDateVale();
+    }, []);
     return (
         <>
         <div>
@@ -25,14 +44,14 @@ function Detail({brand}) {
                     </div>
                 :
                 <form onSubmit={handleSubmit(onSubmit)} className="flex items-center justify-evenly mt-5" >
-                    <select {...register("product", {required:true})} name="product">
+                    <select {...register("product", {required:true})} name="product" className="border-2 rounded-md w-72 border-gray-200 text-center">
                         <option value="">Choose a product</option>
                         { brand.product_set.map((product) => 
                             <option key={product.pk} value={product.pk}>{product.name}</option>
                             )
                         }
                     </select>
-                    <select {...register("saleSite", {required:true})} name="saleSite">
+                    <select {...register("saleSite", {required:true})} name="saleSite" className="border-2 rounded-md w-72 border-gray-200 text-center">
                         <option value="">Choose a sale site</option>
                         { brand.site_set.map((site) => (
                             site.kind === "sale_site" ? 
@@ -41,7 +60,7 @@ function Detail({brand}) {
                                 null
                         ))}
                     </select>
-                    <select {...register("advertisingSite", {required:true})} name="advertisingSite">
+                    <select {...register("advertisingSite", {required:true})} name="advertisingSite" className="border-2 rounded-md w-72 border-gray-200 text-center">
                         <option value="">Choose an advertising site</option>
                         { brand.site_set.map((site) => (
                             site.kind === "advertising_site" ? 
@@ -51,10 +70,10 @@ function Detail({brand}) {
                         ))}
                     </select>
                     <label htmlFor="dateFrom">FROM</label>
-                    <input {...register("dateFrom", {required:true})} name="dateFrom" id="dateFrom" type={"date"}  />
+                    <input {...register("dateFrom", {required:true})} name="dateFrom" id="dateFrom" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
                     <label htmlFor="retrieve_date_to">TO</label>
-                    <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} />
-                    <button>Retrieve</button>
+                    <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
+                    <button className="border-b-2 hover:border-purple-500">RETRIEVE</button>
                 </form>
             }
         </div>
