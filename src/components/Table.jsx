@@ -1,6 +1,8 @@
-function Table({brand, completeData, listOfDate}) {
+import Loading from "./Loading";
+
+function Table({brand, completeData, listOfDate, isLoading}) {
     return (
-        <>
+        <>            
             <div>
                 <span>Summary</span>
                 { completeData.length === 0 ? 

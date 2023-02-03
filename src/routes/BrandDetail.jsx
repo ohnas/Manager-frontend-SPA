@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useOutletContext, useParams } from "react-router-dom";
 import { baseUrl } from "../api";
 import Table from "../components/Table";
+import Loading from "../components/Loading";
 
 function BrandDetail() {
     const { 
@@ -13,6 +14,7 @@ function BrandDetail() {
     const [completeData, setCompleteData] = useState([]);
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
+    const [isLoading, setIsLoading] = useState();
     const { register, handleSubmit } = useForm();
     const [maxDate, setMaxDate] = useState();
     async function brandDetail() {
@@ -46,6 +48,7 @@ function BrandDetail() {
             "dateFrom" : retrieveData.dateFrom,
             "dateTo" : retrieveData.dateTo,
         });
+        setIsLoading(true);
         let response = await fetch(`${baseUrl}/sales/?saleSite=${retrieveData.saleSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
             method : "GET",
             credentials: "include",
@@ -56,6 +59,7 @@ function BrandDetail() {
         let saleData = await response.json();
         if (response.ok) {
             setCompleteData(saleData);
+            setIsLoading(false);
         }
     }
     function dateList() {
@@ -109,7 +113,11 @@ function BrandDetail() {
                         <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
                         <button className="hover:border-b-2 border-purple-500">RETRIEVE</button>
                     </form>
-                    <Table brand={brand} completeData={completeData} listOfDate={listOfDate}/>
+                    {isLoading ? 
+                            <Loading />
+                        :
+                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} isLoading={isLoading}/>
+                    }
                 </>
             }
         </>
