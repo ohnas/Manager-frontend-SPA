@@ -11,7 +11,8 @@ function BrandDetail() {
     } = useOutletContext();
     let {brandPk} = useParams();
     const [brand, setBrand] = useState({});
-    const [completeData, setCompleteData] = useState([]);
+    const [salesData, setSalesData] = useState({});
+    const [advertisingsData, setAdvertisingsData] = useState({});
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
     const [isLoading, setIsLoading] = useState();
@@ -44,21 +45,36 @@ function BrandDetail() {
         setMaxDate(yesterdayValue);
     });
     async function onSubmit(retrieveData) {
+        if (retrieveData.dateTo < retrieveData.dateFrom) {
+            alert("조회 조건을 확인하세요");
+            return;
+        } 
         setSelectedDate({
             "dateFrom" : retrieveData.dateFrom,
             "dateTo" : retrieveData.dateTo,
         });
         setIsLoading(true);
-        let response = await fetch(`${baseUrl}/sales/?saleSite=${retrieveData.saleSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
+        let saleResponse = await fetch(`${baseUrl}/sales/?saleSite=${retrieveData.saleSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
             method : "GET",
             credentials: "include",
             headers : {
                 'Content-Type': 'application/json',
             },
         });
-        let saleData = await response.json();
-        if (response.ok) {
-            setCompleteData(saleData);
+        let saleData = await saleResponse.json();
+        if (saleResponse.ok) {
+            setSalesData(saleData);
+        }
+        let advertisingResponse = await fetch(`${baseUrl}/advertisings/?advertisingSite=${retrieveData.advertisingSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
+            method : "GET",
+            credentials: "include",
+            headers : {
+                'Content-Type': 'application/json',
+            },
+        });
+        let advertisingData = await advertisingResponse.json();
+        if (advertisingData.ok) {
+            setAdvertisingsData(advertisingData);
             setIsLoading(false);
         }
     }
@@ -116,7 +132,7 @@ function BrandDetail() {
                     {isLoading ? 
                             <Loading />
                         :
-                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} isLoading={isLoading}/>
+                            <Table brand={brand} salesData={salesData} advertisingsData={advertisingsData} listOfDate={listOfDate} />
                     }
                 </>
             }

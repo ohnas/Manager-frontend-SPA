@@ -1,9 +1,7 @@
-import Loading from "./Loading";
-
-function Table({brand, completeData, listOfDate, isLoading}) {
+function Table({brand, salesData, advertisingsData, listOfDate}) {
     return (
         <>            
-            <div>
+            {/* <div>
                 <span>Summary</span>
                 { completeData.length === 0 ? 
                         <div className="flex justify-center items-center border h-52">
@@ -38,7 +36,20 @@ function Table({brand, completeData, listOfDate, isLoading}) {
                         }
                     </table>
                 </div>
-            ))}
+            ))} */}
+            { completeData.length === 0 ? 
+                    <div className="flex justify-center items-center h-screen">
+                        <div className="flex justify-center items-center">
+                            <span className="text-gray-400">No data.</span>
+                        </div>
+                    </div>
+                :
+                <div>
+                    {brand.product_set.map((product) => 
+                        <span>{product.name}</span>
+                    )}
+                </div>
+            }
         </>
     );
 }
