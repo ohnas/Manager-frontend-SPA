@@ -11,11 +11,13 @@ function BrandDetail() {
     } = useOutletContext();
     let {brandPk} = useParams();
     const [brand, setBrand] = useState({});
+    const [products, setProducts] = useState({});
+    const [options, setOptions] = useState({});
     const [salesData, setSalesData] = useState({});
     const [advertisingsData, setAdvertisingsData] = useState({});
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
-    const [isLoading, setIsLoading] = useState();
+    const [isLoading, setIsLoading] = useState(false);
     const { register, handleSubmit } = useForm();
     const [maxDate, setMaxDate] = useState();
     async function brandDetail() {
@@ -29,6 +31,27 @@ function BrandDetail() {
         let data = await response.json();
         setBrand(data);
         setBrandName(data.name);
+        let productsObj = {}
+        let optionsObj = {}
+        data.product_set.forEach(product => {
+            productsObj[product.name] = {
+                "pk" : product.pk,
+                "english_name" : product.english_name,
+                "cost" : product.cost,
+            }
+            product.options_set.forEach(option => {
+                optionsObj[option.name] = {
+                    "pk" : option.pk,
+                    "price" : option.price,
+                    "cost" : option.cost,
+                    "logistic_fee" : option.logistic_fee,
+                    "quantity" : option.quantity,
+                    "gift_quantity" : option.gift_quantity,
+                }
+            });
+        });
+        setProducts(productsObj);
+        setOptions(optionsObj);
     }
     const maxDateVale = (() => {
         const today = new Date();
@@ -73,7 +96,7 @@ function BrandDetail() {
             },
         });
         let advertisingData = await advertisingResponse.json();
-        if (advertisingData.ok) {
+        if (advertisingResponse.ok) {
             setAdvertisingsData(advertisingData);
             setIsLoading(false);
         }
@@ -132,7 +155,7 @@ function BrandDetail() {
                     {isLoading ? 
                             <Loading />
                         :
-                            <Table brand={brand} salesData={salesData} advertisingsData={advertisingsData} listOfDate={listOfDate} />
+                            <Table products={products} options={options} salesData={salesData} advertisingsData={advertisingsData} listOfDate={listOfDate} />
                     }
                 </>
             }
