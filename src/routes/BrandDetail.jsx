@@ -11,8 +11,7 @@ function BrandDetail() {
     } = useOutletContext();
     let {brandPk} = useParams();
     const [brand, setBrand] = useState({});
-    const [salesData, setSalesData] = useState({});
-    const [advertisingsData, setAdvertisingsData] = useState({});
+    const [completeData, setCompleteData] = useState({});
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -56,27 +55,16 @@ function BrandDetail() {
             "dateTo" : retrieveData.dateTo,
         });
         setIsLoading(true);
-        let saleResponse = await fetch(`${baseUrl}/sales/?saleSite=${retrieveData.saleSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
+        let response = await fetch(`${baseUrl}/retrieves/?brandPk=${brandPk}&saleSite=${retrieveData.saleSite}&advertisingSite=${retrieveData.advertisingSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
             method : "GET",
             credentials: "include",
             headers : {
                 'Content-Type': 'application/json',
             },
         });
-        let saleData = await saleResponse.json();
-        if (saleResponse.ok) {
-            setSalesData(saleData);
-        }
-        let advertisingResponse = await fetch(`${baseUrl}/advertisings/?advertisingSite=${retrieveData.advertisingSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
-            method : "GET",
-            credentials: "include",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-        });
-        let advertisingData = await advertisingResponse.json();
-        if (advertisingResponse.ok) {
-            setAdvertisingsData(advertisingData);
+        let data = await response.json();
+        if (response.ok) {
+            setCompleteData(data);
             setIsLoading(false);
         }
     }
@@ -134,7 +122,7 @@ function BrandDetail() {
                     {isLoading ? 
                             <Loading />
                         :
-                            <Table brand={brand} salesData={salesData} advertisingsData={advertisingsData} listOfDate={listOfDate} />
+                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} />
                     }
                 </>
             }
