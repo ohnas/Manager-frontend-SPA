@@ -57,8 +57,12 @@ function Table({brand, completeData, listOfDate}) {
                             <thead>
                                 <tr>
                                     <th>날짜</th>
+                                    <th>주문</th>
                                     {product.options_set.map((option) =>
                                         <th key={option.pk}>{option.name}</th>
+                                    )}
+                                    {product.options_set.map((option) =>
+                                        <th key={option.pk}>{option.name} 판매율</th>
                                     )}
                                 </tr>
                             </thead>
@@ -66,6 +70,67 @@ function Table({brand, completeData, listOfDate}) {
                                 {listOfDate.map((date, index) =>
                                     <tr key={index}>
                                         <td>{date}</td>
+                                        <td>
+                                            {completeData.imweb_data.products[product.name] ?
+                                                    <>
+                                                        {completeData.imweb_data.products[product.name][date] ? 
+                                                                <>
+                                                                    {completeData.imweb_data.products[product.name][date]["prod_count"]}
+                                                                </>
+                                                            :
+                                                                0
+                                                        }
+                                                    </>
+                                                :
+                                                    0
+                                            }
+                                        </td>
+                                        {product.options_set.map((option) => 
+                                            <td key={option.pk}>
+                                                {completeData.imweb_data.options[product.name] ?
+                                                        <>
+                                                            {completeData.imweb_data.options[product.name][date] ? 
+                                                                    <>
+                                                                        {completeData.imweb_data.options[product.name][date][option.name] ?
+                                                                                <>
+                                                                                    {completeData.imweb_data.options[product.name][date][option.name]}
+                                                                                </>
+                                                                            :
+                                                                                0
+                                                                        }
+                                                                    </>
+                                                                :
+                                                                    0
+                                                            }
+                                                        </>
+                                                    :
+                                                        0
+                                                }
+                                            </td>
+                                        )}
+                                        {product.options_set.map((option) => 
+                                            <td key={option.pk}>
+                                                {salesRate[product.name] ?
+                                                        <>
+                                                            {salesRate[product.name][date] ? 
+                                                                    <>
+                                                                        {salesRate[product.name][date][option.name] ?
+                                                                                <>
+                                                                                    {salesRate[product.name][date][option.name]} %
+                                                                                </>
+                                                                            :
+                                                                                0
+                                                                        }
+                                                                    </>
+                                                                :
+                                                                    0
+                                                            }
+                                                        </>
+                                                    :
+                                                        0
+                                                }
+                                            </td>
+                                        )}
                                     </tr>
                                 )}
                             </tbody>
