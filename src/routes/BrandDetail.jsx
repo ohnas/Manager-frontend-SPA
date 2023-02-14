@@ -4,6 +4,7 @@ import { useOutletContext, useParams } from "react-router-dom";
 import { baseUrl } from "../api";
 import Table from "../components/Table";
 import Loading from "../components/Loading";
+import { type } from "@testing-library/user-event/dist/type";
 
 function BrandDetail() {
     const { 
