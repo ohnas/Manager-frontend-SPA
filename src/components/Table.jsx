@@ -142,203 +142,202 @@ function Table({brand, completeData, listOfDate}) {
                 :
                 <>
                     {brand.product_set.map((product) =>
-                        <table key={product.pk}>
-                            <thead>
-                                <tr>
-                                    <th>{product.name}</th>
-                                    <th>옵션판매현황</th>
-                                    <th>메타광고현황</th>
-                                </tr>
-                            </thead>
-                            <thead>
-                                <tr>
-                                    <th>날짜</th>
-                                    <th>주문</th>
-                                    {product.options_set.map((option) =>
-                                        <th key={option.pk}>{option.name}</th>
-                                    )}
-                                    {product.options_set.map((option) =>
-                                        <th key={option.pk}>{option.name} 판매율</th>
-                                    )}
-                                    <th>총수량</th>
-                                    <th>도달수</th>
-                                    <th>노출</th>
-                                    <th>빈도</th>
-                                    <th>비용</th>
-                                    <th>CPM</th>
-                                    <th>CTR</th>
-                                    <th>ROAS</th>
-                                    <th>CPC</th>
-                                    <th>구매</th>
-                                    <th>랜딩페이지뷰</th>
-                                    <th>링크클릭</th>
-                                    <th>결제정보추가</th>
-                                    <th>장바구니</th>
-                                    <th>구매전환율</th>
-                                    <th>비용(원화)</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {listOfDate.map((date, index) =>
-                                    <tr key={index}>
-                                        <td>{date}</td>
-                                        <td>
-                                            {completeData.imweb_data.products[product.name] ?
+                        <div key={product.pk} className="overflow-x-scroll w-full mt-5 mb-5">
+                            <div>
+                                <span>{product.name}</span>
+                            </div>
+                            <table className="whitespace-nowrap text-center">
+                                <thead>
+                                    <tr>
+                                        <th className="sticky left-0 z-50 bg-white border-4">날짜</th>
+                                        <th className="border-2">주문</th>
+                                        {product.options_set.map((option) =>
+                                            <th key={option.pk} className="border-4">{option.name}</th>
+                                        )}
+                                        {product.options_set.map((option) =>
+                                            <th key={option.pk} className="border-4">{option.name} 판매율</th>
+                                        )}
+                                        <th className="border-4">총수량</th>
+                                        <th className="border-4">도달수</th>
+                                        <th className="border-4">노출</th>
+                                        <th className="border-4">빈도</th>
+                                        <th className="border-4">비용</th>
+                                        <th className="border-4">CPM</th>
+                                        <th className="border-4">CTR</th>
+                                        <th className="border-4">ROAS</th>
+                                        <th className="border-4">CPC</th>
+                                        <th className="border-4">구매</th>
+                                        <th className="border-4">랜딩페이지뷰</th>
+                                        <th className="border-4">링크클릭</th>
+                                        <th className="border-4">결제정보추가</th>
+                                        <th className="border-4">장바구니</th>
+                                        <th className="border-4">구매전환율</th>
+                                        <th className="border-4">비용(원화)</th>
+                                        <th className="border-4">원가</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {listOfDate.map((date, index) =>
+                                        <tr key={index}>
+                                            <td className="sticky left-0 z-50 bg-white border-2">{date}</td>
+                                            <td className="border-2">
+                                                {completeData.imweb_data.products[product.name] ?
+                                                        <>
+                                                            {completeData.imweb_data.products[product.name][date] ? 
+                                                                    <>
+                                                                        {completeData.imweb_data.products[product.name][date]["prod_count"]}
+                                                                    </>
+                                                                :
+                                                                    0
+                                                            }
+                                                        </>
+                                                    :
+                                                        0
+                                                }
+                                            </td>
+                                            {product.options_set.map((option) => 
+                                                <td key={option.pk} className="border-2">
+                                                    {completeData.imweb_data.options[product.name] ?
+                                                            <>
+                                                                {completeData.imweb_data.options[product.name][date] ? 
+                                                                        <>
+                                                                            {completeData.imweb_data.options[product.name][date][option.name] ?
+                                                                                    <>
+                                                                                        {completeData.imweb_data.options[product.name][date][option.name]}
+                                                                                    </>
+                                                                                :
+                                                                                    0
+                                                                            }
+                                                                        </>
+                                                                    :
+                                                                        0
+                                                                }
+                                                            </>
+                                                        :
+                                                            0
+                                                    }
+                                                </td>
+                                            )}
+                                            {product.options_set.map((option) => 
+                                                <td key={option.pk} className="border-2">
+                                                    {saleRate[product.name] ?
+                                                            <>
+                                                                {saleRate[product.name][date] ? 
+                                                                        <>
+                                                                            {saleRate[product.name][date][option.name] ?
+                                                                                    <>
+                                                                                        {saleRate[product.name][date][option.name]} %
+                                                                                    </>
+                                                                                :
+                                                                                    0
+                                                                            }
+                                                                        </>
+                                                                    :
+                                                                        0
+                                                                }
+                                                            </>
+                                                        :
+                                                            0
+                                                    }
+                                                </td>
+                                            )}
+                                            {optionTotalCount[product.name] ? 
                                                     <>
-                                                        {completeData.imweb_data.products[product.name][date] ? 
+                                                        {optionTotalCount[product.name][date] ? 
                                                                 <>
-                                                                    {completeData.imweb_data.products[product.name][date]["prod_count"]}
+                                                                    <td className="border-2">{optionTotalCount[product.name][date]["totalCount"]}</td>
                                                                 </>
                                                             :
-                                                                0
+                                                                <td className="border-2">0</td>
                                                         }
                                                     </>
                                                 :
-                                                    0
+                                                <td className="border-2">0</td>
                                             }
-                                        </td>
-                                        {product.options_set.map((option) => 
-                                            <td key={option.pk}>
-                                                {completeData.imweb_data.options[product.name] ?
-                                                        <>
-                                                            {completeData.imweb_data.options[product.name][date] ? 
-                                                                    <>
-                                                                        {completeData.imweb_data.options[product.name][date][option.name] ?
-                                                                                <>
-                                                                                    {completeData.imweb_data.options[product.name][date][option.name]}
-                                                                                </>
-                                                                            :
-                                                                                0
-                                                                        }
-                                                                    </>
-                                                                :
-                                                                    0
-                                                            }
-                                                        </>
-                                                    :
-                                                        0
-                                                }
-                                            </td>
-                                        )}
-                                        {product.options_set.map((option) => 
-                                            <td key={option.pk}>
-                                                {saleRate[product.name] ?
-                                                        <>
-                                                            {saleRate[product.name][date] ? 
-                                                                    <>
-                                                                        {saleRate[product.name][date][option.name] ?
-                                                                                <>
-                                                                                    {saleRate[product.name][date][option.name]} %
-                                                                                </>
-                                                                            :
-                                                                                0
-                                                                        }
-                                                                    </>
-                                                                :
-                                                                    0
-                                                            }
-                                                        </>
-                                                    :
-                                                        0
-                                                }
-                                            </td>
-                                        )}
-                                        {optionTotalCount[product.name] ? 
-                                                <>
-                                                    {optionTotalCount[product.name][date] ? 
-                                                            <>
-                                                                <td>{optionTotalCount[product.name][date]["totalCount"]}</td>
-                                                            </>
-                                                        :
-                                                            <td>0</td>
-                                                    }
-                                                </>
-                                            :
-                                               <td>0</td>
-                                        }
-                                        {completeData.facebook_data.campaigns[product.name] ?
-                                                <>
-                                                    {completeData.facebook_data.campaigns[product.name][date] ? 
-                                                            <>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["reach"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["impressions"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["frequency"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["spend"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["cpm"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["website_ctr"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["purchase_roas"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["cost_per_unique_inline_link_click"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["purchase"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["landing_page_view"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["link_click"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["add_payment_info"]}</td>
-                                                                <td>{completeData.facebook_data.campaigns[product.name][date]["add_to_cart"]}</td>
-                                                            </>
-                                                        :
-                                                            <>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                                <td>0</td>
-                                                            </>
-                                                    }
-                                                </>
-                                            :
-                                                <>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                    <td>0</td>
-                                                </>
-                                        }
-                                        {conversionRate[product.name] ? 
-                                                <>
-                                                    {conversionRate[product.name][date] ? 
-                                                            <>
-                                                                <td>{conversionRate[product.name][date]["conversionRate"]}%</td>
-                                                            </>
-                                                        :
-                                                            <td>0%</td>
-                                                    }
-                                                </>
-                                            :
-                                               <td>0%</td>
-                                        }
-                                        {spendKrw[product.name] ? 
-                                                <>
-                                                    {spendKrw[product.name][date] ? 
-                                                            <>
-                                                                <td>{spendKrw[product.name][date]["spendKrw"]}</td>
-                                                            </>
-                                                        :
-                                                            <td>0</td>
-                                                    }
-                                                </>
-                                            :
-                                               <td>0</td>
-                                        }
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
+                                            {completeData.facebook_data.campaigns[product.name] ?
+                                                    <>
+                                                        {completeData.facebook_data.campaigns[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["reach"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["impressions"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["frequency"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["spend"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["cpm"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["website_ctr"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["purchase_roas"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["cost_per_unique_inline_link_click"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["purchase"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["landing_page_view"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["link_click"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["add_payment_info"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["add_to_cart"]}</td>
+                                                                </>
+                                                            :
+                                                                <>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0</td>
+                                                                </>
+                                                        }
+                                                    </>
+                                                :
+                                                    <>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                        <td className="border-2">0</td>
+                                                    </>
+                                            }
+                                            {conversionRate[product.name] ? 
+                                                    <>
+                                                        {conversionRate[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{conversionRate[product.name][date]["conversionRate"]}%</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">0%</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">0%</td>
+                                            }
+                                            {spendKrw[product.name] ? 
+                                                    <>
+                                                        {spendKrw[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{spendKrw[product.name][date]["spendKrw"]}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">0</td>
+                                            }
+                                        </tr>
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
                     )}
                 </>
             }
