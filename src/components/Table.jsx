@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 
 function Table({brand, completeData, listOfDate}) {
-    const [salesRate, setSalesRate] = useState({});
-    const [optionsTotalCount, setOptionsTotalCount] = useState({});
-    function saleRate() {
+    const [saleRate, setSaleRate] = useState({});
+    const [optionTotalCount, setOptionTotalCount] = useState({});
+    const [conversionRate, setConversionRate] = useState({});
+    const [spendKrw, setSpendKrw] = useState({});
+    function handleSaleRate() {
         if(Object.keys(completeData).length === 0) {
             return;
         } else {
@@ -30,10 +32,10 @@ function Table({brand, completeData, listOfDate}) {
                     });
                 });
             });
-            setSalesRate(saleRateObj);
+            setSaleRate(saleRateObj);
         }
     }
-    function optionTotalCount() {
+    function handleOptionTotalCount() {
         if(Object.keys(completeData).length === 0) {
             return;
         } else {
@@ -64,14 +66,70 @@ function Table({brand, completeData, listOfDate}) {
                     });
                 });
             });
-            setOptionsTotalCount(optionTotalCountObj);
+            setOptionTotalCount(optionTotalCountObj);
+        }
+    }
+    function handleConversionRate() {
+        if(Object.keys(completeData).length === 0) {
+            return;
+        } else {
+            let conversionRateObj = {};
+            brand.product_set.forEach((product) => {
+                if(completeData.facebook_data.campaigns[product.name]) {
+                    conversionRateObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(completeData.facebook_data.campaigns[product.name][date]) {
+                        let rate = (completeData.facebook_data.campaigns[product.name][date].purchase / completeData.facebook_data.campaigns[product.name][date].landing_page_view) * 100;
+                        conversionRateObj[product.name][date] = {
+                            "conversionRate" : rate,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setConversionRate(conversionRateObj);
+        }
+    }
+    function handleSpendKrw() {
+        if(Object.keys(completeData).length === 0) {
+            return;
+        } else {
+            let spendKrwObj = {};
+            brand.product_set.forEach((product) => {
+                if(completeData.facebook_data.campaigns[product.name]) {
+                    spendKrwObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(completeData.facebook_data.campaigns[product.name][date]) {
+                        let krw = Math.ceil(completeData.facebook_data.campaigns[product.name][date].spend * completeData.facebook_data.exchange_rate[date])
+                        spendKrwObj[product.name][date] = {
+                            "spendKrw" : krw,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setSpendKrw(spendKrwObj)
         }
     }
     useEffect(() => {
-        saleRate();
+        handleSaleRate();
     }, [completeData]);
     useEffect(() => {
-        optionTotalCount();
+        handleOptionTotalCount();
+    }, [completeData]);
+    useEffect(() => {
+        handleConversionRate();
+    }, [completeData]);
+    useEffect(() => {
+        handleSpendKrw();
     }, [completeData]);
     return (
         <>            
@@ -116,6 +174,8 @@ function Table({brand, completeData, listOfDate}) {
                                     <th>링크클릭</th>
                                     <th>결제정보추가</th>
                                     <th>장바구니</th>
+                                    <th>구매전환율</th>
+                                    <th>비용(원화)</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -162,13 +222,13 @@ function Table({brand, completeData, listOfDate}) {
                                         )}
                                         {product.options_set.map((option) => 
                                             <td key={option.pk}>
-                                                {salesRate[product.name] ?
+                                                {saleRate[product.name] ?
                                                         <>
-                                                            {salesRate[product.name][date] ? 
+                                                            {saleRate[product.name][date] ? 
                                                                     <>
-                                                                        {salesRate[product.name][date][option.name] ?
+                                                                        {saleRate[product.name][date][option.name] ?
                                                                                 <>
-                                                                                    {salesRate[product.name][date][option.name]} %
+                                                                                    {saleRate[product.name][date][option.name]} %
                                                                                 </>
                                                                             :
                                                                                 0
@@ -183,11 +243,11 @@ function Table({brand, completeData, listOfDate}) {
                                                 }
                                             </td>
                                         )}
-                                        {optionsTotalCount[product.name] ? 
+                                        {optionTotalCount[product.name] ? 
                                                 <>
-                                                    {optionsTotalCount[product.name][date] ? 
+                                                    {optionTotalCount[product.name][date] ? 
                                                             <>
-                                                                <td>{optionsTotalCount[product.name][date]["totalCount"]}</td>
+                                                                <td>{optionTotalCount[product.name][date]["totalCount"]}</td>
                                                             </>
                                                         :
                                                             <td>0</td>
@@ -248,6 +308,32 @@ function Table({brand, completeData, listOfDate}) {
                                                     <td>0</td>
                                                     <td>0</td>
                                                 </>
+                                        }
+                                        {conversionRate[product.name] ? 
+                                                <>
+                                                    {conversionRate[product.name][date] ? 
+                                                            <>
+                                                                <td>{conversionRate[product.name][date]["conversionRate"]}%</td>
+                                                            </>
+                                                        :
+                                                            <td>0%</td>
+                                                    }
+                                                </>
+                                            :
+                                               <td>0%</td>
+                                        }
+                                        {spendKrw[product.name] ? 
+                                                <>
+                                                    {spendKrw[product.name][date] ? 
+                                                            <>
+                                                                <td>{spendKrw[product.name][date]["spendKrw"]}</td>
+                                                            </>
+                                                        :
+                                                            <td>0</td>
+                                                    }
+                                                </>
+                                            :
+                                               <td>0</td>
                                         }
                                     </tr>
                                 )}
