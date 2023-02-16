@@ -24,7 +24,7 @@ function Table({brand, completeData, listOfDate}) {
                     }
                     product.options_set.forEach((option) => {
                         if(completeData.imweb_data.options[product.name] && completeData.imweb_data.options[product.name][date] && completeData.imweb_data.options[product.name][date][option.name]) {
-                            let rate = (completeData.imweb_data.options[product.name][date][option.name] / completeData.imweb_data.products[product.name][date]["prod_count"]) * 100;
+                            let rate = Math.round((completeData.imweb_data.options[product.name][date][option.name] / completeData.imweb_data.products[product.name][date]["prod_count"]) * 100);
                             saleRateObj[product.name][date][option.name] = rate;
                         } else {
                             return;
@@ -82,7 +82,7 @@ function Table({brand, completeData, listOfDate}) {
                 }
                 listOfDate.forEach((date) => {
                     if(completeData.facebook_data.campaigns[product.name][date]) {
-                        let rate = (completeData.facebook_data.campaigns[product.name][date].purchase / completeData.facebook_data.campaigns[product.name][date].landing_page_view) * 100;
+                        let rate = ((completeData.facebook_data.campaigns[product.name][date].purchase / completeData.facebook_data.campaigns[product.name][date].landing_page_view) * 100).toFixed(2);
                         conversionRateObj[product.name][date] = {
                             "conversionRate" : rate,
                         }
@@ -107,7 +107,8 @@ function Table({brand, completeData, listOfDate}) {
                 }
                 listOfDate.forEach((date) => {
                     if(completeData.facebook_data.campaigns[product.name][date]) {
-                        let krw = Math.ceil(completeData.facebook_data.campaigns[product.name][date].spend * completeData.facebook_data.exchange_rate[date])
+                        let krw = Math.round(completeData.facebook_data.campaigns[product.name][date].spend * completeData.facebook_data.exchange_rate[date])
+                        krw = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(krw);
                         spendKrwObj[product.name][date] = {
                             "spendKrw" : krw,
                         }
@@ -143,37 +144,37 @@ function Table({brand, completeData, listOfDate}) {
                 <>
                     {brand.product_set.map((product) =>
                         <div key={product.pk} className="overflow-x-scroll w-full mt-5 mb-5">
-                            <div>
+                            <div className="sticky left-0 z-50 bg-white">
                                 <span>{product.name}</span>
                             </div>
                             <table className="whitespace-nowrap text-center">
-                                <thead>
+                                <thead className="bg-gray-200">
                                     <tr>
-                                        <th className="sticky left-0 z-50 bg-white border-4">날짜</th>
-                                        <th className="border-2">주문</th>
+                                        <th className="border-2 border-slate-400 px-24 py-2">날짜</th>
+                                        <th className="border-2 border-slate-400 px-8">주문</th>
                                         {product.options_set.map((option) =>
-                                            <th key={option.pk} className="border-4">{option.name}</th>
+                                            <th key={option.pk} className="border-2 border-slate-400 px-16">{option.name}</th>
                                         )}
                                         {product.options_set.map((option) =>
-                                            <th key={option.pk} className="border-4">{option.name} 판매율</th>
+                                            <th key={option.pk} className="border-2 border-slate-400 px-16">{option.name} 판매율</th>
                                         )}
-                                        <th className="border-4">총수량</th>
-                                        <th className="border-4">도달수</th>
-                                        <th className="border-4">노출</th>
-                                        <th className="border-4">빈도</th>
-                                        <th className="border-4">비용</th>
-                                        <th className="border-4">CPM</th>
-                                        <th className="border-4">CTR</th>
-                                        <th className="border-4">ROAS</th>
-                                        <th className="border-4">CPC</th>
-                                        <th className="border-4">구매</th>
-                                        <th className="border-4">랜딩페이지뷰</th>
-                                        <th className="border-4">링크클릭</th>
-                                        <th className="border-4">결제정보추가</th>
-                                        <th className="border-4">장바구니</th>
-                                        <th className="border-4">구매전환율</th>
-                                        <th className="border-4">비용(원화)</th>
-                                        <th className="border-4">원가</th>
+                                        <th className="border-2 border-slate-400 px-8">총수량</th>
+                                        <th className="border-2 border-slate-400 px-8">도달수</th>
+                                        <th className="border-2 border-slate-400 px-8">노출</th>
+                                        <th className="border-2 border-slate-400 px-8">빈도</th>
+                                        <th className="border-2 border-slate-400 px-8">비용</th>
+                                        <th className="border-2 border-slate-400 px-8">CPM</th>
+                                        <th className="border-2 border-slate-400 px-8">CTR</th>
+                                        <th className="border-2 border-slate-400 px-8">ROAS</th>
+                                        <th className="border-2 border-slate-400 px-8">CPC</th>
+                                        <th className="border-2 border-slate-400 px-8">구매</th>
+                                        <th className="border-2 border-slate-400 px-8">랜딩페이지뷰</th>
+                                        <th className="border-2 border-slate-400 px-8">링크클릭</th>
+                                        <th className="border-2 border-slate-400 px-8">결제정보추가</th>
+                                        <th className="border-2 border-slate-400 px-8">장바구니</th>
+                                        <th className="border-2 border-slate-400 px-8">구매전환율</th>
+                                        <th className="border-2 border-slate-400 px-8">비용(원화)</th>
+                                        <th className="border-2 border-slate-400 px-8">원가</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -226,18 +227,24 @@ function Table({brand, completeData, listOfDate}) {
                                                                         <>
                                                                             {saleRate[product.name][date][option.name] ?
                                                                                     <>
-                                                                                        {saleRate[product.name][date][option.name]} %
+                                                                                        {saleRate[product.name][date][option.name]}%
                                                                                     </>
                                                                                 :
-                                                                                    0
+                                                                                    <>
+                                                                                        0%
+                                                                                    </>
                                                                             }
                                                                         </>
                                                                     :
-                                                                        0
+                                                                        <>
+                                                                            0%
+                                                                        </>
                                                                 }
                                                             </>
                                                         :
-                                                            0
+                                                            <>
+                                                                0%
+                                                            </>
                                                     }
                                                 </td>
                                             )}
@@ -260,12 +267,12 @@ function Table({brand, completeData, listOfDate}) {
                                                                 <>
                                                                     <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["reach"]}</td>
                                                                     <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["impressions"]}</td>
-                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["frequency"]}</td>
-                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["spend"]}</td>
-                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["cpm"]}</td>
-                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["website_ctr"]}</td>
-                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["purchase_roas"]}</td>
-                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["cost_per_unique_inline_link_click"]}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["frequency"].toFixed(2)}</td>
+                                                                    <td className="border-2">US${completeData.facebook_data.campaigns[product.name][date]["spend"].toFixed(2)}</td>
+                                                                    <td className="border-2">US${completeData.facebook_data.campaigns[product.name][date]["cpm"].toFixed(2)}</td>
+                                                                    <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["website_ctr"].toFixed(2)}</td>
+                                                                    <td className="border-2">{Math.round(completeData.facebook_data.campaigns[product.name][date]["purchase_roas"]*100)}%</td>
+                                                                    <td className="border-2">US${completeData.facebook_data.campaigns[product.name][date]["cost_per_unique_inline_link_click"].toFixed(2)}</td>
                                                                     <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["purchase"]}</td>
                                                                     <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["landing_page_view"]}</td>
                                                                     <td className="border-2">{completeData.facebook_data.campaigns[product.name][date]["link_click"]}</td>
@@ -276,12 +283,12 @@ function Table({brand, completeData, listOfDate}) {
                                                                 <>
                                                                     <td className="border-2">0</td>
                                                                     <td className="border-2">0</td>
-                                                                    <td className="border-2">0</td>
-                                                                    <td className="border-2">0</td>
-                                                                    <td className="border-2">0</td>
-                                                                    <td className="border-2">0</td>
-                                                                    <td className="border-2">0</td>
-                                                                    <td className="border-2">0</td>
+                                                                    <td className="border-2">0.00</td>
+                                                                    <td className="border-2">US$0.00</td>
+                                                                    <td className="border-2">US$0.00</td>
+                                                                    <td className="border-2">0.00</td>
+                                                                    <td className="border-2">0%</td>
+                                                                    <td className="border-2">US$0.00</td>
                                                                     <td className="border-2">0</td>
                                                                     <td className="border-2">0</td>
                                                                     <td className="border-2">0</td>
@@ -292,19 +299,19 @@ function Table({brand, completeData, listOfDate}) {
                                                     </>
                                                 :
                                                     <>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
-                                                        <td className="border-2">0</td>
+                                                    <td className="border-2">0</td>
+                                                    <td className="border-2">0</td>
+                                                    <td className="border-2">0.00</td>
+                                                    <td className="border-2">US$0.00</td>
+                                                    <td className="border-2">US$0.00</td>
+                                                    <td className="border-2">0.00</td>
+                                                    <td className="border-2">0%</td>
+                                                    <td className="border-2">US$0.00</td>
+                                                    <td className="border-2">0</td>
+                                                    <td className="border-2">0</td>
+                                                    <td className="border-2">0</td>
+                                                    <td className="border-2">0</td>
+                                                    <td className="border-2">0</td>
                                                     </>
                                             }
                                             {conversionRate[product.name] ? 
@@ -314,11 +321,11 @@ function Table({brand, completeData, listOfDate}) {
                                                                     <td className="border-2">{conversionRate[product.name][date]["conversionRate"]}%</td>
                                                                 </>
                                                             :
-                                                                <td className="border-2">0%</td>
+                                                                <td className="border-2">0.00%</td>
                                                         }
                                                     </>
                                                 :
-                                                <td className="border-2">0%</td>
+                                                <td className="border-2">0.00%</td>
                                             }
                                             {spendKrw[product.name] ? 
                                                     <>
@@ -327,11 +334,11 @@ function Table({brand, completeData, listOfDate}) {
                                                                     <td className="border-2">{spendKrw[product.name][date]["spendKrw"]}</td>
                                                                 </>
                                                             :
-                                                                <td className="border-2">0</td>
+                                                                <td className="border-2">₩0</td>
                                                         }
                                                     </>
                                                 :
-                                                <td className="border-2">0</td>
+                                                <td className="border-2">₩0</td>
                                             }
                                         </tr>
                                     )}
