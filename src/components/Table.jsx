@@ -5,6 +5,8 @@ function Table({brand, completeData, listOfDate}) {
     const [optionTotalCount, setOptionTotalCount] = useState({});
     const [conversionRate, setConversionRate] = useState({});
     const [spendKrw, setSpendKrw] = useState({});
+    const [productCost, setProductCost] = useState({});
+    const [logisticTotalCost, setLogisticTotalCost] = useState({});
     function handleSaleRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -120,6 +122,66 @@ function Table({brand, completeData, listOfDate}) {
             setSpendKrw(spendKrwObj)
         }
     }
+    function handleProductCost() {
+        if(Object.keys(optionTotalCount).length === 0) {
+            return;
+        } else {
+            let productCostObj = {};
+            brand.product_set.forEach((product) => {
+                if(optionTotalCount[product.name]) {
+                    productCostObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(optionTotalCount[product.name][date]) {
+                        let cost = product.cost * optionTotalCount[product.name][date]["totalCount"]
+                        cost = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(cost);
+                        productCostObj[product.name][date] = {
+                            "productCost" : cost,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setProductCost(productCostObj);
+        }
+    }
+    function handleLogisticTotalCost() {
+        if(Object.keys(completeData).length === 0) {
+            return;
+        } else {
+            let logisticFeeObj = {}
+            brand.product_set.forEach((product) => {
+                if(completeData.imweb_data.options[product.name]) {
+                    logisticFeeObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    let logisticFee = 0;
+                    if(completeData.imweb_data.options[product.name][date]) {
+                        logisticFeeObj[product.name][date] ={}
+                    } else {
+                        return;
+                    }
+                    product.options_set.forEach((option) => {
+                        if(completeData.imweb_data.options[product.name] && completeData.imweb_data.options[product.name][date] && completeData.imweb_data.options[product.name][date][option.name]) {
+                            let optionLogisticFee = option.logistic_fee;
+                            let fee = completeData.imweb_data.options[product.name][date][option.name] * optionLogisticFee;
+                            logisticFee += fee;
+                            logisticFeeObj[product.name][date]["logisticFee"] = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(logisticFee);
+                        } else {
+                            return;
+                        }
+                    });
+                });
+            });
+            setLogisticTotalCost(logisticFeeObj);
+        }
+    }
+    console.log(logisticTotalCost);
     useEffect(() => {
         handleSaleRate();
     }, [completeData]);
@@ -131,6 +193,12 @@ function Table({brand, completeData, listOfDate}) {
     }, [completeData]);
     useEffect(() => {
         handleSpendKrw();
+    }, [completeData]);
+    useEffect(() => {
+        handleProductCost();
+    }, [optionTotalCount]);
+    useEffect(() => {
+        handleLogisticTotalCost();
     }, [completeData]);
     return (
         <>            
@@ -175,6 +243,7 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8">구매전환율</th>
                                         <th className="border-2 border-slate-400 px-8">비용(원화)</th>
                                         <th className="border-2 border-slate-400 px-8">원가</th>
+                                        <th className="border-2 border-slate-400 px-8">물류비용</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -332,6 +401,32 @@ function Table({brand, completeData, listOfDate}) {
                                                         {spendKrw[product.name][date] ? 
                                                                 <>
                                                                     <td className="border-2">{spendKrw[product.name][date]["spendKrw"]}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">₩0</td>
+                                            }
+                                            {productCost[product.name] ? 
+                                                    <>
+                                                        {productCost[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{productCost[product.name][date]["productCost"]}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">₩0</td>
+                                            }
+                                            {logisticTotalCost[product.name] ? 
+                                                    <>
+                                                        {logisticTotalCost[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{logisticTotalCost[product.name][date]["logisticFee"]}</td>
                                                                 </>
                                                             :
                                                                 <td className="border-2">₩0</td>
