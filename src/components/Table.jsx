@@ -7,6 +7,8 @@ function Table({brand, completeData, listOfDate}) {
     const [spendKrw, setSpendKrw] = useState({});
     const [productCost, setProductCost] = useState({});
     const [logisticTotalCost, setLogisticTotalCost] = useState({});
+    const [saleFee, setSaleFee] = useState({});
+    const [totalCost, setTotalCost] = useState({});
     function handleSaleRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -110,7 +112,6 @@ function Table({brand, completeData, listOfDate}) {
                 listOfDate.forEach((date) => {
                     if(completeData.facebook_data.campaigns[product.name][date]) {
                         let krw = Math.round(completeData.facebook_data.campaigns[product.name][date].spend * completeData.facebook_data.exchange_rate[date])
-                        krw = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(krw);
                         spendKrwObj[product.name][date] = {
                             "spendKrw" : krw,
                         }
@@ -136,7 +137,6 @@ function Table({brand, completeData, listOfDate}) {
                 listOfDate.forEach((date) => {
                     if(optionTotalCount[product.name][date]) {
                         let cost = product.cost * optionTotalCount[product.name][date]["totalCount"]
-                        cost = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(cost);
                         productCostObj[product.name][date] = {
                             "productCost" : cost,
                         };
@@ -171,7 +171,7 @@ function Table({brand, completeData, listOfDate}) {
                             let optionLogisticFee = option.logistic_fee;
                             let fee = completeData.imweb_data.options[product.name][date][option.name] * optionLogisticFee;
                             logisticFee += fee;
-                            logisticFeeObj[product.name][date]["logisticFee"] = new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(logisticFee);
+                            logisticFeeObj[product.name][date]["logisticFee"] = logisticFee;
                         } else {
                             return;
                         }
@@ -181,7 +181,56 @@ function Table({brand, completeData, listOfDate}) {
             setLogisticTotalCost(logisticFeeObj);
         }
     }
-    console.log(logisticTotalCost);
+    function handleSaleFee() {
+        if(Object.keys(completeData).length === 0) {
+            return;
+        } else {
+            let saleFeeObj = {};
+            brand.product_set.forEach((product) => {
+                if(completeData.imweb_data.by_products_payment[product.name]) {
+                    saleFeeObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(completeData.imweb_data.by_products_payment[product.name][date]) {
+                        let fee = completeData.imweb_data.by_products_payment[product.name][date]["price"] * 0.033;
+                        saleFeeObj[product.name][date] = {
+                            "saleFee" : fee,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setSaleFee(saleFeeObj);
+        }
+    }
+    function handleTotalCost() {
+        if(Object.keys(productCost).length === 0 || Object.keys(logisticTotalCost).length === 0 || Object.keys(saleFee).length === 0) {
+            return;
+        } else {
+            let totalCostObj = {};
+            brand.product_set.forEach((product) => {
+                if(productCost[product.name] && logisticTotalCost[product.name] && saleFee[product.name]) {
+                    totalCostObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productCost[product.name][date] && logisticTotalCost[product.name][date] && saleFee[product.name][date]) {
+                        let cost = productCost[product.name][date]["productCost"] + logisticTotalCost[product.name][date]["logisticFee"] + saleFee[product.name][date]["saleFee"];
+                        totalCostObj[product.name][date] = {
+                            "totalCost" : cost,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setTotalCost(totalCostObj);
+        }
+    }
     useEffect(() => {
         handleSaleRate();
     }, [completeData]);
@@ -200,6 +249,12 @@ function Table({brand, completeData, listOfDate}) {
     useEffect(() => {
         handleLogisticTotalCost();
     }, [completeData]);
+    useEffect(() => {
+        handleSaleFee();
+    }, [completeData]);
+    useEffect(() => {
+        handleTotalCost();
+    }, [productCost, logisticTotalCost, saleFee]);
     return (
         <>            
             { Object.keys(completeData).length === 0 ? 
@@ -244,6 +299,8 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8">비용(원화)</th>
                                         <th className="border-2 border-slate-400 px-8">원가</th>
                                         <th className="border-2 border-slate-400 px-8">물류비용</th>
+                                        <th className="border-2 border-slate-400 px-8">판매수수료</th>
+                                        <th className="border-2 border-slate-400 px-8">비용계</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -400,7 +457,7 @@ function Table({brand, completeData, listOfDate}) {
                                                     <>
                                                         {spendKrw[product.name][date] ? 
                                                                 <>
-                                                                    <td className="border-2">{spendKrw[product.name][date]["spendKrw"]}</td>
+                                                                    <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(spendKrw[product.name][date]["spendKrw"])}</td>
                                                                 </>
                                                             :
                                                                 <td className="border-2">₩0</td>
@@ -412,8 +469,8 @@ function Table({brand, completeData, listOfDate}) {
                                             {productCost[product.name] ? 
                                                     <>
                                                         {productCost[product.name][date] ? 
-                                                                <>
-                                                                    <td className="border-2">{productCost[product.name][date]["productCost"]}</td>
+                                                                <> 
+                                                                    <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(productCost[product.name][date]["productCost"])}</td>
                                                                 </>
                                                             :
                                                                 <td className="border-2">₩0</td>
@@ -426,7 +483,33 @@ function Table({brand, completeData, listOfDate}) {
                                                     <>
                                                         {logisticTotalCost[product.name][date] ? 
                                                                 <>
-                                                                    <td className="border-2">{logisticTotalCost[product.name][date]["logisticFee"]}</td>
+                                                                    <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(logisticTotalCost[product.name][date]["logisticFee"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">₩0</td>
+                                            }
+                                            {saleFee[product.name] ? 
+                                                    <>
+                                                        {saleFee[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(saleFee[product.name][date]["saleFee"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">₩0</td>
+                                            }
+                                            {totalCost[product.name] ? 
+                                                    <>
+                                                        {totalCost[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalCost[product.name][date]["totalCost"])}</td>
                                                                 </>
                                                             :
                                                                 <td className="border-2">₩0</td>
