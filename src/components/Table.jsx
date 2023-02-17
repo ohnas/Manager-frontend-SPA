@@ -273,7 +273,7 @@ function Table({brand, completeData, listOfDate}) {
                             <table className="whitespace-nowrap text-center">
                                 <thead className="bg-gray-200">
                                     <tr>
-                                        <th className="border-2 border-slate-400 px-24 py-2">날짜</th>
+                                        <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-gray-200">날짜</th>
                                         <th className="border-2 border-slate-400 px-8">주문</th>
                                         {product.options_set.map((option) =>
                                             <th key={option.pk} className="border-2 border-slate-400 px-16">{option.name}</th>
@@ -301,6 +301,10 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8">물류비용</th>
                                         <th className="border-2 border-slate-400 px-8">판매수수료</th>
                                         <th className="border-2 border-slate-400 px-8">비용계</th>
+                                        <th className="border-2 border-slate-400 px-8">매출</th>
+                                        <th className="border-2 border-slate-400 px-8">택배매출</th>
+                                        <th className="border-2 border-slate-400 px-8">판매이익</th>
+                                        <th className="border-2 border-slate-400 px-8">이익-광고비</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -510,6 +514,32 @@ function Table({brand, completeData, listOfDate}) {
                                                         {totalCost[product.name][date] ? 
                                                                 <>
                                                                     <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalCost[product.name][date]["totalCost"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">₩0</td>
+                                            }
+                                            {completeData.imweb_data.by_products_payment[product.name] ? 
+                                                    <>
+                                                        {completeData.imweb_data.by_products_payment[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_products_payment[product.name][date]["price"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2">₩0</td>
+                                            }
+                                            {completeData.imweb_data.by_products_payment[product.name] ? 
+                                                    <>
+                                                        {completeData.imweb_data.by_products_payment[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_products_payment[product.name][date]["deliv_price"])}</td>
                                                                 </>
                                                             :
                                                                 <td className="border-2">₩0</td>

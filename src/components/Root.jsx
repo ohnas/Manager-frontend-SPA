@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { baseUrl, getCookie } from "../api";
 import Header from "./Header";
 
@@ -8,6 +8,7 @@ function Root() {
     const [user, setUser] = useState({});
     const [brandName, setBrandName] = useState();
     const navigate = useNavigate();
+    const location = useLocation();
     async function logOut() {
         let csrftoken = getCookie('csrftoken');
         let response = await fetch(`${baseUrl}/users/log-out` , {
@@ -38,10 +39,15 @@ function Root() {
             setPermission(true);
             setUser(data);
         }
-      }
+    }
     useEffect(() => {
         userProfile();
     }, [permission]);
+    useEffect(() => {
+        if(location.pathname !== "/brands") {
+            setBrandName("");
+        }
+    }, [location]);
     return (
         <div>
             <Header permission={permission} user={user} logOut={logOut} brandName={brandName} />
