@@ -6,6 +6,10 @@ import Brand from "./routes/Brand";
 import BrandDetail from "./routes/BrandDetail";
 import SignUp from "./routes/SignUp";
 import Management from "./routes/Management";
+import ManageUser from "./routes/ManageUser";
+import ManageBrand from "./routes/ManageBrand";
+import ManageProduct from "./routes/ManageProduct";
+import ManageSite from "./routes/ManageSite";
 
 const router = createBrowserRouter([
     {
@@ -32,6 +36,24 @@ const router = createBrowserRouter([
             {
                 path: "management",
                 element: <Management />,
+                children: [
+                    {
+                        path: "manageuser",
+                        element: <ManageUser />,
+                    },
+                    {
+                        path: "managebrand",
+                        element: <ManageBrand />,
+                    },
+                    {
+                        path: "manageproduct",
+                        element: <ManageProduct />,
+                    },
+                    {
+                        path: "managesite",
+                        element: <ManageSite />,
+                    },
+                ]
             },
         ]
     }
