@@ -6,10 +6,6 @@ import Brand from "./routes/Brand";
 import BrandDetail from "./routes/BrandDetail";
 import SignUp from "./routes/SignUp";
 import Management from "./routes/Management";
-import ManageUser from "./routes/management/ManageUser";
-import ManageBrand from "./routes/management/ManageBrand";
-import ManageProduct from "./routes/management/ManageProduct";
-import ManageSite from "./routes/management/ManageSite";
 import UpdateUser from "./routes/management/user/UpdateUser";
 import CreateBrand from "./routes/management/brand/CreateBrand"
 import UpdateBrand from "./routes/management/brand/UpdateBrand"
@@ -44,60 +40,34 @@ const router = createBrowserRouter([
             {
                 path: "management",
                 element: <Management />,
-                children: [
-                    {
-                        path: "manageuser",
-                        element: <ManageUser />,
-                        children: [
-                            {
-                                path: "update",
-                                element: <UpdateUser />,
-                            }
-                        ]
-                    },
-                    {
-                        path: "managebrand",
-                        element: <ManageBrand />,
-                        children: [
-                            {
-                                path: "create",
-                                element: <CreateBrand />,
-                            },
-                            {
-                                path: "update",
-                                element: <UpdateBrand />,
-                            },
-                        ]
-                    },
-                    {
-                        path: "manageproduct",
-                        element: <ManageProduct />,
-                        children: [
-                            {
-                                path: "create",
-                                element: <CreateProduct />,
-                            },
-                            {
-                                path: "update",
-                                element: <UpdateProduct />,
-                            },
-                        ]
-                    },
-                    {
-                        path: "managesite",
-                        element: <ManageSite />,
-                        children: [
-                            {
-                                path: "create",
-                                element: <CreateSite />,
-                            },
-                            {
-                                path: "update",
-                                element: <UpdateSite />,
-                            },
-                        ]
-                    },
-                ]
+            },
+            {
+                path: "management/manageuser/update",
+                element: <UpdateUser />,
+            },
+            {
+                path: "management/managebrand/create",
+                element: <CreateBrand />,
+            },
+            {
+                path: "management/managebrand/update",
+                element: <UpdateBrand />,
+            },
+            {
+                path: "management/manageproduct/create",
+                element: <CreateProduct />,
+            },
+            {
+                path: "management/manageproduct/update",
+                element: <UpdateProduct />,
+            },
+            {
+                path: "management/managesite/create",
+                element: <CreateSite />,
+            },
+            {
+                path: "management/managesite/update",
+                element: <UpdateSite />,
             },
         ]
     }
