@@ -60,7 +60,7 @@ function CreateBrand() {
                     <input {...register("name", {required: true})} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                     <label htmlFor="description">DESCRIPTION</label>
                     <input {...register("description")} id="description" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                    <select {...register("user")} id="user" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
+                    <select {...register("user", {required: true})} id="user" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
                         <option>BM</option>
                         {userList.map((user) => 
                             <option key={user.pk} value={user.pk}>{user.name}</option>
