@@ -9,6 +9,7 @@ import Management from "./routes/Management";
 import UpdateUser from "./routes/management/user/UpdateUser";
 import CreateBrand from "./routes/management/brand/CreateBrand"
 import UpdateBrand from "./routes/management/brand/UpdateBrand"
+import UpdateBrandForm from "./routes/management/brand/UpdateBrandForm"
 import CreateProduct from "./routes/management/product/CreateProduct"
 import UpdateProduct from "./routes/management/product/UpdateProduct"
 import CreateSite from "./routes/management/site/CreateSite"
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
             {
                 path: "management/managebrand/update",
                 element: <UpdateBrand />,
+            },
+            {
+                path: "management/managebrand/update/:brandPk",
+                element: <UpdateBrandForm />,
             },
             {
                 path: "management/manageproduct/create",
