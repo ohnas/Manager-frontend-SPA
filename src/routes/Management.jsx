@@ -50,6 +50,17 @@ function Management() {
                             </ul>
                         </div>
                         <div className="flex flex-col items-center mb-14">
+                            <span className="text-2xl mb-5">OPTION</span>
+                            <ul className="flex justify-between items-center w-32">
+                                <Link to={"/management/manageoption/create"}>
+                                    <li className="text-gray-400 hover:border-b-2 border-purple-400">create</li>
+                                </Link>
+                                <Link to={"/management/manageoption/update"}>
+                                    <li className="text-gray-400 hover:border-b-2 border-purple-400">update</li>
+                                </Link>
+                            </ul>
+                        </div>
+                        <div className="flex flex-col items-center mb-14">
                             <span className="text-2xl mb-5">SITE</span>
                             <ul className="flex justify-between items-center w-32">
                                 <Link to={"/management/managesite/create"}>

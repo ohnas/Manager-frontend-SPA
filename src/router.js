@@ -13,7 +13,8 @@ import CreateProduct from "./routes/management/product/CreateProduct"
 import UpdateProduct from "./routes/management/product/UpdateProduct"
 import CreateSite from "./routes/management/site/CreateSite"
 import UpdateSite from "./routes/management/site/UpdateSite"
-
+import CreateOption from "./routes/management/option/CreateOption"
+import UpdateOption from "./routes/management/option/UpdateOption"
 
 const router = createBrowserRouter([
     {
@@ -60,6 +61,14 @@ const router = createBrowserRouter([
             {
                 path: "management/manageproduct/update",
                 element: <UpdateProduct />,
+            },
+            {
+                path: "management/manageoption/create",
+                element: <CreateOption />,
+            },
+            {
+                path: "management/manageoption/update",
+                element: <UpdateOption />,
             },
             {
                 path: "management/managesite/create",
