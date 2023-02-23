@@ -10,6 +10,7 @@ function Table({brand, completeData, listOfDate}) {
     const [productLogisticExpense, setProductLogisticExpense] = useState({});
     const [saleExpense, setSaleExpense] = useState({});
     const [facebookKrwExpense, setFacebookKrwExpense] = useState({});
+    const [productOperatingProfit, setProductOperatingProfit] = useState({});
     function handleOptionRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -257,6 +258,31 @@ function Table({brand, completeData, listOfDate}) {
             setFacebookKrwExpense(facebookKrwExpenseObj)
         }
     }
+    function handleProductOperatingProfit() {
+        if(Object.keys(productProfit).length === 0 || Object.keys(productExpense).length === 0) {
+            return;
+        } else {
+            let productOperatingProfitObj = {};
+            brand.product_set.forEach((product) => {
+                if(productProfit[product.name] && productExpense[product.name]) {
+                    productOperatingProfitObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productProfit[product.name][date] && productExpense[product.name][date]) {
+                        let profit = (productProfit[product.name][date]["productProfit"] - productExpense[product.name][date]["productExpense"])
+                        productOperatingProfitObj[product.name][date] = {
+                            "productOperatingProfit" : profit,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setProductOperatingProfit(productOperatingProfitObj);
+        }
+    }
     useEffect(() => {
         handleOptionRate();
     }, [completeData]);
@@ -284,6 +310,9 @@ function Table({brand, completeData, listOfDate}) {
     useEffect(() => {
         handleFacebookKrwExpense();
     }, [completeData]);
+    useEffect(() => {
+        handleProductOperatingProfit();
+    }, [productProfit, productExpense]);
     return (
         <>            
             { Object.keys(completeData).length === 0 ? 
@@ -355,9 +384,9 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8 bg-indigo-300">상품 이익</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">비용</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">물류(3pl)</th>
-                                        <th className="border-2 border-slate-400 px-8 bg-green-300">판매수수료</th>
-                                        <th className="border-2 border-slate-400 px-8 bg-green-300">광고비용(facebook 원화)</th>
-                                        <th className="border-2 border-slate-400 px-8">판매이익</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">판매 수수료</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">광고 비용(facebook 원화)</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-indigo-300">영업 이익</th>
                                         <th className="border-2 border-slate-400 px-8">이익-광고비</th>
                                     </tr>
                                 </thead>
@@ -614,6 +643,19 @@ function Table({brand, completeData, listOfDate}) {
                                                     </>
                                                 :
                                                 <td className="border-2 bg-green-50">₩0</td>
+                                            }
+                                            {productOperatingProfit[product.name] ? 
+                                                    <>
+                                                        {productOperatingProfit[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(productOperatingProfit[product.name][date]["productOperatingProfit"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-indigo-50">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-indigo-50">₩0</td>
                                             }
                                         </tr>
                                     )}
