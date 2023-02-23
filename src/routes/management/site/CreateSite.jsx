@@ -67,13 +67,13 @@ function CreateSite() {
                     <label htmlFor="adAccountId">AD ACCOUNT ID</label>
                     <input {...register("adAccountId")} id="adAccountId" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                     <select {...register("brand", {required: true})} id="brand" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
-                        <option>BRAND</option>
+                        <option value="">BRAND</option>
                         {brandList.map((brand) => 
                             <option key={brand.pk} value={brand.pk}>{brand.name}</option>
                         )}
                     </select>
                     <select {...register("kind", {required: true})} id="kind" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
-                        <option>KIND</option>
+                        <option value="">KIND</option>
                         <option value={"sale_site"}>판매</option>
                         <option value={"advertising_site"}>광고</option>
                     </select>

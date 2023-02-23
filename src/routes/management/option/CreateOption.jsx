@@ -73,7 +73,7 @@ function CreateOption() {
                     <label htmlFor="gift_quantity">GIFT QUANTITY</label>
                     <input {...register("gift_quantity")} id="gift_quantity" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                     <select {...register("product", {required: true})} id="product" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
-                        <option>PRODUCT</option>
+                        <option value="">PRODUCT</option>
                         {productList.map((product) => 
                             <option key={product.pk} value={product.pk}>{product.name}</option>
                         )}

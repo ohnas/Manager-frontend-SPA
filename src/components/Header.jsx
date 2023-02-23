@@ -17,7 +17,7 @@ function Header({permission, user, logOut, brandName}) {
                         <span className="w-24">{user.name}</span>
                         {user.is_staff ? 
                             <Link to={"/management"}>
-                                <button className="border-solid border-2 rounded-md w-32 h-12 border-purple-300 text-black">Management</button>
+                                <button className="border-solid border-b-2 w-32 h-12 border-purple-200 text-black hover:border-purple-400">Management</button>
                             </Link>
                             :
                             null
