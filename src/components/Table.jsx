@@ -11,6 +11,7 @@ function Table({brand, completeData, listOfDate}) {
     const [saleExpense, setSaleExpense] = useState({});
     const [facebookKrwExpense, setFacebookKrwExpense] = useState({});
     const [productOperatingProfit, setProductOperatingProfit] = useState({});
+    const [totalConversionRate, setTotalConversionRate] = useState({});
     function handleOptionRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -283,6 +284,34 @@ function Table({brand, completeData, listOfDate}) {
             setProductOperatingProfit(productOperatingProfitObj);
         }
     }
+    function handleTotalConversionRate() {
+        if(Object.keys(completeData).length === 0) {
+            return;
+        } else {
+            let totalConversionRateObj = {};
+            listOfDate.forEach((date) => {
+                if(completeData.facebook_data.by_date[date]) {
+                    let rate = ((completeData.facebook_data.by_date[date].purchase / completeData.facebook_data.by_date[date].landing_page_view) * 100).toFixed(2);
+                    totalConversionRateObj[date] = {
+                        "totalConversionRate" : rate,
+                    }
+                } else {
+                    return;
+                }
+            });
+            setTotalConversionRate(totalConversionRateObj);
+        }
+    }
+    function handleToggleBtn(event) {
+        let curretBtn = event.target.nextElementSibling;
+        curretBtn.classList.toggle("hidden");
+        let curretText = event.target.innerText;
+        if(curretText === "hidden") {
+            event.target.innerText = "show";
+        } else {
+            event.target.innerText = "hidden";
+        }
+    }
     useEffect(() => {
         handleOptionRate();
     }, [completeData]);
@@ -313,6 +342,9 @@ function Table({brand, completeData, listOfDate}) {
     useEffect(() => {
         handleProductOperatingProfit();
     }, [productProfit, productExpense]);
+    useEffect(() => {
+        handleTotalConversionRate();
+    }, [completeData]);
     return (
         <>            
             { Object.keys(completeData).length === 0 ? 
@@ -323,6 +355,111 @@ function Table({brand, completeData, listOfDate}) {
                     </div>
                 :
                 <>
+                    <div className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
+                        <div className="sticky left-0 z-50 bg-white flex">
+                            <span>TOTAL</span>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>imweb</span>
+                                <div className="w-3 h-3 bg-gray-300 rounded-full ml-1"></div>
+                            </div>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>facebook</span>
+                                <div className="w-3 h-3 bg-blue-300 rounded-full ml-1"></div>
+                            </div>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>매출</span>
+                                <div className="w-3 h-3 bg-rose-300 rounded-full ml-1"></div>
+                            </div>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>원가</span>
+                                <div className="w-3 h-3 bg-fuchsia-300 rounded-full ml-1"></div>
+                            </div>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>이익</span>
+                                <div className="w-3 h-3 bg-indigo-300 rounded-full ml-1"></div>
+                            </div>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>비용</span>
+                                <div className="w-3 h-3 bg-green-300 rounded-full ml-1"></div>
+                            </div>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>비율</span>
+                                <div className="w-3 h-3 bg-yellow-300 rounded-full ml-1"></div>
+                            </div>
+                        </div>
+                        <table className="whitespace-nowrap text-center">
+                            <thead>
+                                <tr>
+                                    <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">빈도</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">비용</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">CPM</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">CTR</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">ROAS</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">CPC</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">구매</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">랜딩페이지뷰</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">링크클릭</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">결제정보추가</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">장바구니</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-blue-300">구매전환율</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {listOfDate.map((date, index) => 
+                                    <tr key={index}>
+                                        <td className="sticky left-0 z-50 bg-white border-2">{date}</td>
+                                        {completeData.imweb_data.total_order[date] ? 
+                                                <td className="border-2 bg-gray-50">{completeData.imweb_data.total_order[date]["prod_count"]}</td>
+                                            :
+                                                <td className="border-2 bg-gray-50">0</td>
+                                        }
+                                        {completeData.facebook_data.by_date[date] ?
+                                                <>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["reach"]}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["impressions"]}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["frequency"].toFixed(2)}</td>
+                                                    <td className="border-2 bg-blue-50">US${completeData.facebook_data.by_date[date]["spend"].toFixed(2)}</td>
+                                                    <td className="border-2 bg-blue-50">US${completeData.facebook_data.by_date[date]["cpm"].toFixed(2)}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["website_ctr"].toFixed(2)}</td>
+                                                    <td className="border-2 bg-blue-50">{Math.round(completeData.facebook_data.by_date[date]["purchase_roas"]*100)}%</td>
+                                                    <td className="border-2 bg-blue-50">US${completeData.facebook_data.by_date[date]["cost_per_unique_inline_link_click"].toFixed(2)}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["purchase"]}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["landing_page_view"]}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["link_click"]}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["add_payment_info"]}</td>
+                                                    <td className="border-2 bg-blue-50">{completeData.facebook_data.by_date[date]["add_to_cart"]}</td>
+                                                </>
+                                            :
+                                                <>
+                                                    <td className="border-2 bg-blue-50">0</td>
+                                                    <td className="border-2 bg-blue-50">0</td>
+                                                    <td className="border-2 bg-blue-50">0.00</td>
+                                                    <td className="border-2 bg-blue-50">US$0.00</td>
+                                                    <td className="border-2 bg-blue-50">US$0.00</td>
+                                                    <td className="border-2 bg-blue-50">0.00</td>
+                                                    <td className="border-2 bg-blue-50">0%</td>
+                                                    <td className="border-2 bg-blue-50">US$0.00</td>
+                                                    <td className="border-2 bg-blue-50">0</td>
+                                                    <td className="border-2 bg-blue-50">0</td>
+                                                    <td className="border-2 bg-blue-50">0</td>
+                                                    <td className="border-2 bg-blue-50">0</td>
+                                                    <td className="border-2 bg-blue-50">0</td>
+                                                </>
+                                        }
+                                        {totalConversionRate[date] ? 
+                                                <td className="border-2 bg-blue-50">{totalConversionRate[date]["totalConversionRate"]}%</td>   
+                                            :
+                                                <td>0.00%</td>
+                                        }
+                                    </tr>
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
                     {brand.product_set.map((product) =>
                         <div key={product.pk} className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
                             <div className="sticky left-0 z-50 bg-white flex">
@@ -351,11 +488,16 @@ function Table({brand, completeData, listOfDate}) {
                                     <span>비용</span>
                                     <div className="w-3 h-3 bg-green-300 rounded-full ml-1"></div>
                                 </div>
+                                <div className="flex items-center ml-5 text-xs text-gray-500">
+                                    <span>비율</span>
+                                    <div className="w-3 h-3 bg-yellow-300 rounded-full ml-1"></div>
+                                </div>
                             </div>
+                            <button onClick={handleToggleBtn}>hidden</button>
                             <table className="whitespace-nowrap text-center">
-                                <thead className="bg-gray-200">
+                                <thead>
                                     <tr>
-                                        <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-gray-200">날짜</th>
+                                        <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
                                         <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
                                         {product.options_set.map((option) =>
                                             <th key={option.pk} className="border-2 border-slate-400 px-16 bg-gray-300">{option.name}</th>
@@ -387,7 +529,9 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">판매 수수료</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">광고 비용(facebook 원화)</th>
                                         <th className="border-2 border-slate-400 px-8 bg-indigo-300">영업 이익</th>
-                                        <th className="border-2 border-slate-400 px-8">이익-광고비</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 이익율</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 원가율</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 광고비율</th>
                                     </tr>
                                 </thead>
                                 <tbody>
