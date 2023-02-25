@@ -306,10 +306,10 @@ function Table({brand, completeData, listOfDate}) {
         let curretBtn = event.target.nextElementSibling;
         curretBtn.classList.toggle("hidden");
         let curretText = event.target.innerText;
-        if(curretText === "hidden") {
-            event.target.innerText = "show";
+        if(curretText === "show") {
+            event.target.innerText = "hide";
         } else {
-            event.target.innerText = "hidden";
+            event.target.innerText = "show";
         }
     }
     useEffect(() => {
@@ -406,6 +406,8 @@ function Table({brand, completeData, listOfDate}) {
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">결제정보추가</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">장바구니</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">구매전환율</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-rose-300">상품 매출</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-rose-300">택배 매출</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -455,6 +457,16 @@ function Table({brand, completeData, listOfDate}) {
                                             :
                                                 <td>0.00%</td>
                                         }
+                                        {completeData.imweb_data.by_date_payment[date] ? 
+                                                <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["price"])}</td>
+                                            :
+                                                <td className="border-2 bg-rose-50">₩0</td>
+                                        }
+                                        {completeData.imweb_data.by_date_payment[date] ? 
+                                                <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["deliv_price"])}</td>
+                                            :
+                                                <td className="border-2 bg-rose-50">₩0</td>
+                                        }
                                     </tr>
                                 )}
                             </tbody>
@@ -493,8 +505,8 @@ function Table({brand, completeData, listOfDate}) {
                                     <div className="w-3 h-3 bg-yellow-300 rounded-full ml-1"></div>
                                 </div>
                             </div>
-                            <button onClick={handleToggleBtn}>hidden</button>
-                            <table className="whitespace-nowrap text-center">
+                            <button onClick={handleToggleBtn} className="sticky left-0 z-50 bg-white text-gray-300">show</button>
+                            <table className="whitespace-nowrap text-center hidden">
                                 <thead>
                                     <tr>
                                         <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
@@ -528,7 +540,7 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">물류(3pl)</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">판매 수수료</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">광고 비용(facebook 원화)</th>
-                                        <th className="border-2 border-slate-400 px-8 bg-indigo-300">영업 이익</th>
+                                        <th className="border-4 border-black px-8 bg-indigo-300">영업 이익</th>
                                         <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 이익율</th>
                                         <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 원가율</th>
                                         <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 광고비율</th>
@@ -792,14 +804,14 @@ function Table({brand, completeData, listOfDate}) {
                                                     <>
                                                         {productOperatingProfit[product.name][date] ? 
                                                                 <>
-                                                                    <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(productOperatingProfit[product.name][date]["productOperatingProfit"])}</td>
+                                                                    <td className="border-4 border-black bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(productOperatingProfit[product.name][date]["productOperatingProfit"])}</td>
                                                                 </>
                                                             :
-                                                                <td className="border-2 bg-indigo-50">₩0</td>
+                                                                <td className="border-4 border-black bg-indigo-50">₩0</td>
                                                         }
                                                     </>
                                                 :
-                                                <td className="border-2 bg-indigo-50">₩0</td>
+                                                <td className="border-4 border-black bg-indigo-50">₩0</td>
                                             }
                                         </tr>
                                     )}
