@@ -6,11 +6,14 @@ function Table({brand, completeData, listOfDate}) {
     const [conversionRate, setConversionRate] = useState({});
     const [productCost, setProductCost] = useState({});
     const [productProfit, setProductProfit] = useState({});
-    const [productExpense, setProductExpense] = useState({});
     const [productLogisticExpense, setProductLogisticExpense] = useState({});
     const [saleExpense, setSaleExpense] = useState({});
     const [facebookKrwExpense, setFacebookKrwExpense] = useState({});
+    const [productExpense, setProductExpense] = useState({});
     const [productOperatingProfit, setProductOperatingProfit] = useState({});
+    const [productOperatingProfitRate, setProductOperatingProfitRate] = useState({});
+    const [productCostRate, setProductCostRate] = useState({});
+    const [advertisementRate, setAdvertisementRate] = useState({});
     const [totalConversionRate, setTotalConversionRate] = useState({});
     const [totalProductCost, setTotalProductCost] = useState({});
     const [totalProductProfit, setTotalProductProfit] = useState({});
@@ -153,31 +156,6 @@ function Table({brand, completeData, listOfDate}) {
             setProductProfit(productProfitObj);
         }
     }
-    function handleProductExpense() {
-        if(Object.keys(productLogisticExpense).length === 0 || Object.keys(saleExpense).length === 0 || Object.keys(facebookKrwExpense).length === 0) {
-            return;
-        } else {
-            let productExpenseObj = {};
-            brand.product_set.forEach((product) => {
-                if(productLogisticExpense[product.name] && saleExpense[product.name] && facebookKrwExpense[product.name]) {
-                    productExpenseObj[product.name] = {};
-                } else {
-                    return;
-                }
-                listOfDate.forEach((date) => {
-                    if(productLogisticExpense[product.name][date] && saleExpense[product.name][date] && facebookKrwExpense[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {
-                        let expense = productLogisticExpense[product.name][date]["logisticExpense"] + saleExpense[product.name][date]["saleExpense"] + facebookKrwExpense[product.name][date]["facebookKrwExpense"] + completeData.imweb_data.by_products_payment[product.name][date]["coupon"] + completeData.imweb_data.by_products_payment[product.name][date]["point"] + completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"] + completeData.imweb_data.by_products_payment[product.name][date]["price_sale"] + completeData.imweb_data.by_products_payment[product.name][date]["period_discount"];
-                        productExpenseObj[product.name][date] = {
-                            "productExpense" : expense,
-                        };
-                    } else {    
-                        return;
-                    }
-                });
-            });
-            setProductExpense(productExpenseObj);
-        }
-    }
     function handleProductLogisticExpense() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -261,6 +239,31 @@ function Table({brand, completeData, listOfDate}) {
             setFacebookKrwExpense(facebookKrwExpenseObj)
         }
     }
+    function handleProductExpense() {
+        if(Object.keys(productLogisticExpense).length === 0 || Object.keys(saleExpense).length === 0 || Object.keys(facebookKrwExpense).length === 0) {
+            return;
+        } else {
+            let productExpenseObj = {};
+            brand.product_set.forEach((product) => {
+                if(productLogisticExpense[product.name] && saleExpense[product.name] && facebookKrwExpense[product.name]) {
+                    productExpenseObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productLogisticExpense[product.name][date] && saleExpense[product.name][date] && facebookKrwExpense[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {
+                        let expense = productLogisticExpense[product.name][date]["logisticExpense"] + saleExpense[product.name][date]["saleExpense"] + facebookKrwExpense[product.name][date]["facebookKrwExpense"] + completeData.imweb_data.by_products_payment[product.name][date]["coupon"] + completeData.imweb_data.by_products_payment[product.name][date]["point"] + completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"] + completeData.imweb_data.by_products_payment[product.name][date]["price_sale"] + completeData.imweb_data.by_products_payment[product.name][date]["period_discount"];
+                        productExpenseObj[product.name][date] = {
+                            "productExpense" : expense,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setProductExpense(productExpenseObj);
+        }
+    }
     function handleProductOperatingProfit() {
         if(Object.keys(productProfit).length === 0 || Object.keys(productExpense).length === 0) {
             return;
@@ -274,7 +277,7 @@ function Table({brand, completeData, listOfDate}) {
                 }
                 listOfDate.forEach((date) => {
                     if(productProfit[product.name][date] && productExpense[product.name][date]) {
-                        let profit = (productProfit[product.name][date]["productProfit"] - productExpense[product.name][date]["productExpense"])
+                        let profit = (productProfit[product.name][date]["productProfit"] - productExpense[product.name][date]["productExpense"]);
                         productOperatingProfitObj[product.name][date] = {
                             "productOperatingProfit" : profit,
                         };
@@ -284,6 +287,81 @@ function Table({brand, completeData, listOfDate}) {
                 });
             });
             setProductOperatingProfit(productOperatingProfitObj);
+        }
+    }
+    function handleProductOperatingProfitRate() {
+        if(Object.keys(productOperatingProfit).length === 0) {
+            return;
+        } else {
+            let productOperatingProfitRateObj = {};
+            brand.product_set.forEach((product) => {
+                if(productOperatingProfit[product.name]) {
+                    productOperatingProfitRateObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productOperatingProfit[product.name][date]) {
+                        let rate = ((productOperatingProfit[product.name][date]["productOperatingProfit"] / completeData.imweb_data.by_products_payment[product.name][date]["price"]) * 100).toFixed(2);
+                        productOperatingProfitRateObj[product.name][date] = {
+                            "productOperatingProfitRate" : rate,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setProductOperatingProfitRate(productOperatingProfitRateObj);
+        }
+    }
+    function handleProductCostRate() {
+        if(Object.keys(productCost).length === 0) {
+            return;
+        } else {
+            let productCostRateObj = {};
+            brand.product_set.forEach((product) => {
+                if(productCost[product.name]) {
+                    productCostRateObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productCost[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {
+                        let rate = ((productCost[product.name][date]["productCost"] / completeData.imweb_data.by_products_payment[product.name][date]["price"]) * 100).toFixed(2);
+                        productCostRateObj[product.name][date] = {
+                            "productCostRate" : rate,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setProductCostRate(productCostRateObj);
+        }
+    }
+    function handleAdvertisementRate() {
+        if(Object.keys(facebookKrwExpense).length === 0) {
+            return;
+        } else {
+            let advertisementRateObj = {};
+            brand.product_set.forEach((product) => {
+                if(facebookKrwExpense[product.name]) {
+                    advertisementRateObj[product.name] = {};
+                } else {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(facebookKrwExpense[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {
+                        let rate = ((facebookKrwExpense[product.name][date]["facebookKrwExpense"] / completeData.imweb_data.by_products_payment[product.name][date]["price"]) * 100).toFixed(2);
+                        advertisementRateObj[product.name][date] = {
+                            "advertisementRate" : rate,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            });
+            setAdvertisementRate(advertisementRateObj);
         }
     }
     function handleTotalConversionRate() {
@@ -414,6 +492,15 @@ function Table({brand, completeData, listOfDate}) {
     useEffect(() => {
         handleProductOperatingProfit();
     }, [productProfit, productExpense]);
+    useEffect(() => {
+        handleProductOperatingProfitRate();
+    }, [productOperatingProfit]);
+    useEffect(() => {
+        handleProductCostRate();
+    }, [productCost]);
+    useEffect(() => {
+        handleAdvertisementRate();
+    }, [facebookKrwExpense]);
     useEffect(() => {
         handleTotalConversionRate();
     }, [completeData]);
@@ -622,6 +709,7 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8 bg-blue-300">결제정보추가</th>
                                         <th className="border-2 border-slate-400 px-8 bg-blue-300">장바구니</th>
                                         <th className="border-2 border-slate-400 px-8 bg-blue-300">구매전환율</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">광고 세트</th>
                                         <th className="border-2 border-slate-400 px-8 bg-rose-300">상품 매출</th>
                                         <th className="border-2 border-slate-400 px-8 bg-rose-300">택배 매출</th>
                                         <th className="border-2 border-slate-400 px-8 bg-fuchsia-300">상품 원가</th>
@@ -791,6 +879,7 @@ function Table({brand, completeData, listOfDate}) {
                                                 :
                                                 <td className="border-2 bg-blue-50">0.00%</td>
                                             }
+                                            <td>show</td>
                                             {completeData.imweb_data.by_products_payment[product.name] ? 
                                                     <>
                                                         {completeData.imweb_data.by_products_payment[product.name][date] ? 
@@ -972,6 +1061,45 @@ function Table({brand, completeData, listOfDate}) {
                                                     </>
                                                 :
                                                 <td className="border-4 border-black bg-indigo-50">₩0</td>
+                                            }
+                                            {productOperatingProfitRate[product.name] ? 
+                                                    <>
+                                                        {productOperatingProfitRate[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-yellow-50">{productOperatingProfitRate[product.name][date]["productOperatingProfitRate"]}%</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-yellow-50">0.00%</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-yellow-50">0.00%</td>
+                                            }
+                                            {productCostRate[product.name] ? 
+                                                    <>
+                                                        {productCostRate[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-yellow-50">{productCostRate[product.name][date]["productCostRate"]}%</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-yellow-50">0.00%</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-yellow-50">0.00%</td>
+                                            }
+                                            {advertisementRate[product.name] ? 
+                                                    <>
+                                                        {advertisementRate[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-yellow-50">{advertisementRate[product.name][date]["advertisementRate"]}%</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-yellow-50">0.00%</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-yellow-50">0.00%</td>
                                             }
                                         </tr>
                                     )}
