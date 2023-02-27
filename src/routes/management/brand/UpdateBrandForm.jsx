@@ -61,7 +61,11 @@ function UpdateBrandForm() {
             body : JSON.stringify(updateData),
         });
         let data = await response.json();
-        setBrandDetail(data);
+        if (data.name[0] === "brand with this name already exists.") {
+            alert("중복된 브랜드 이름 입니다.");
+        } else{
+            setBrandDetail(data);
+        }
     }
     useEffect(() => {
         goHome();
