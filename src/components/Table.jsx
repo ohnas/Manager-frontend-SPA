@@ -12,6 +12,8 @@ function Table({brand, completeData, listOfDate}) {
     const [facebookKrwExpense, setFacebookKrwExpense] = useState({});
     const [productOperatingProfit, setProductOperatingProfit] = useState({});
     const [totalConversionRate, setTotalConversionRate] = useState({});
+    const [totalProductCost, setTotalProductCost] = useState({});
+    const [totalProductProfit, setTotalProductProfit] = useState({});
     function handleOptionRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -163,8 +165,8 @@ function Table({brand, completeData, listOfDate}) {
                     return;
                 }
                 listOfDate.forEach((date) => {
-                    if(productLogisticExpense[product.name][date] && saleExpense[product.name][date] && facebookKrwExpense[product.name][date]) {
-                        let expense = productLogisticExpense[product.name][date]["logisticExpense"] + saleExpense[product.name][date]["saleExpense"] + facebookKrwExpense[product.name][date]["facebookKrwExpense"];
+                    if(productLogisticExpense[product.name][date] && saleExpense[product.name][date] && facebookKrwExpense[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {
+                        let expense = productLogisticExpense[product.name][date]["logisticExpense"] + saleExpense[product.name][date]["saleExpense"] + facebookKrwExpense[product.name][date]["facebookKrwExpense"] + completeData.imweb_data.by_products_payment[product.name][date]["coupon"] + completeData.imweb_data.by_products_payment[product.name][date]["point"] + completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"] + completeData.imweb_data.by_products_payment[product.name][date]["price_sale"] + completeData.imweb_data.by_products_payment[product.name][date]["period_discount"];
                         productExpenseObj[product.name][date] = {
                             "productExpense" : expense,
                         };
@@ -302,6 +304,76 @@ function Table({brand, completeData, listOfDate}) {
             setTotalConversionRate(totalConversionRateObj);
         }
     }
+    function handleTotalProductCost() {
+        if(Object.keys(productCost).length === 0) {
+            return;
+        } else {
+            let totalProductCostArray = [];
+            brand.product_set.forEach((product) => {
+                if(!productCost[product.name]) {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productCost[product.name][date]) {
+                        totalProductCostArray.push({[date] : productCost[product.name][date]["productCost"]})
+                    } else {
+                        return;
+                    }
+                });
+            });
+            let totalProductCostObj = {};
+            listOfDate.forEach((date) => {
+                let initialCost = 0;
+                totalProductCostArray.forEach((dateCost) => {
+                    if(dateCost.hasOwnProperty(date)) {
+                        let cost = dateCost[date];
+                        initialCost += cost;
+                        totalProductCostObj[date] = {
+                            "totalProductCost" : initialCost,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setTotalProductCost(totalProductCostObj);
+        }
+    }
+    function handleTotalProductProfit() {
+        if(Object.keys(productProfit).length === 0) {
+            return;
+        } else {
+            let totalProductProfitArray = [];
+            brand.product_set.forEach((product) => {
+                if(!productProfit[product.name]) {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productProfit[product.name][date]) {
+                        totalProductProfitArray.push({[date] : productProfit[product.name][date]["productProfit"]})
+                    } else {
+                        return;
+                    }
+                });
+            });
+            let totalProductProfitObj = {};
+            listOfDate.forEach((date) => {
+                let initialProfit = 0;
+                totalProductProfitArray.forEach((dateProfit) => {
+                    if(dateProfit.hasOwnProperty(date)) {
+                        let profit = dateProfit[date];
+                        initialProfit += profit;
+                        totalProductProfitObj[date] = {
+                            "totalProductProfit" : initialProfit,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setTotalProductProfit(totalProductProfitObj);
+        }
+    }
     function handleToggleBtn(event) {
         let curretBtn = event.target.nextElementSibling;
         curretBtn.classList.toggle("hidden");
@@ -345,6 +417,12 @@ function Table({brand, completeData, listOfDate}) {
     useEffect(() => {
         handleTotalConversionRate();
     }, [completeData]);
+    useEffect(() => {
+        handleTotalProductCost();
+    }, [productCost]);
+    useEffect(() => {
+        handleTotalProductProfit();
+    }, [productProfit]);
     return (
         <>            
             { Object.keys(completeData).length === 0 ? 
@@ -408,6 +486,8 @@ function Table({brand, completeData, listOfDate}) {
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">구매전환율</th>
                                     <th className="border-2 border-slate-400 px-8 bg-rose-300">상품 매출</th>
                                     <th className="border-2 border-slate-400 px-8 bg-rose-300">택배 매출</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-fuchsia-300">상품 원가</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-indigo-300">상품 이익</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -466,6 +546,16 @@ function Table({brand, completeData, listOfDate}) {
                                                 <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["deliv_price"])}</td>
                                             :
                                                 <td className="border-2 bg-rose-50">₩0</td>
+                                        }
+                                        {totalProductCost[date] ? 
+                                                <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalProductCost[date]["totalProductCost"])}</td>
+                                            :
+                                                <td className="border-2 bg-fuchsia-50">₩0</td>
+                                        }
+                                        {totalProductProfit[date] ? 
+                                                <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalProductProfit[date]["totalProductProfit"])}</td>
+                                            :
+                                                <td className="border-2 bg-indigo-50">₩0</td>
                                         }
                                     </tr>
                                 )}
@@ -536,10 +626,15 @@ function Table({brand, completeData, listOfDate}) {
                                         <th className="border-2 border-slate-400 px-8 bg-rose-300">택배 매출</th>
                                         <th className="border-2 border-slate-400 px-8 bg-fuchsia-300">상품 원가</th>
                                         <th className="border-2 border-slate-400 px-8 bg-indigo-300">상품 이익</th>
-                                        <th className="border-2 border-slate-400 px-8 bg-green-300">비용</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">물류(3pl)</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">판매 수수료</th>
                                         <th className="border-2 border-slate-400 px-8 bg-green-300">광고 비용(facebook 원화)</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(쿠폰)</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(적립금)</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(쇼핑등급 할인)</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(즉시 할인)</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(기간 할인)</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-green-300">비용</th>
                                         <th className="border-4 border-black px-8 bg-indigo-300">영업 이익</th>
                                         <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 이익율</th>
                                         <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 원가율</th>
@@ -748,19 +843,6 @@ function Table({brand, completeData, listOfDate}) {
                                                 :
                                                 <td className="border-2 bg-indigo-50">₩0</td>
                                             }
-                                            {productExpense[product.name] ? 
-                                                    <>
-                                                        {productExpense[product.name][date] ? 
-                                                                <>
-                                                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(productExpense[product.name][date]["productExpense"])}</td>
-                                                                </>
-                                                            :
-                                                                <td className="border-2 bg-green-50">₩0</td>
-                                                        }
-                                                    </>
-                                                :
-                                                <td className="border-2 bg-green-50">₩0</td>
-                                            }
                                             {productLogisticExpense[product.name] ? 
                                                     <>
                                                         {productLogisticExpense[product.name][date] ? 
@@ -792,6 +874,84 @@ function Table({brand, completeData, listOfDate}) {
                                                         {facebookKrwExpense[product.name][date] ? 
                                                                 <>
                                                                     <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(facebookKrwExpense[product.name][date]["facebookKrwExpense"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-green-50">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                            }
+                                            {completeData.imweb_data.by_products_payment[product.name] ? 
+                                                    <>
+                                                        {completeData.imweb_data.by_products_payment[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_products_payment[product.name][date]["coupon"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-green-50">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                            }
+                                            {completeData.imweb_data.by_products_payment[product.name] ? 
+                                                    <>
+                                                        {completeData.imweb_data.by_products_payment[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_products_payment[product.name][date]["point"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-green-50">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                            }
+                                            {completeData.imweb_data.by_products_payment[product.name] ? 
+                                                    <>
+                                                        {completeData.imweb_data.by_products_payment[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-green-50">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                            }
+                                            {completeData.imweb_data.by_products_payment[product.name] ? 
+                                                    <>
+                                                        {completeData.imweb_data.by_products_payment[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_products_payment[product.name][date]["price_sale"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-green-50">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                            }
+                                            {completeData.imweb_data.by_products_payment[product.name] ? 
+                                                    <>
+                                                        {completeData.imweb_data.by_products_payment[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_products_payment[product.name][date]["period_discount"])}</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-green-50">₩0</td>
+                                                        }
+                                                    </>
+                                                :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                            }
+                                            {productExpense[product.name] ? 
+                                                    <>
+                                                        {productExpense[product.name][date] ? 
+                                                                <>
+                                                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(productExpense[product.name][date]["productExpense"])}</td>
                                                                 </>
                                                             :
                                                                 <td className="border-2 bg-green-50">₩0</td>
