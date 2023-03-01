@@ -12,6 +12,7 @@ import UpdateBrand from "./routes/management/brand/UpdateBrand"
 import UpdateBrandForm from "./routes/management/brand/UpdateBrandForm"
 import CreateProduct from "./routes/management/product/CreateProduct"
 import UpdateProduct from "./routes/management/product/UpdateProduct"
+import UpdateProductForm from "./routes/management/product/UpdateProductForm";
 import CreateSite from "./routes/management/site/CreateSite"
 import UpdateSite from "./routes/management/site/UpdateSite"
 import CreateOption from "./routes/management/option/CreateOption"
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
             {
                 path: "management/manageproduct/update",
                 element: <UpdateProduct />,
+            },
+            {
+                path: "management/manageproduct/update/:productPk",
+                element: <UpdateProductForm />,
             },
             {
                 path: "management/manageoption/create",
