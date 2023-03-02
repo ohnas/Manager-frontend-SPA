@@ -32,7 +32,7 @@ function UpdateProduct() {
         handleProductList();
     }, []);
     return (
-        <div className="flex flex-col mt-32 justify-center items-center">
+        <div className="flex flex-col mt-6 justify-center items-center">
             {user.is_staff ? 
                     <ul>
                         {productList.map((product) =>

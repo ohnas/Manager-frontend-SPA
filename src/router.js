@@ -13,10 +13,11 @@ import UpdateBrandForm from "./routes/management/brand/UpdateBrandForm"
 import CreateProduct from "./routes/management/product/CreateProduct"
 import UpdateProduct from "./routes/management/product/UpdateProduct"
 import UpdateProductForm from "./routes/management/product/UpdateProductForm";
-import CreateSite from "./routes/management/site/CreateSite"
-import UpdateSite from "./routes/management/site/UpdateSite"
 import CreateOption from "./routes/management/option/CreateOption"
 import UpdateOption from "./routes/management/option/UpdateOption"
+import UpdateOptionForm from "./routes/management/option/UpdateOptionForm";
+import CreateSite from "./routes/management/site/CreateSite"
+import UpdateSite from "./routes/management/site/UpdateSite"
 
 const router = createBrowserRouter([
     {
@@ -79,6 +80,10 @@ const router = createBrowserRouter([
             {
                 path: "management/manageoption/update",
                 element: <UpdateOption />,
+            },
+            {
+                path: "management/manageoption/update/:optionPk",
+                element: <UpdateOptionForm />,
             },
             {
                 path: "management/managesite/create",
