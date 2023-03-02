@@ -8,9 +8,9 @@ function UpdateSiteForm() {
         userData:[user],
     } = useOutletContext();
     const navigate = useNavigate();
-    let {optionPk} = useParams();
-    const [optionDetail, setOptionDetail] = useState({});
-    const [productList, setProductList] = useState([]);
+    let {sitePk} = useParams();
+    const [siteDetail, setSiteDetail] = useState({});
+    const [brandList, setBrandList] = useState([]);
     const { register, handleSubmit } = useForm();
     function goHome() {
         if(user.is_staff === false) {
@@ -18,8 +18,8 @@ function UpdateSiteForm() {
             return navigate("/");
         }
     }
-    async function getOptionDetail() {
-        let response = await fetch(`${baseUrl}/products/update/option/${optionPk}`, {
+    async function getSiteDetail() {
+        let response = await fetch(`${baseUrl}/sites/update/${sitePk}`, {
             method : "GET",
             credentials: "include",
             headers : {
@@ -27,10 +27,10 @@ function UpdateSiteForm() {
             },
         });
         let data = await response.json();
-        setOptionDetail(data);
+        setSiteDetail(data);
     }
-    async function handleProductList() {
-        let response = await fetch(`${baseUrl}/products/create/option`, {
+    async function handleBrandList() {
+        let response = await fetch(`${baseUrl}/sites/create`, {
             method : "GET",
             credentials: "include",
             headers : {
@@ -38,29 +38,23 @@ function UpdateSiteForm() {
             },
         });
         let data = await response.json();
-        setProductList(data);
+        setBrandList(data);
     }
     async function onSubmit(updateData) {
         if(updateData.name === "") {
             delete updateData.name;
         }
-        if(updateData.price === "") {
-            delete updateData.price;
+        if(updateData.url === "") {
+            delete updateData.url;
         }
-        if(updateData.logistic_fee === "") {
-            delete updateData.logistic_fee;
+        if(updateData.kind === "") {
+            delete updateData.kind;
         }
-        if(updateData.quantity === "") {
-            delete updateData.quantity;
-        }
-        if(updateData.gift_quantity === "") {
-            delete updateData.gift_quantity;
-        }
-        if(updateData.product === "") {
-            delete updateData.product;
+        if(updateData.brand === "") {
+            delete updateData.brand;
         }
         let csrftoken = getCookie('csrftoken');
-        let response = await fetch(`${baseUrl}/products/update/option/${optionPk}` , {
+        let response = await fetch(`${baseUrl}/sites/update/${sitePk}` , {
             method : "PUT",
             credentials: "include",
             headers : {
@@ -70,58 +64,65 @@ function UpdateSiteForm() {
             body : JSON.stringify(updateData),
         });
         let data = await response.json();
-        if (data.name[0] === "options with this name already exists.") {
-            alert("이미 등록된 옵션 입니다.");
-        } else{
-            setOptionDetail(data);
+        if(response.ok) {
+            setSiteDetail(data);
         }
     }
     useEffect(() => {
         goHome();
     }, [user]);
     useEffect(() => {
-        getOptionDetail();
+        getSiteDetail();
     }, []);
     useEffect(() => {
-        handleProductList();
+        handleBrandList();
     }, []);
     return (
         <div className="mt-12 flex justify-center items-center">
             {user.is_staff ?
                     <>
-                        {Object.keys(optionDetail).length === 0 ? 
+                        {Object.keys(siteDetail).length === 0 ? 
                                 null
                             :
                                 <>
                                     <div className="flex flex-col border-2 w-80 justify-center items-center rounded-md shadow-md">
                                         <label htmlFor="name">NAME</label>
-                                        <span id="name" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.name}</span>
-                                        <label htmlFor="price">PRICE</label>
-                                        <span id="price" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.price}</span>
-                                        <label htmlFor="logistic_fee">LOGISTIC COST</label>
-                                        <span id="logistic_fee" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.logistic_fee}</span>
-                                        <label htmlFor="quantity">QUANTITY</label>
-                                        <span id="quantity" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.quantity}</span>
-                                        <label htmlFor="gift_quantity">GIFT QUANTITY</label>
-                                        <span id="gift_quantity" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.gift_quantity}</span>
-                                        <label htmlFor="product">PRODUCT</label>
-                                        <span id="product" className="border-2 rounded-md w-72 border-gray-200 mb-5 text-center">{optionDetail.product.name}</span>
+                                        <span id="name" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{siteDetail.name}</span>
+                                        <label htmlFor="url">URL</label>
+                                        <span id="url" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{siteDetail.url}</span>
+                                        {siteDetail.kind === "sale_site" ? 
+                                            <>
+                                                <label htmlFor="kind">KIND</label>
+                                                <span id="kind" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">판매</span>
+                                            </>
+                                            :
+                                            null
+                                        }
+                                        {siteDetail.kind === "advertising_site" ? 
+                                            <>
+                                                <label htmlFor="kind">KIND</label>
+                                                <span id="kind" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">광고</span>
+                                            </>
+                                            :
+                                            null
+                                        }
+                                        <label htmlFor="brand">BRAND</label>
+                                        <span id="brand" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{siteDetail.brand.name}</span>
                                     </div>
                                     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center border-2 w-80 rounded-md shadow-md">
                                         <label htmlFor="name">NAME</label>
                                         <input {...register("name")} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="price">PRICE</label>
-                                        <input {...register("price")} id="price" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="logistic_fee">LOGISTIC COST</label>
-                                        <input {...register("logistic_fee")} id="logistic_fee" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="quantity">QUANTITY</label>
-                                        <input {...register("quantity")} id="quantity" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="gift_quantity">GIFT QUANTITY</label>
-                                        <input {...register("gift_quantity")} id="gift_quantity" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <select {...register("product")} id="product" className="border-2 rounded-md w-72 border-gray-200 mb-5 text-center">
-                                            <option value="">PRODUCT</option>
-                                            {productList.map((product) => 
-                                                <option key={product.pk} value={product.pk}>{product.name}</option>
+                                        <label htmlFor="url">URL</label>
+                                        <input {...register("url")} id="url" type="url" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                        <select {...register("kind")} id="kind" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
+                                            <option value="">KIND</option>
+                                            <option value={"sale_site"}>판매</option>
+                                            <option value={"advertising_site"}>광고</option>
+                                        </select>
+                                        <select {...register("brand")} id="brand" className="border-2 rounded-md w-72 border-gray-200 mb-5 text-center">
+                                            <option value="">BRAND</option>
+                                            {brandList.map((brand) => 
+                                                <option key={brand.pk} value={brand.pk}>{brand.name}</option>
                                             )}
                                         </select>
                                         <button className="w-56 h-12 hover:border-b-2 border-purple-500">UPDATE</button>
