@@ -18,6 +18,7 @@ import UpdateOption from "./routes/management/option/UpdateOption"
 import UpdateOptionForm from "./routes/management/option/UpdateOptionForm";
 import CreateSite from "./routes/management/site/CreateSite"
 import UpdateSite from "./routes/management/site/UpdateSite"
+import UpdateSiteForm from "./routes/management/site/UpdateSiteForm";
 
 const router = createBrowserRouter([
     {
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
             {
                 path: "management/managesite/update",
                 element: <UpdateSite />,
+            },
+            {
+                path: "management/managesite/update/:sitePk",
+                element: <UpdateSiteForm />,
             },
         ]
     }
