@@ -36,7 +36,7 @@ function UpdateUser() {
             {user.is_staff ? 
                     <ul>
                         {userList.map((user) =>
-                            <Link to={`/management/managesite/update/${user.pk}`} key={user.pk}>
+                            <Link to={`/management/manageuser/update/${user.pk}`} key={user.pk}>
                                 <li className="mb-10">{user.name}</li>
                             </Link>
                         )}

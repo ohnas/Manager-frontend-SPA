@@ -7,6 +7,7 @@ import BrandDetail from "./routes/BrandDetail";
 import SignUp from "./routes/SignUp";
 import Management from "./routes/Management";
 import UpdateUser from "./routes/management/user/UpdateUser";
+import UpdateUserForm from "./routes/management/user/UpdateUserForm";
 import CreateBrand from "./routes/management/brand/CreateBrand"
 import UpdateBrand from "./routes/management/brand/UpdateBrand"
 import UpdateBrandForm from "./routes/management/brand/UpdateBrandForm"
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
             {
                 path: "management/manageuser/update",
                 element: <UpdateUser />,
+            },
+            {
+                path: "management/manageuser/update/:userPk",
+                element: <UpdateUserForm />,
             },
             {
                 path: "management/managebrand/create",
