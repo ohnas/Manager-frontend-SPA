@@ -82,6 +82,21 @@ function UpdateProductForm() {
             setProductDetail(data);
         }
     }
+    async function onDelete() {
+        let csrftoken = getCookie('csrftoken');
+        let response = await fetch(`${baseUrl}/products/update/product/${productPk}`, {
+            method : "DELETE",
+            credentials: "include",
+            headers : {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrftoken,
+            },
+        });
+        if(response.ok){
+            alert("삭제 완료");
+            return navigate("/");
+        }
+    }
     useEffect(() => {
         goHome();
     }, [user]);
@@ -143,7 +158,7 @@ function UpdateProductForm() {
                                         </form>
                                     </div>
                                     <div className="flex justify-center mt-16 text-red-400">
-                                        <button>DELETE</button>
+                                        <button onClick={onDelete}>DELETE</button>
                                     </div>
                                 </>
                         }
