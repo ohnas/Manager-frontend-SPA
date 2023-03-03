@@ -22,7 +22,7 @@ function Home() {
         if (response.ok) {
             setPermission(true);
         } else {
-            alert("id 와 pw 를 확인하세요")
+            alert("활성화 상태 또는 id 와 pw를 확인해주세요");
         }
     }
     return (

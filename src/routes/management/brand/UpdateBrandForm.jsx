@@ -67,6 +67,21 @@ function UpdateBrandForm() {
             setBrandDetail(data);
         }
     }
+    async function onDelete() {
+        let csrftoken = getCookie('csrftoken');
+        let response = await fetch(`${baseUrl}/brands/update/${brandPk}`, {
+            method : "DELETE",
+            credentials: "include",
+            headers : {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrftoken,
+            },
+        });
+        if(response.ok){
+            alert("삭제 완료");
+            return navigate("/");
+        }
+    }
     useEffect(() => {
         goHome();
     }, [user]);
@@ -77,41 +92,46 @@ function UpdateBrandForm() {
         handleUserList();
     }, []);
     return (
-        <div className="mt-24 flex justify-center items-center">
+        <>
             {user.is_staff ?
                     <>
                         {Object.keys(brandDetail).length === 0 ? 
                                 null
                             :
                                 <>
-                                    <div className="flex flex-col border-2 w-80 h-80 justify-center items-center rounded-md shadow-md">
-                                        <label htmlFor="name">NAME</label>
-                                        <span id="name" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{brandDetail.name}</span>
-                                        <label htmlFor="description">DESCRIPTION</label>
-                                        <span id="description" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{brandDetail.description}</span>
-                                        <label htmlFor="user">BM</label>
-                                        <span id="user" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{brandDetail.user.name}</span>
+                                    <div className="mt-24 flex justify-center items-center">
+                                        <div className="flex flex-col border-2 w-80 h-80 justify-center items-center rounded-md shadow-md">
+                                            <label htmlFor="name">NAME</label>
+                                            <span id="name" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{brandDetail.name}</span>
+                                            <label htmlFor="description">DESCRIPTION</label>
+                                            <span id="description" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{brandDetail.description}</span>
+                                            <label htmlFor="user">BM</label>
+                                            <span id="user" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{brandDetail.user.name}</span>
+                                        </div>
+                                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center border-2 w-80 h-80 rounded-md shadow-md">
+                                            <label htmlFor="name">NAME</label>
+                                            <input {...register("name")} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                            <label htmlFor="description">DESCRIPTION</label>
+                                            <input {...register("description")} id="description" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                            <select {...register("user")} id="user" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
+                                                <option value="">BM</option>
+                                                {userList.map((user) => 
+                                                    <option key={user.pk} value={user.pk}>{user.name}</option>
+                                                )}
+                                            </select>
+                                            <button className="w-24 h-8 text-xs text-gray-400 hover:border-b-2 border-purple-400">UPDATE</button>
+                                        </form>
                                     </div>
-                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center border-2 w-80 h-80 rounded-md shadow-md">
-                                        <label htmlFor="name">NAME</label>
-                                        <input {...register("name")} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="description">DESCRIPTION</label>
-                                        <input {...register("description")} id="description" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <select {...register("user")} id="user" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">
-                                            <option value="">BM</option>
-                                            {userList.map((user) => 
-                                                <option key={user.pk} value={user.pk}>{user.name}</option>
-                                            )}
-                                        </select>
-                                        <button className="w-56 h-12 hover:border-b-2 border-purple-500">UPDATE</button>
-                                    </form>
+                                    <div className="flex justify-center mt-16 text-red-400">
+                                        <button onClick={onDelete}>DELETE</button>
+                                    </div>
                                 </>
                         }
                     </>
                 :
                     null
             }
-        </div>
+        </>
     );
 }
 

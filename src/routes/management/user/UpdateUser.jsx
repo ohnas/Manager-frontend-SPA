@@ -33,14 +33,20 @@ function UpdateUser() {
     }, []);
     return (
         <div className="flex flex-col mt-12 justify-center items-center">
-            {user.is_staff ? 
-                    <ul>
-                        {userList.map((user) =>
-                            <Link to={`/management/manageuser/update/${user.pk}`} key={user.pk}>
-                                <li className="mb-10">{user.name}</li>
-                            </Link>
-                        )}
-                    </ul>
+            {user.is_staff ?
+                <>
+                    {userList.length === 0 ? 
+                            <span>There is no inactive user</span>
+                        :
+                            <ul>
+                                {userList.map((user) =>
+                                    <Link to={`/management/manageuser/update/${user.pk}`} key={user.pk}>
+                                        <li className="mb-10">{user.name}</li>
+                                    </Link>
+                                )}
+                            </ul>
+                    }
+                </>
                 :
                     null
             }
