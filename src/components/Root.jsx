@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { baseUrl, getCookie } from "../api";
 import Header from "./Header";
+import Footer from "./Footer";
 
 function Root() {
     const [permission, setPermission] = useState(false);
@@ -57,6 +58,7 @@ function Root() {
                         brandName: [setBrandName],
                     }
                 } />
+            <Footer />
         </div>
     );
 }
