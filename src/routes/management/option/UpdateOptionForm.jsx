@@ -76,6 +76,21 @@ function UpdateOptionForm() {
             setOptionDetail(data);
         }
     }
+    async function onDelete() {
+        let csrftoken = getCookie('csrftoken');
+        let response = await fetch(`${baseUrl}/products/update/option/${optionPk}`, {
+            method : "DELETE",
+            credentials: "include",
+            headers : {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrftoken,
+            },
+        });
+        if(response.ok){
+            alert("삭제 완료");
+            return navigate("/");
+        }
+    }
     useEffect(() => {
         goHome();
     }, [user]);
@@ -86,53 +101,58 @@ function UpdateOptionForm() {
         handleProductList();
     }, []);
     return (
-        <div className="mt-12 flex justify-center items-center">
+        <>
             {user.is_staff ?
                     <>
                         {Object.keys(optionDetail).length === 0 ? 
                                 null
                             :
                                 <>
-                                    <div className="flex flex-col border-2 w-80 justify-center items-center rounded-md shadow-md">
-                                        <label htmlFor="name">NAME</label>
-                                        <span id="name" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.name}</span>
-                                        <label htmlFor="price">PRICE</label>
-                                        <span id="price" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.price}</span>
-                                        <label htmlFor="logistic_fee">LOGISTIC COST</label>
-                                        <span id="logistic_fee" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.logistic_fee}</span>
-                                        <label htmlFor="quantity">QUANTITY</label>
-                                        <span id="quantity" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.quantity}</span>
-                                        <label htmlFor="gift_quantity">GIFT QUANTITY</label>
-                                        <span id="gift_quantity" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.gift_quantity}</span>
-                                        <label htmlFor="product">PRODUCT</label>
-                                        <span id="product" className="border-2 rounded-md w-72 border-gray-200 mb-5 text-center">{optionDetail.product.name}</span>
+                                    <div className="mt-12 flex justify-center items-center">
+                                        <div className="flex flex-col border-2 w-80 justify-center items-center rounded-md shadow-md">
+                                            <label htmlFor="name">NAME</label>
+                                            <span id="name" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.name}</span>
+                                            <label htmlFor="price">PRICE</label>
+                                            <span id="price" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.price}</span>
+                                            <label htmlFor="logistic_fee">LOGISTIC COST</label>
+                                            <span id="logistic_fee" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.logistic_fee}</span>
+                                            <label htmlFor="quantity">QUANTITY</label>
+                                            <span id="quantity" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.quantity}</span>
+                                            <label htmlFor="gift_quantity">GIFT QUANTITY</label>
+                                            <span id="gift_quantity" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">{optionDetail.gift_quantity}</span>
+                                            <label htmlFor="product">PRODUCT</label>
+                                            <span id="product" className="border-2 rounded-md w-72 border-gray-200 mb-5 text-center">{optionDetail.product.name}</span>
+                                        </div>
+                                        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center border-2 w-80 rounded-md shadow-md">
+                                            <label htmlFor="name">NAME</label>
+                                            <input {...register("name")} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                            <label htmlFor="price">PRICE</label>
+                                            <input {...register("price")} id="price" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                            <label htmlFor="logistic_fee">LOGISTIC COST</label>
+                                            <input {...register("logistic_fee")} id="logistic_fee" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                            <label htmlFor="quantity">QUANTITY</label>
+                                            <input {...register("quantity")} id="quantity" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                            <label htmlFor="gift_quantity">GIFT QUANTITY</label>
+                                            <input {...register("gift_quantity")} id="gift_quantity" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                                            <select {...register("product")} id="product" className="border-2 rounded-md w-72 border-gray-200 mb-5 text-center">
+                                                <option value="">PRODUCT</option>
+                                                {productList.map((product) => 
+                                                    <option key={product.pk} value={product.pk}>{product.name}</option>
+                                                )}
+                                            </select>
+                                            <button className="w-24 h-8 text-xs text-gray-400 hover:border-b-2 border-purple-400">UPDATE</button>
+                                        </form>
                                     </div>
-                                    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center border-2 w-80 rounded-md shadow-md">
-                                        <label htmlFor="name">NAME</label>
-                                        <input {...register("name")} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="price">PRICE</label>
-                                        <input {...register("price")} id="price" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="logistic_fee">LOGISTIC COST</label>
-                                        <input {...register("logistic_fee")} id="logistic_fee" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="quantity">QUANTITY</label>
-                                        <input {...register("quantity")} id="quantity" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <label htmlFor="gift_quantity">GIFT QUANTITY</label>
-                                        <input {...register("gift_quantity")} id="gift_quantity" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                                        <select {...register("product")} id="product" className="border-2 rounded-md w-72 border-gray-200 mb-5 text-center">
-                                            <option value="">PRODUCT</option>
-                                            {productList.map((product) => 
-                                                <option key={product.pk} value={product.pk}>{product.name}</option>
-                                            )}
-                                        </select>
-                                        <button className="w-56 h-12 hover:border-b-2 border-purple-500">UPDATE</button>
-                                    </form>
+                                    <div className="flex justify-center mt-16 text-red-400">
+                                        <button onClick={onDelete}>DELETE</button>
+                                    </div>
                                 </>
                         }
                     </>
                 :
                     null
             }
-        </div>
+        </>
     );
 }
 
