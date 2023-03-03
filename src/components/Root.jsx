@@ -58,7 +58,7 @@ function Root() {
                         brandName: [setBrandName],
                     }
                 } />
-            <Footer />
+            <Footer permission={permission} />
         </div>
     );
 }

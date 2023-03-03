@@ -79,7 +79,7 @@ function BrandDetail() {
     }
     useEffect(() => {
         brandDetail();
-    }, []);
+    }, [brandPk]);
     useEffect(() => {
         maxDateVale();
     }, []);
