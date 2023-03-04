@@ -17,6 +17,14 @@ function Table({brand, completeData, listOfDate}) {
     const [totalConversionRate, setTotalConversionRate] = useState({});
     const [totalProductCost, setTotalProductCost] = useState({});
     const [totalProductProfit, setTotalProductProfit] = useState({});
+    const [totalProductLogisticExpense, setTotalProductLogisticExpense] = useState({});
+    const [totalSaleExpense, setTotalSaleExpense] = useState({});
+    const [totalFacebookKrwExpense, setTotalFacebookKrwExpense] = useState({});
+    const [totalProductExpense, setTotalProductExpense] = useState({});
+    const [totalProductOperatingProfit, setTotalProductOperatingProfit] = useState({});
+    const [totalProductOperatingProfitRate, setTotalProductOperatingProfitRate] = useState({});
+    const [totalProductCostRate, setTotalProductCostRate] = useState({});
+    const [totalAdvertisementRate, setTotalAdvertisementRate] = useState({});
     function handleOptionRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -301,7 +309,7 @@ function Table({brand, completeData, listOfDate}) {
                     return;
                 }
                 listOfDate.forEach((date) => {
-                    if(productOperatingProfit[product.name][date]) {
+                    if(productOperatingProfit[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {
                         let rate = ((productOperatingProfit[product.name][date]["productOperatingProfit"] / completeData.imweb_data.by_products_payment[product.name][date]["price"]) * 100).toFixed(2);
                         productOperatingProfitRateObj[product.name][date] = {
                             "productOperatingProfitRate" : rate,
@@ -452,6 +460,235 @@ function Table({brand, completeData, listOfDate}) {
             setTotalProductProfit(totalProductProfitObj);
         }
     }
+    function handleTotalProductLogisticExpense() {
+        if(Object.keys(productLogisticExpense).length === 0) {
+            return;
+        } else {
+            let totalProductLogisticExpenseArray = [];
+            brand.product_set.forEach((product) => {
+                if(!productLogisticExpense[product.name]) {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productLogisticExpense[product.name][date]) {
+                        totalProductLogisticExpenseArray.push({[date] : productLogisticExpense[product.name][date]["logisticExpense"]})
+                    } else {
+                        return;
+                    }
+                });
+            });
+            let totalProductLogisticExpenseObj = {};
+            listOfDate.forEach((date) => {
+                let initialExpense = 0;
+                totalProductLogisticExpenseArray.forEach((dateExpense) => {
+                    if(dateExpense.hasOwnProperty(date)) {
+                        let expense = dateExpense[date];
+                        initialExpense += expense;
+                        totalProductLogisticExpenseObj[date] = {
+                            "totalProductLogisticExpense" : initialExpense,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setTotalProductLogisticExpense(totalProductLogisticExpenseObj);
+        }
+    }
+    function handleTotalSaleExpense() {
+        if(Object.keys(saleExpense).length === 0) {
+            return;
+        } else {
+            let totalSaleExpenseArray = [];
+            brand.product_set.forEach((product) => {
+                if(!saleExpense[product.name]) {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(saleExpense[product.name][date]) {
+                        totalSaleExpenseArray.push({[date] : saleExpense[product.name][date]["saleExpense"]})
+                    } else {
+                        return;
+                    }
+                });
+            });
+            let totalSaleExpenseObj = {};
+            listOfDate.forEach((date) => {
+                let initialExpense = 0;
+                totalSaleExpenseArray.forEach((dateExpense) => {
+                    if(dateExpense.hasOwnProperty(date)) {
+                        let expense = dateExpense[date];
+                        initialExpense += expense;
+                        totalSaleExpenseObj[date] = {
+                            "totalSaleExpense" : initialExpense,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setTotalSaleExpense(totalSaleExpenseObj);
+        }
+    }
+    function handleTotalFacebookKrwExpense() {
+        if(Object.keys(facebookKrwExpense).length === 0) {
+            return;
+        } else {
+            let totalFacebookKrwExpenseArray = [];
+            brand.product_set.forEach((product) => {
+                if(!facebookKrwExpense[product.name]) {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(facebookKrwExpense[product.name][date]) {
+                        totalFacebookKrwExpenseArray.push({[date] : facebookKrwExpense[product.name][date]["facebookKrwExpense"]})
+                    } else {
+                        return;
+                    }
+                });
+            });
+            let totalFacebookKrwExpenseObj = {};
+            listOfDate.forEach((date) => {
+                let initialExpense = 0;
+                totalFacebookKrwExpenseArray.forEach((dateExpense) => {
+                    if(dateExpense.hasOwnProperty(date)) {
+                        let expense = dateExpense[date];
+                        initialExpense += expense;
+                        totalFacebookKrwExpenseObj[date] = {
+                            "totalFacebookKrwExpense" : initialExpense,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setTotalFacebookKrwExpense(totalFacebookKrwExpenseObj);
+        }
+    }
+    function handleTotalProductExpense() {
+        if(Object.keys(productExpense).length === 0) {
+            return;
+        } else {
+            let totalProductExpenseArray = [];
+            brand.product_set.forEach((product) => {
+                if(!productExpense[product.name]) {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productExpense[product.name][date]) {
+                        totalProductExpenseArray.push({[date] : productExpense[product.name][date]["productExpense"]})
+                    } else {
+                        return;
+                    }
+                });
+            });
+            let totalProductExpenseObj = {};
+            listOfDate.forEach((date) => {
+                let initialExpense = 0;
+                totalProductExpenseArray.forEach((dateExpense) => {
+                    if(dateExpense.hasOwnProperty(date)) {
+                        let expense = dateExpense[date];
+                        initialExpense += expense;
+                        totalProductExpenseObj[date] = {
+                            "totalProductExpense" : initialExpense,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setTotalProductExpense(totalProductExpenseObj);
+        }
+    }
+    function handleTotalProductOperatingProfit() {
+        if(Object.keys(productOperatingProfit).length === 0) {
+            return;
+        } else {
+            let totalProductOperatingProfitArray = [];
+            brand.product_set.forEach((product) => {
+                if(!productOperatingProfit[product.name]) {
+                    return;
+                }
+                listOfDate.forEach((date) => {
+                    if(productOperatingProfit[product.name][date]) {
+                        totalProductOperatingProfitArray.push({[date] : productOperatingProfit[product.name][date]["productOperatingProfit"]})
+                    } else {
+                        return;
+                    }
+                });
+            });
+            let totalProductOperatingProfitObj = {};
+            listOfDate.forEach((date) => {
+                let initialProfit = 0;
+                totalProductOperatingProfitArray.forEach((dateProfit) => {
+                    if(dateProfit.hasOwnProperty(date)) {
+                        let profit = dateProfit[date];
+                        initialProfit += profit;
+                        totalProductOperatingProfitObj[date] = {
+                            "totalProductOperatingProfit" : initialProfit,
+                        }
+                    } else {
+                        return;
+                    }
+                });
+            });
+            setTotalProductOperatingProfit(totalProductOperatingProfitObj);
+        }
+    }
+    function handleTotalProductOperatingProfitRate() {
+        if(Object.keys(totalProductOperatingProfit).length === 0) {
+            return;
+        } else {
+            let totalProductOperatingProfitRateObj = {};
+                listOfDate.forEach((date) => {
+                    if(totalProductOperatingProfit[date] && completeData.imweb_data.by_date_payment[date]) {
+                        let rate = ((totalProductOperatingProfit[date]["totalProductOperatingProfit"] / completeData.imweb_data.by_date_payment[date]["price"]) * 100).toFixed(2);
+                        totalProductOperatingProfitRateObj[date] = {
+                            "totalProductOperatingProfitRate" : rate,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            setTotalProductOperatingProfitRate(totalProductOperatingProfitRateObj);
+        }
+    }
+    function handleTotalProductCostRate() {
+        if(Object.keys(totalProductCost).length === 0) {
+            return;
+        } else {
+            let totalProductCostRateObj = {};
+                listOfDate.forEach((date) => {
+                    if(totalProductCost[date] && completeData.imweb_data.by_date_payment[date]) {
+                        let rate = ((totalProductCost[date]["totalProductCost"] / completeData.imweb_data.by_date_payment[date]["price"]) * 100).toFixed(2);
+                        totalProductCostRateObj[date] = {
+                            "totalProductCostRate" : rate,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            setTotalProductCostRate(totalProductCostRateObj);
+        }
+    }
+    function handleTotalAdvertisementRate() {
+        if(Object.keys(totalFacebookKrwExpense).length === 0) {
+            return;
+        } else {
+            let totalAdvertisementRateObj = {};
+                listOfDate.forEach((date) => {
+                    if(totalFacebookKrwExpense[date] && completeData.imweb_data.by_date_payment[date]) {
+                        let rate = ((totalFacebookKrwExpense[date]["totalFacebookKrwExpense"] / completeData.imweb_data.by_date_payment[date]["price"]) * 100).toFixed(2);
+                        totalAdvertisementRateObj[date] = {
+                            "totalAdvertisementRate" : rate,
+                        };
+                    } else {    
+                        return;
+                    }
+                });
+            setTotalAdvertisementRate(totalAdvertisementRateObj);
+        }
+    }
     function handleToggleBtn(event) {
         let curretBtn = event.target.nextElementSibling;
         curretBtn.classList.toggle("hidden");
@@ -510,6 +747,30 @@ function Table({brand, completeData, listOfDate}) {
     useEffect(() => {
         handleTotalProductProfit();
     }, [productProfit]);
+    useEffect(() => {
+        handleTotalProductLogisticExpense();
+    }, [productLogisticExpense]);
+    useEffect(() => {
+        handleTotalSaleExpense();
+    }, [saleExpense]);
+    useEffect(() => {
+        handleTotalFacebookKrwExpense();
+    }, [facebookKrwExpense]);
+    useEffect(() => {
+        handleTotalProductExpense();
+    }, [productExpense]);
+    useEffect(() => {
+        handleTotalProductOperatingProfit();
+    }, [productOperatingProfit]);
+    useEffect(() => {
+        handleTotalProductOperatingProfitRate();
+    }, [totalProductOperatingProfit]);
+    useEffect(() => {
+        handleTotalProductCostRate();
+    }, [totalProductCost]);
+    useEffect(() => {
+        handleTotalAdvertisementRate();
+    }, [totalFacebookKrwExpense]);
     return (
         <>            
             { Object.keys(completeData).length === 0 ? 
@@ -575,6 +836,19 @@ function Table({brand, completeData, listOfDate}) {
                                     <th className="border-2 border-slate-400 px-8 bg-rose-300">택배 매출</th>
                                     <th className="border-2 border-slate-400 px-8 bg-fuchsia-300">상품 원가</th>
                                     <th className="border-2 border-slate-400 px-8 bg-indigo-300">상품 이익</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">물류(3pl)</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">판매 수수료</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">광고 비용(facebook 원화)</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(쿠폰)</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(적립금)</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(쇼핑등급 할인)</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(즉시 할인)</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(기간 할인)</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-green-300">비용</th>
+                                    <th className="border-4 border-black px-8 bg-indigo-300">영업 이익</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 이익율</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 원가율</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 광고비율</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -643,6 +917,71 @@ function Table({brand, completeData, listOfDate}) {
                                                 <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalProductProfit[date]["totalProductProfit"])}</td>
                                             :
                                                 <td className="border-2 bg-indigo-50">₩0</td>
+                                        }
+                                        {totalProductLogisticExpense[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalProductLogisticExpense[date]["totalProductLogisticExpense"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {totalSaleExpense[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalSaleExpense[date]["totalSaleExpense"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {totalFacebookKrwExpense[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalFacebookKrwExpense[date]["totalFacebookKrwExpense"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {completeData.imweb_data.by_date_payment[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["coupon"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {completeData.imweb_data.by_date_payment[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["point"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {completeData.imweb_data.by_date_payment[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["membership_discount"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {completeData.imweb_data.by_date_payment[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["price_sale"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {completeData.imweb_data.by_date_payment[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["period_discount"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {totalProductExpense[date] ? 
+                                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalProductExpense[date]["totalProductExpense"])}</td>
+                                            :
+                                                <td className="border-2 bg-green-50">₩0</td>
+                                        }
+                                        {totalProductOperatingProfit[date] ? 
+                                                <td className="border-4 border-black bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(totalProductOperatingProfit[date]["totalProductOperatingProfit"])}</td>
+                                            :
+                                                <td className="border-4 border-black bg-indigo-50">₩0</td>
+                                        }
+                                        {totalProductOperatingProfitRate[date] ? 
+                                                <td className="border-2 bg-yellow-50">{totalProductOperatingProfitRate[date]["totalProductOperatingProfitRate"]}%</td>
+                                            :
+                                                <td className="border-2 bg-yellow-50">0.00%</td>
+                                        }
+                                        {totalProductCostRate[date] ? 
+                                                <td className="border-2 bg-yellow-50">{totalProductCostRate[date]["totalProductCostRate"]}%</td>
+                                            :
+                                                <td className="border-2 bg-yellow-50">0.00%</td>
+                                        }
+                                        {totalAdvertisementRate[date] ? 
+                                                <td className="border-2 bg-yellow-50">{totalAdvertisementRate[date]["totalAdvertisementRate"]}%</td>
+                                            :
+                                                <td className="border-2 bg-yellow-50">0.00%</td>
                                         }
                                     </tr>
                                 )}
