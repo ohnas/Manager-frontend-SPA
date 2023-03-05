@@ -1218,7 +1218,77 @@ function Table({brand, completeData, listOfDate}) {
                                                 :
                                                 <td className="border-2 bg-blue-50">0.00%</td>
                                             }
-                                            <td>show</td>
+                                            <td> show
+                                                {/* to-do : adset는 dialog로 구현하기 */}
+                                                {/* <div>
+                                                    <table>
+                                                        <thead>
+                                                            <tr>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">광고세트 이름</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">빈도</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">비용</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">CPM</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">CTR</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">ROAS</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">CPC</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">구매</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">랜딩페이지뷰</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">링크클릭</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">결제정보추가</th>
+                                                                <th className="border-2 border-slate-400 px-8 bg-blue-300">장바구니</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            {Object.keys(completeData.facebook_data.adsets).length !== 0 ? 
+                                                                    <>
+                                                                        {completeData.facebook_data.adsets.map((adset, index) => (
+                                                                            <>
+                                                                                {adset.campaign_name === product.name && adset.date === date ? 
+                                                                                        <tr key={index}>
+                                                                                            <td className="border-2 bg-blue-50">{adset["adset_name"]}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["reach"]}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["impressions"]}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["frequency"].toFixed(2)}</td>
+                                                                                            <td className="border-2 bg-blue-50">US${adset["spend"].toFixed(2)}</td>
+                                                                                            <td className="border-2 bg-blue-50">US${adset["cpm"].toFixed(2)}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["website_ctr"].toFixed(2)}</td>
+                                                                                            <td className="border-2 bg-blue-50">{Math.round(adset["purchase_roas"]*100)}%</td>
+                                                                                            <td className="border-2 bg-blue-50">US${adset["cost_per_unique_inline_link_click"].toFixed(2)}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["purchase"]}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["landing_page_view"]}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["link_click"]}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["add_payment_info"]}</td>
+                                                                                            <td className="border-2 bg-blue-50">{adset["add_to_cart"]}</td>
+                                                                                        </tr>
+                                                                                    :
+                                                                                        null
+                                                                                }
+                                                                            </>
+                                                                        ))}
+                                                                    </>
+                                                                :
+                                                                    <tr>
+                                                                        <td className="border-2 bg-blue-50">0</td>
+                                                                        <td className="border-2 bg-blue-50">0</td>
+                                                                        <td className="border-2 bg-blue-50">0.00</td>
+                                                                        <td className="border-2 bg-blue-50">US$0.00</td>
+                                                                        <td className="border-2 bg-blue-50">US$0.00</td>
+                                                                        <td className="border-2 bg-blue-50">0.00</td>
+                                                                        <td className="border-2 bg-blue-50">0%</td>
+                                                                        <td className="border-2 bg-blue-50">US$0.00</td>
+                                                                        <td className="border-2 bg-blue-50">0</td>
+                                                                        <td className="border-2 bg-blue-50">0</td>
+                                                                        <td className="border-2 bg-blue-50">0</td>
+                                                                        <td className="border-2 bg-blue-50">0</td>
+                                                                        <td className="border-2 bg-blue-50">0</td>
+                                                                    </tr>
+                                                            }
+                                                        </tbody>
+                                                    </table>
+                                                </div> */}
+                                            </td>
                                             {completeData.imweb_data.by_products_payment[product.name] ? 
                                                     <>
                                                         {completeData.imweb_data.by_products_payment[product.name][date] ? 
