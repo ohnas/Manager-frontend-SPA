@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
-import { baseUrl } from "../api";
 
-function Table({brand, completeData, listOfDate, selectedDate, brandPk}) {
-    const [eventCount, setEventCount] = useState({});
-    const [events, setEvents] = useState({});
+function Table({brand, completeData, listOfDate, eventCount, events}) {
     const [optionRate, setOptionRate] = useState({});
     const [optionCount, setOptionCount] = useState({});
     const [conversionRate, setConversionRate] = useState({});
@@ -28,45 +25,6 @@ function Table({brand, completeData, listOfDate, selectedDate, brandPk}) {
     const [totalProductOperatingProfitRate, setTotalProductOperatingProfitRate] = useState({});
     const [totalProductCostRate, setTotalProductCostRate] = useState({});
     const [totalAdvertisementRate, setTotalAdvertisementRate] = useState({});
-    async function getEvent() {
-        if(Object.keys(selectedDate).length === 0) {
-            return;
-        } else {
-            let response = await fetch(`${baseUrl}/events/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
-                method : "GET",
-                credentials: "include",
-                headers : {
-                    'Content-Type': 'application/json',
-                },
-            });
-            let data = await response.json();
-            if (response.ok) {
-                let eventCountObj = {};
-                listOfDate.forEach((date) => {
-                    let count = data.filter((d) => 
-                        d.event_date === date
-                    );
-                    eventCountObj[date] = count.length;
-                });
-                setEventCount(eventCountObj);
-                let eventsObj = {};
-                brand.product_set.forEach((product) =>{
-                    eventsObj[product.name] = {};
-                    listOfDate.forEach((date) => {
-                        let event = data.filter((d) =>
-                            d.product.name === product.name && d.event_date === date
-                        );
-                        if(event.length !== 0) {
-                            eventsObj[product.name][date] = event;
-                        } else {
-                            return;
-                        }
-                    });
-                });
-                setEvents(eventsObj);
-            }
-        }
-    }
     function handleOptionRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -742,9 +700,6 @@ function Table({brand, completeData, listOfDate, selectedDate, brandPk}) {
         }
     }
     useEffect(() => {
-        getEvent();
-    }, [selectedDate]);
-    useEffect(() => {
         handleOptionRate();
     }, [completeData]);
     useEffect(() => {
@@ -954,7 +909,7 @@ function Table({brand, completeData, listOfDate, selectedDate, brandPk}) {
                                         {totalConversionRate[date] ? 
                                                 <td className="border-2 bg-blue-50">{totalConversionRate[date]["totalConversionRate"]}%</td>   
                                             :
-                                                <td>0.00%</td>
+                                                <td className="border-2 bg-blue-50">0.00%</td>
                                         }
                                         {completeData.imweb_data.by_date_payment[date] ? 
                                                 <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData.imweb_data.by_date_payment[date]["price"])}</td>

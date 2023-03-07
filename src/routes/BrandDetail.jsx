@@ -12,6 +12,8 @@ function BrandDetail() {
     let {brandPk} = useParams();
     const [brand, setBrand] = useState({});
     const [completeData, setCompleteData] = useState({});
+    const [eventCount, setEventCount] = useState({});
+    const [events, setEvents] = useState({});
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -68,6 +70,45 @@ function BrandDetail() {
             setIsLoading(false);
         }
     }
+    async function getEvent() {
+        if(Object.keys(selectedDate).length === 0) {
+            return;
+        } else {
+            let response = await fetch(`${baseUrl}/events/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
+                method : "GET",
+                credentials: "include",
+                headers : {
+                    'Content-Type': 'application/json',
+                },
+            });
+            let data = await response.json();
+            if (response.ok) {
+                let eventCountObj = {};
+                listOfDate.forEach((date) => {
+                    let count = data.filter((d) => 
+                        d.event_date === date
+                    );
+                    eventCountObj[date] = count.length;
+                });
+                setEventCount(eventCountObj);
+                let eventsObj = {};
+                brand.product_set.forEach((product) =>{
+                    eventsObj[product.name] = {};
+                    listOfDate.forEach((date) => {
+                        let event = data.filter((d) =>
+                            d.product.name === product.name && d.event_date === date
+                        );
+                        if(event.length !== 0) {
+                            eventsObj[product.name][date] = event;
+                        } else {
+                            return;
+                        }
+                    });
+                });
+                setEvents(eventsObj);
+            }
+        }
+    }
     function dateList() {
         let result = [];
         let curDate = new Date(selectedDate.dateFrom);
@@ -77,9 +118,14 @@ function BrandDetail() {
         }
         setListOfDate(result);
     }
+    console.log(eventCount);
+    console.log(events);
     useEffect(() => {
         brandDetail();
     }, [brandPk]);
+    useEffect(() => {
+        getEvent();
+    }, [selectedDate, completeData]);
     useEffect(() => {
         maxDateVale();
     }, []);
@@ -122,7 +168,7 @@ function BrandDetail() {
                     {isLoading ? 
                             <Loading />
                         :
-                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} selectedDate={selectedDate} brandPk={brandPk} />
+                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} eventCount={eventCount} events={events} />
                     }
                 </>
             }
