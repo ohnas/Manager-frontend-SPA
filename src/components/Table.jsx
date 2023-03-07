@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import Event from "./Event";
 
-function Table({brand, completeData, listOfDate, eventCount, events}) {
+function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, eventCount, events}) {
     const [optionRate, setOptionRate] = useState({});
     const [optionCount, setOptionCount] = useState({});
     const [conversionRate, setConversionRate] = useState({});
@@ -699,6 +700,10 @@ function Table({brand, completeData, listOfDate, eventCount, events}) {
             event.target.innerText = "show";
         }
     }
+    function handleOpenEvent(event) {
+        let selectDialog = event.target.nextElementSibling;
+        selectDialog.showModal();
+    }
     useEffect(() => {
         handleOptionRate();
     }, [completeData]);
@@ -781,9 +786,7 @@ function Table({brand, completeData, listOfDate, eventCount, events}) {
                     </div>
                 :
                 <>
-                    <div className="border-2 rounded-md w-32 mt-5 text-center">
-                        <button className="text-gray-400">Add an event</button>
-                    </div>
+                    <Event brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} brand={brand} />
                     <div className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
                         <div className="sticky left-0 z-50 bg-white flex">
                             <span>TOTAL</span>
@@ -1090,19 +1093,34 @@ function Table({brand, completeData, listOfDate, eventCount, events}) {
                                     {listOfDate.map((date, index) =>
                                         <tr key={index}>
                                             <td className="sticky left-0 z-50 bg-white border-2">{date}</td>
+                                            <td className="border-2 bg-red-50">
                                             {Object.keys(events[product.name]).length !== 0 ? 
                                                     <>
                                                         {events[product.name][date] ?
                                                                 <>
-                                                                    <td className="border-2 bg-red-50">{events[product.name][date].length}건</td>
+                                                                    <button onClick={handleOpenEvent}>{events[product.name][date].length}건</button>
+                                                                    <dialog className="w-64 h-64 rounded-md">
+                                                                        <div className="flex flex-col justify-center items-center h-56">
+                                                                            {events[product.name][date].map((e) =>
+                                                                                <div key={e.pk} className="flex flex-col justify-center border-b-2 border-black mb-5">
+                                                                                    <span>날짜 : {e.event_date}</span>
+                                                                                    <span>내용 : {e.name}</span>
+                                                                                </div>
+                                                                            )}
+                                                                            <form method="dialog">
+                                                                                <button className="text-gray-400">close</button>
+                                                                            </form>
+                                                                        </div>
+                                                                    </dialog>
                                                                 </>
                                                             :
-                                                                <td className="border-2 bg-red-50">0건</td>
+                                                                <span>0건</span>
                                                         }
                                                     </>
                                                 :
-                                                    <td className="border-2 bg-red-50">0건</td>
-                                            }    
+                                                    <span>0건</span>
+                                            }
+                                            </td>
                                             <td className="border-2 bg-gray-50">
                                                 {completeData.imweb_data.products[product.name] ?
                                                         <>
@@ -1249,8 +1267,8 @@ function Table({brand, completeData, listOfDate, eventCount, events}) {
                                                 :
                                                 <td className="border-2 bg-blue-50">0.00%</td>
                                             }
-                                            <td> show
-                                                {/* to-do : adset는 dialog로 구현하기 */}
+                                            <td> 보류
+                                                {/* to-do : 현재 캠페인명 = 상품명이 아니기 때문에 매칭이 되지 않고 있음 형식 정해지면 진행 adset는 dialog로 구현하기 */}
                                                 {/* <div>
                                                     <table>
                                                         <thead>

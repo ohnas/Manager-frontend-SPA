@@ -118,8 +118,6 @@ function BrandDetail() {
         }
         setListOfDate(result);
     }
-    console.log(eventCount);
-    console.log(events);
     useEffect(() => {
         brandDetail();
     }, [brandPk]);
@@ -168,7 +166,7 @@ function BrandDetail() {
                     {isLoading ? 
                             <Loading />
                         :
-                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} eventCount={eventCount} events={events} />
+                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} />
                     }
                 </>
             }
