@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { baseUrl } from "../api";
 
-function Table({brand, completeData, listOfDate}) {
+function Table({brand, completeData, listOfDate, selectedDate, brandPk}) {
+    const [eventCount, setEventCount] = useState({});
+    const [events, setEvents] = useState({});
     const [optionRate, setOptionRate] = useState({});
     const [optionCount, setOptionCount] = useState({});
     const [conversionRate, setConversionRate] = useState({});
@@ -25,6 +28,45 @@ function Table({brand, completeData, listOfDate}) {
     const [totalProductOperatingProfitRate, setTotalProductOperatingProfitRate] = useState({});
     const [totalProductCostRate, setTotalProductCostRate] = useState({});
     const [totalAdvertisementRate, setTotalAdvertisementRate] = useState({});
+    async function getEvent() {
+        if(Object.keys(selectedDate).length === 0) {
+            return;
+        } else {
+            let response = await fetch(`${baseUrl}/events/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
+                method : "GET",
+                credentials: "include",
+                headers : {
+                    'Content-Type': 'application/json',
+                },
+            });
+            let data = await response.json();
+            if (response.ok) {
+                let eventCountObj = {};
+                listOfDate.forEach((date) => {
+                    let count = data.filter((d) => 
+                        d.event_date === date
+                    );
+                    eventCountObj[date] = count.length;
+                });
+                setEventCount(eventCountObj);
+                let eventsObj = {};
+                brand.product_set.forEach((product) =>{
+                    eventsObj[product.name] = {};
+                    listOfDate.forEach((date) => {
+                        let event = data.filter((d) =>
+                            d.product.name === product.name && d.event_date === date
+                        );
+                        if(event.length !== 0) {
+                            eventsObj[product.name][date] = event;
+                        } else {
+                            return;
+                        }
+                    });
+                });
+                setEvents(eventsObj);
+            }
+        }
+    }
     function handleOptionRate() {
         if(Object.keys(completeData).length === 0) {
             return;
@@ -700,6 +742,9 @@ function Table({brand, completeData, listOfDate}) {
         }
     }
     useEffect(() => {
+        getEvent();
+    }, [selectedDate]);
+    useEffect(() => {
         handleOptionRate();
     }, [completeData]);
     useEffect(() => {
@@ -781,9 +826,16 @@ function Table({brand, completeData, listOfDate}) {
                     </div>
                 :
                 <>
+                    <div className="border-2 rounded-md w-32 mt-5 text-center">
+                        <button className="text-gray-400">Add an event</button>
+                    </div>
                     <div className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
                         <div className="sticky left-0 z-50 bg-white flex">
                             <span>TOTAL</span>
+                            <div className="flex items-center ml-5 text-xs text-gray-500">
+                                <span>이벤트</span>
+                                <div className="w-3 h-3 bg-red-400 rounded-full ml-1"></div>
+                            </div>
                             <div className="flex items-center ml-5 text-xs text-gray-500">
                                 <span>imweb</span>
                                 <div className="w-3 h-3 bg-gray-300 rounded-full ml-1"></div>
@@ -817,6 +869,7 @@ function Table({brand, completeData, listOfDate}) {
                             <thead>
                                 <tr>
                                     <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th>
                                     <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
@@ -855,6 +908,11 @@ function Table({brand, completeData, listOfDate}) {
                                 {listOfDate.map((date, index) => 
                                     <tr key={index}>
                                         <td className="sticky left-0 z-50 bg-white border-2">{date}</td>
+                                        {eventCount.hasOwnProperty(date) ? 
+                                                <td className="border-2 bg-red-50">{eventCount[date]}건</td>
+                                            :
+                                                <td className="border-2 bg-red-50">0건</td>
+                                        }
                                         {completeData.imweb_data.total_order[date] ? 
                                                 <td className="border-2 bg-gray-50">{completeData.imweb_data.total_order[date]["prod_count"]}</td>
                                             :
@@ -993,6 +1051,10 @@ function Table({brand, completeData, listOfDate}) {
                             <div className="sticky left-0 z-50 bg-white flex">
                                 <span>{product.name}</span>
                                 <div className="flex items-center ml-5 text-xs text-gray-500">
+                                    <span>이벤트</span>
+                                    <div className="w-3 h-3 bg-red-400 rounded-full ml-1"></div>
+                                </div>
+                                <div className="flex items-center ml-5 text-xs text-gray-500">
                                     <span>imweb</span>
                                     <div className="w-3 h-3 bg-gray-300 rounded-full ml-1"></div>
                                 </div>
@@ -1026,6 +1088,7 @@ function Table({brand, completeData, listOfDate}) {
                                 <thead>
                                     <tr>
                                         <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
+                                        <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th>
                                         <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
                                         {product.options_set.map((option) =>
                                             <th key={option.pk} className="border-2 border-slate-400 px-16 bg-gray-300">{option.name}</th>
@@ -1072,6 +1135,19 @@ function Table({brand, completeData, listOfDate}) {
                                     {listOfDate.map((date, index) =>
                                         <tr key={index}>
                                             <td className="sticky left-0 z-50 bg-white border-2">{date}</td>
+                                            {Object.keys(events[product.name]).length !== 0 ? 
+                                                    <>
+                                                        {events[product.name][date] ?
+                                                                <>
+                                                                    <td className="border-2 bg-red-50">{events[product.name][date].length}건</td>
+                                                                </>
+                                                            :
+                                                                <td className="border-2 bg-red-50">0건</td>
+                                                        }
+                                                    </>
+                                                :
+                                                    <td className="border-2 bg-red-50">0건</td>
+                                            }    
                                             <td className="border-2 bg-gray-50">
                                                 {completeData.imweb_data.products[product.name] ?
                                                         <>

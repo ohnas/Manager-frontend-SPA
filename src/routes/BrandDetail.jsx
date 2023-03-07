@@ -122,7 +122,7 @@ function BrandDetail() {
                     {isLoading ? 
                             <Loading />
                         :
-                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} />
+                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} selectedDate={selectedDate} brandPk={brandPk} />
                     }
                 </>
             }
