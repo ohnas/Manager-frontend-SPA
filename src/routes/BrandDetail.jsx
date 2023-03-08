@@ -14,6 +14,8 @@ function BrandDetail() {
     const [completeData, setCompleteData] = useState({});
     const [eventCount, setEventCount] = useState({});
     const [events, setEvents] = useState({});
+    const [pageView, setPageView] = useState({});
+    const [visit, setVisit] = useState({});
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -109,6 +111,62 @@ function BrandDetail() {
             }
         }
     }
+    async function getPageView() {
+        if(Object.keys(selectedDate).length === 0) {
+            return;
+        } else {
+            let response = await fetch(`${baseUrl}/pages/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
+                method : "GET",
+                credentials: "include",
+                headers : {
+                    'Content-Type': 'application/json',
+                },
+            });
+            let data = await response.json();
+            if (response.ok) {
+                let pageViewObj = {};
+                listOfDate.forEach((date) => {
+                    let page = data.find((d) => 
+                        d.page_date === date
+                    );
+                    if(page) {
+                        pageViewObj[date] = page;
+                    } else {
+                        return;
+                    }
+                });
+                setPageView(pageViewObj);
+            }
+        }
+    }
+    async function getVisit() {
+        if(Object.keys(selectedDate).length === 0) {
+            return;
+        } else {
+            let response = await fetch(`${baseUrl}/visits/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
+                method : "GET",
+                credentials: "include",
+                headers : {
+                    'Content-Type': 'application/json',
+                },
+            });
+            let data = await response.json();
+            if (response.ok) {
+                let visitObj = {};
+                listOfDate.forEach((date) => {
+                    let visit = data.find((d) => 
+                        d.visit_date === date
+                    );
+                    if(visit) {
+                        visitObj[date] = visit;
+                    } else {
+                        return;
+                    }
+                });
+                setVisit(visitObj);
+            }
+        }
+    }
     function dateList() {
         let result = [];
         let curDate = new Date(selectedDate.dateFrom);
@@ -123,6 +181,12 @@ function BrandDetail() {
     }, [brandPk]);
     useEffect(() => {
         getEvent();
+    }, [selectedDate, completeData]);
+    useEffect(() => {
+        getPageView();
+    }, [selectedDate, completeData]);
+    useEffect(() => {
+        getVisit();
     }, [selectedDate, completeData]);
     useEffect(() => {
         maxDateVale();
@@ -166,7 +230,7 @@ function BrandDetail() {
                     {isLoading ? 
                             <Loading />
                         :
-                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} />
+                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} pageView={pageView} visit={visit} />
                     }
                 </>
             }

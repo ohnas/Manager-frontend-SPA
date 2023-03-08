@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { baseUrl, getCookie } from "../api";
 import Event from "./Event";
+import PageView from "./PageView";
 
-function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, eventCount, events}) {
+function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, eventCount, events, pageView, visit}) {
     const [optionRate, setOptionRate] = useState({});
     const [optionCount, setOptionCount] = useState({});
     const [conversionRate, setConversionRate] = useState({});
@@ -807,6 +808,7 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                 :
                 <>
                     <Event brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} brand={brand} />
+                    <PageView brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} />
                     <div className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
                         <div className="sticky left-0 z-50 bg-white flex">
                             <span>TOTAL</span>
@@ -848,6 +850,10 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                 <tr>
                                     <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
                                     <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-gray-300">페이지 뷰</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-gray-300">방문자</th>
+                                    {/* <th className="border-2 border-slate-400 px-8 bg-gray-300">방문평균페이지</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-gray-300">전환율</th> */}
                                     <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
@@ -890,6 +896,16 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                                 <td className="border-2 bg-red-50">{eventCount[date]}건</td>
                                             :
                                                 <td className="border-2 bg-red-50">0건</td>
+                                        }
+                                        {pageView.hasOwnProperty(date) ? 
+                                                <td className="border-2 bg-gray-50">{pageView[date].view}</td>
+                                            :
+                                                <td className="border-2 bg-gray-50">0</td>
+                                        }
+                                        {visit.hasOwnProperty(date) ? 
+                                                <td className="border-2 bg-gray-50">{visit[date].num}</td>
+                                            :
+                                                <td className="border-2 bg-gray-50">0</td>
                                         }
                                         {completeData.imweb_data.total_order[date] ? 
                                                 <td className="border-2 bg-gray-50">{completeData.imweb_data.total_order[date]["prod_count"]}</td>
