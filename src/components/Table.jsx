@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { baseUrl, getCookie } from "../api";
 import Event from "./Event";
 
 function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, eventCount, events}) {
@@ -704,6 +705,25 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
         let selectDialog = event.target.nextElementSibling;
         selectDialog.showModal();
     }
+    async function handleDeleteEvent(event) {
+        let selectEventPk = event.target.parentElement.id;
+        let csrftoken = getCookie('csrftoken');
+        let response = await fetch(`${baseUrl}/events/update/${selectEventPk}`, {
+            method : "DELETE",
+            credentials: "include",
+            headers : {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrftoken,
+            },
+        });
+        if(response.ok){
+            alert("삭제 완료");
+            setSelectedDate({
+                "dateFrom" : listOfDate[0],
+                "dateTo" : listOfDate[listOfDate.length - 1],
+            });
+        }
+    }
     useEffect(() => {
         handleOptionRate();
     }, [completeData]);
@@ -1099,12 +1119,13 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                                         {events[product.name][date] ?
                                                                 <>
                                                                     <button onClick={handleOpenEvent}>{events[product.name][date].length}건</button>
-                                                                    <dialog className="w-64 h-64 rounded-md">
-                                                                        <div className="flex flex-col justify-center items-center h-56">
+                                                                    <dialog className="rounded-md w-1/2 h-1/2">
+                                                                        <div className="flex flex-col justify-center items-center w-full h-full">
                                                                             {events[product.name][date].map((e) =>
-                                                                                <div key={e.pk} className="flex flex-col justify-center border-b-2 border-black mb-5">
-                                                                                    <span>날짜 : {e.event_date}</span>
-                                                                                    <span>내용 : {e.name}</span>
+                                                                                <div key={e.pk} id={e.pk} className="flex flex-col justify-center items-center border-2 mb-5 rounded-md shadow-md p-5">
+                                                                                    <span className="mt-3">날짜 : {e.event_date}</span>
+                                                                                    <span className="mt-3">내용 : {e.name}</span>
+                                                                                    <button onClick={handleDeleteEvent} className="text-xs mt-3">DELETE</button>
                                                                                 </div>
                                                                             )}
                                                                             <form method="dialog">
