@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { baseUrl, getCookie } from "../api";
 import Event from "./Event";
 import PageView from "./PageView";
+import Visit from "./Visit";
 
 function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, eventCount, events, pageView, visit}) {
     const [optionRate, setOptionRate] = useState({});
@@ -807,8 +808,11 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                     </div>
                 :
                 <>
-                    <Event brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} brand={brand} />
-                    <PageView brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} />
+                    <div className="flex w-1/3 justify-between">
+                        <Event brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} brand={brand} />
+                        <PageView brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} />
+                        <Visit brandPk={brandPk} setSelectedDate={setSelectedDate} listOfDate={listOfDate} />
+                    </div>
                     <div className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
                         <div className="sticky left-0 z-50 bg-white flex">
                             <span>TOTAL</span>
