@@ -726,6 +726,46 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
             });
         }
     }
+    async function handleDeletePageView(event) {
+        let selectPageViewPk = event.target.parentElement.id;
+        selectPageViewPk = selectPageViewPk.replace("pageViewPk", "");             
+        let csrftoken = getCookie('csrftoken');
+        let response = await fetch(`${baseUrl}/pages/update/${selectPageViewPk}`, {
+            method : "DELETE",
+            credentials: "include",
+            headers : {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrftoken,
+            },
+        });
+        if(response.ok){
+            alert("삭제 완료");
+            setSelectedDate({
+                "dateFrom" : listOfDate[0],
+                "dateTo" : listOfDate[listOfDate.length - 1],
+            });
+        }
+    }
+    async function handleDeleteVisit(event) {
+        let selectVisitPk = event.target.parentElement.id;
+        selectVisitPk = selectVisitPk.replace("visitPk", "");
+        let csrftoken = getCookie('csrftoken');
+        let response = await fetch(`${baseUrl}/visits/update/${selectVisitPk}`, {
+            method : "DELETE",
+            credentials: "include",
+            headers : {
+                'Content-Type': 'application/json',
+                "X-CSRFToken": csrftoken,
+            },
+        });
+        if(response.ok){
+            alert("삭제 완료");
+            setSelectedDate({
+                "dateFrom" : listOfDate[0],
+                "dateTo" : listOfDate[listOfDate.length - 1],
+            });
+        }
+    }
     useEffect(() => {
         handleOptionRate();
     }, [completeData]);
@@ -902,12 +942,22 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                                 <td className="border-2 bg-red-50">0건</td>
                                         }
                                         {pageView.hasOwnProperty(date) ? 
-                                                <td className="border-2 bg-gray-50">{pageView[date].view}</td>
+                                                <td className="border-2 bg-gray-50">
+                                                    <div id={`pageViewPk${pageView[date].pk}`} className="flex justify-center items-center">
+                                                        <span>{pageView[date].view}</span>
+                                                        <button onClick={handleDeletePageView} className="text-xs border-2 border-red-300 rounded-md text-gray-400 w-10 ml-2">del</button>
+                                                    </div>
+                                                </td>
                                             :
                                                 <td className="border-2 bg-gray-50">0</td>
                                         }
                                         {visit.hasOwnProperty(date) ? 
-                                                <td className="border-2 bg-gray-50">{visit[date].num}</td>
+                                                <td className="border-2 bg-gray-50">
+                                                    <div id={`visitPk${visit[date].pk}`} className="flex justify-center items-center">
+                                                        {visit[date].num}
+                                                        <button onClick={handleDeleteVisit} className="text-xs border-2 border-red-300 rounded-md text-gray-400 w-10 ml-2">del</button>
+                                                    </div>
+                                                </td>
                                             :
                                                 <td className="border-2 bg-gray-50">0</td>
                                         }
