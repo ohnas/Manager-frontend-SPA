@@ -18,6 +18,8 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
     const [productOperatingProfitRate, setProductOperatingProfitRate] = useState({});
     const [productCostRate, setProductCostRate] = useState({});
     const [advertisementRate, setAdvertisementRate] = useState({});
+    const [totalAverage, setTotalAverage] = useState({});
+    const [totalImwebConversionRate, setTotalImwebConversionRate] = useState({});
     const [totalConversionRate, setTotalConversionRate] = useState({});
     const [totalProductCost, setTotalProductCost] = useState({});
     const [totalProductProfit, setTotalProductProfit] = useState({});
@@ -374,6 +376,42 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                 });
             });
             setAdvertisementRate(advertisementRateObj);
+        }
+    }
+    function handleTotalAverage() {
+        if(Object.keys(pageView).length === 0 || Object.keys(visit).length === 0) {
+            return;
+        } else {
+            let totalAverageObj = {};
+            listOfDate.forEach((date) => {
+                if(pageView[date] && visit[date]) {
+                    let average = (pageView[date].view / visit[date].num).toFixed(2);
+                    totalAverageObj[date] = {
+                        "totalAverage" : average,
+                    }
+                } else {
+                    return;
+                }
+            });
+            setTotalAverage(totalAverageObj);
+        }
+    }
+    function handleTotalImwebConversionRate() {
+        if(Object.keys(completeData).length === 0 || Object.keys(visit).length === 0) {
+            return;
+        } else {
+            let totalImwebConversionRateObj = {};
+            listOfDate.forEach((date) => {
+                if(completeData.imweb_data.total_order[date] && visit[date]) {
+                    let rate = ((completeData.imweb_data.total_order[date]["prod_count"] / visit[date].num) * 100).toFixed(2);
+                    totalImwebConversionRateObj[date] = {
+                        "totalImwebConversionRate" : rate,
+                    }
+                } else {
+                    return;
+                }
+            });
+            setTotalImwebConversionRate(totalImwebConversionRateObj);
         }
     }
     function handleTotalConversionRate() {
@@ -806,6 +844,12 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
         handleAdvertisementRate();
     }, [facebookKrwExpense]);
     useEffect(() => {
+        handleTotalAverage();
+    }, [pageView ,visit]);
+    useEffect(() => {
+        handleTotalImwebConversionRate();
+    }, [completeData ,visit]);
+    useEffect(() => {
         handleTotalConversionRate();
     }, [completeData]);
     useEffect(() => {
@@ -896,8 +940,8 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                     <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th>
                                     <th className="border-2 border-slate-400 px-8 bg-gray-300">페이지 뷰</th>
                                     <th className="border-2 border-slate-400 px-8 bg-gray-300">방문자</th>
-                                    {/* <th className="border-2 border-slate-400 px-8 bg-gray-300">방문평균페이지</th>
-                                    <th className="border-2 border-slate-400 px-8 bg-gray-300">전환율</th> */}
+                                    <th className="border-2 border-slate-400 px-8 bg-gray-300">방문평균페이지</th>
+                                    <th className="border-2 border-slate-400 px-8 bg-gray-300">전환율</th>
                                     <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
                                     <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
@@ -960,6 +1004,16 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                                 </td>
                                             :
                                                 <td className="border-2 bg-gray-50">0</td>
+                                        }
+                                        {totalAverage[date] ? 
+                                                <td className="border-2 bg-gray-50">{totalAverage[date]["totalAverage"]}</td>
+                                            :
+                                                <td className="border-2 bg-gray-50">0</td>
+                                        }
+                                        {totalImwebConversionRate[date] ? 
+                                                <td className="border-2 bg-gray-50">{totalImwebConversionRate[date]["totalImwebConversionRate"]}%</td>
+                                            :
+                                                <td className="border-2 bg-gray-50">0%</td>
                                         }
                                         {completeData.imweb_data.total_order[date] ? 
                                                 <td className="border-2 bg-gray-50">{completeData.imweb_data.total_order[date]["prod_count"]}</td>
