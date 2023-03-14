@@ -33,6 +33,7 @@ function BrandDetail() {
         if (response.ok) {
             setBrand(data);
             setBrandName(data.name);
+            setCompleteData({});
         }
     }
     const maxDateVale = (() => {
