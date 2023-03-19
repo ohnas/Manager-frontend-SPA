@@ -1,4 +1,5 @@
-export const baseUrl = "http://127.0.0.1:8000/api/v1"
+export const baseUrl = "https://backend.managertestapp.com/api/v1"
+
 
 export function getCookie(name) {
     let matches = document.cookie.match(new RegExp(
