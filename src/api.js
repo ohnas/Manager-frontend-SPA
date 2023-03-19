@@ -12,13 +12,10 @@ export function getCookie(name) {
     const cookieValue = document.cookie.split(';')
         .map(cookie => cookie.trim())
         .find(cookie => cookie.startsWith(`${name}=`));
-
+    console.log(cookieValue);
     if (!cookieValue) {
         return undefined;
     }
 
     return decodeURIComponent(cookieValue.split('=')[1]);
 }
-
-console.log(getCookie('csrftoken'));
-  
