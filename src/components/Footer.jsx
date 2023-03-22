@@ -22,7 +22,9 @@ function Footer({permission}) {
         navigate(`/brands/${data.brand}`);
     }
     useEffect(() => {
-        handleBrands();
+        if (permission) {
+            handleBrands();
+        }
     }, []);
     return (
         <>
