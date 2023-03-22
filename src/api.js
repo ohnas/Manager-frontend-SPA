@@ -1,8 +1,13 @@
 export const baseUrl = "http://127.0.0.1:8000/api/v1"
 
 export function getCookie(name) {
-    let matches = document.cookie.match(new RegExp(
-        "(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"
-    ));
-    return matches ? decodeURIComponent(matches[1]) : undefined;
+    const cookieValue = document.cookie.split(';')
+        .map(cookie => cookie.trim())
+        .find(cookie => cookie.startsWith(`${name}=`));
+        
+    if (!cookieValue) {
+        return undefined;
+    }
+
+    return decodeURIComponent(cookieValue.split('=')[1]);
 }
