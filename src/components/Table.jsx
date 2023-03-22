@@ -109,6 +109,9 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                 listOfDate.forEach((date) => {
                     if(completeData.facebook_data.campaigns[product.name][date]) {
                         let rate = ((completeData.facebook_data.campaigns[product.name][date].purchase / completeData.facebook_data.campaigns[product.name][date].landing_page_view) * 100).toFixed(2);
+                        if (rate === "NaN") {
+                            rate = 0;
+                        }
                         conversionRateObj[product.name][date] = {
                             "conversionRate" : rate,
                         }
