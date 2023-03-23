@@ -273,7 +273,22 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                         productExpenseObj[product.name][date] = {
                             "productExpense" : expense,
                         };
-                    } else {    
+                    } else if (facebookKrwExpense[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {    
+                        let expense = facebookKrwExpense[product.name][date]["facebookKrwExpense"] + completeData.imweb_data.by_products_payment[product.name][date]["coupon"] + completeData.imweb_data.by_products_payment[product.name][date]["point"] + completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"] + completeData.imweb_data.by_products_payment[product.name][date]["price_sale"] + completeData.imweb_data.by_products_payment[product.name][date]["period_discount"];
+                        productExpenseObj[product.name][date] = {
+                            "productExpense" : expense,
+                        };
+                    } else if (completeData.imweb_data.by_products_payment[product.name][date]) {
+                        let expense = completeData.imweb_data.by_products_payment[product.name][date]["coupon"] + completeData.imweb_data.by_products_payment[product.name][date]["point"] + completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"] + completeData.imweb_data.by_products_payment[product.name][date]["price_sale"] + completeData.imweb_data.by_products_payment[product.name][date]["period_discount"];
+                        productExpenseObj[product.name][date] = {
+                            "productExpense" : expense,
+                        };
+                    } else if (facebookKrwExpense[product.name][date]) {
+                        let expense = facebookKrwExpense[product.name][date]["facebookKrwExpense"];
+                        productExpenseObj[product.name][date] = {
+                            "productExpense" : expense,
+                        };
+                    } else {
                         return;
                     }
                 });
@@ -298,7 +313,12 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                         productOperatingProfitObj[product.name][date] = {
                             "productOperatingProfit" : profit,
                         };
-                    } else {    
+                    } else if (productExpense[product.name][date]) {    
+                        let profit = (0 - productExpense[product.name][date]["productExpense"]);
+                        productOperatingProfitObj[product.name][date] = {
+                            "productOperatingProfit" : profit,
+                        };
+                    } else {
                         return;
                     }
                 });
@@ -741,10 +761,10 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
         let curretBtn = event.target.nextElementSibling;
         curretBtn.classList.toggle("hidden");
         let curretText = event.target.innerText;
-        if(curretText === "show") {
-            event.target.innerText = "hide";
+        if(curretText === "▶︎") {
+            event.target.innerText = "▼";
         } else {
-            event.target.innerText = "show";
+            event.target.innerText = "▶︎";
         }
     }
     function handleOpenEvent(event) {
@@ -1191,7 +1211,7 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                     <div className="w-3 h-3 bg-yellow-300 rounded-full ml-1"></div>
                                 </div>
                             </div>
-                            <button onClick={handleToggleBtn} className="sticky left-0 z-50 bg-white text-gray-300">show</button>
+                            <button onClick={handleToggleBtn} className="sticky left-0 z-50 bg-white">▶︎</button>
                             <table className="whitespace-nowrap text-center hidden">
                                 <thead>
                                     <tr>

@@ -226,7 +226,7 @@ function BrandDetail() {
                         <input {...register("dateFrom", {required:true})} name="dateFrom" id="dateFrom" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
                         <label htmlFor="retrieve_date_to">TO</label>
                         <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
-                        <button className="hover:border-b-2 border-purple-500">RETRIEVE</button>
+                        <button className="border-solid border-2 border-emerald-300 rounded-md w-28 h-12 text-black">조회</button> 
                     </form>
                     {isLoading ? 
                             <Loading />
