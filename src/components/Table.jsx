@@ -273,7 +273,22 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                         productExpenseObj[product.name][date] = {
                             "productExpense" : expense,
                         };
-                    } else {    
+                    } else if (facebookKrwExpense[product.name][date] && completeData.imweb_data.by_products_payment[product.name][date]) {    
+                        let expense = facebookKrwExpense[product.name][date]["facebookKrwExpense"] + completeData.imweb_data.by_products_payment[product.name][date]["coupon"] + completeData.imweb_data.by_products_payment[product.name][date]["point"] + completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"] + completeData.imweb_data.by_products_payment[product.name][date]["price_sale"] + completeData.imweb_data.by_products_payment[product.name][date]["period_discount"];
+                        productExpenseObj[product.name][date] = {
+                            "productExpense" : expense,
+                        };
+                    } else if (completeData.imweb_data.by_products_payment[product.name][date]) {
+                        let expense = completeData.imweb_data.by_products_payment[product.name][date]["coupon"] + completeData.imweb_data.by_products_payment[product.name][date]["point"] + completeData.imweb_data.by_products_payment[product.name][date]["membership_discount"] + completeData.imweb_data.by_products_payment[product.name][date]["price_sale"] + completeData.imweb_data.by_products_payment[product.name][date]["period_discount"];
+                        productExpenseObj[product.name][date] = {
+                            "productExpense" : expense,
+                        };
+                    } else if (facebookKrwExpense[product.name][date]) {
+                        let expense = facebookKrwExpense[product.name][date]["facebookKrwExpense"];
+                        productExpenseObj[product.name][date] = {
+                            "productExpense" : expense,
+                        };
+                    } else {
                         return;
                     }
                 });
@@ -298,7 +313,12 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                         productOperatingProfitObj[product.name][date] = {
                             "productOperatingProfit" : profit,
                         };
-                    } else {    
+                    } else if (productExpense[product.name][date]) {    
+                        let profit = (0 - productExpense[product.name][date]["productExpense"]);
+                        productOperatingProfitObj[product.name][date] = {
+                            "productOperatingProfit" : profit,
+                        };
+                    } else {
                         return;
                     }
                 });
