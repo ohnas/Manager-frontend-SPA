@@ -761,10 +761,10 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
         let curretBtn = event.target.nextElementSibling;
         curretBtn.classList.toggle("hidden");
         let curretText = event.target.innerText;
-        if(curretText === "show") {
-            event.target.innerText = "hide";
+        if(curretText === "▶︎") {
+            event.target.innerText = "▼";
         } else {
-            event.target.innerText = "show";
+            event.target.innerText = "▶︎";
         }
     }
     function handleOpenEvent(event) {
@@ -1211,7 +1211,7 @@ function Table({brand, completeData, listOfDate, brandPk, setSelectedDate, event
                                     <div className="w-3 h-3 bg-yellow-300 rounded-full ml-1"></div>
                                 </div>
                             </div>
-                            <button onClick={handleToggleBtn} className="sticky left-0 z-50 bg-white text-gray-300">show</button>
+                            <button onClick={handleToggleBtn} className="sticky left-0 z-50 bg-white">▶︎</button>
                             <table className="whitespace-nowrap text-center hidden">
                                 <thead>
                                     <tr>
