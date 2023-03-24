@@ -3,12 +3,9 @@ import { useMutation } from '@tanstack/react-query';
 import { postLogOut } from "../api";
 
 function Header({userData, brandName}) {
-    const mutation = useMutation({ mutationFn: postLogOut })
+    const mutation = useMutation(postLogOut, {onSuccess: () => alert("Log out")});
     function logOut() {
         mutation.mutate();
-        if (mutation.isSuccess) {
-            alert("Log Out");
-        }
     }
     return (
         <div className="flex justify-between h-28 items-center border-b-2">

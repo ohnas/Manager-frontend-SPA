@@ -1,17 +1,27 @@
 import { useForm } from "react-hook-form";
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { postLogIn } from "../api";
 
 function LogIn() {
-    const { register, watch, handleSubmit } = useForm();
-    const watchAllFields = watch();
-    const { refetch } = useQuery(['logIn', watchAllFields], () => postLogIn(watchAllFields), {enabled: false });
-    // function logIn() {
-    //     refetch();
-    // }
+    const queryClient = useQueryClient();
+    const { register, handleSubmit } = useForm();
+    const mutation = useMutation(postLogIn, 
+            {
+                onSuccess: (data) => {
+                    if(data === 400) {
+                        alert("활성화 상태 또는 id 와 pw를 확인해주세요");
+                    } else {
+                        queryClient.invalidateQueries("userProfile");
+                    }
+                }
+            }
+        )
+    function logIn(logInData) {
+        mutation.mutate(logInData);
+    }
     return (
         <div className="flex flex-col mt-32 justify-center items-center">
-            <form onSubmit={handleSubmit(refetch)} className="flex flex-col justify-center items-center">         
+            <form onSubmit={handleSubmit(logIn)} className="flex flex-col justify-center items-center">         
                 <span className="text-3xl mb-10">Log in to your account</span>
                 <label htmlFor="username">ID</label>
                 <input {...register("username", {required: true})} id="username" name="username" type={"text"} className="border-2 rounded-md w-72 border-gray-200 mb-5" />

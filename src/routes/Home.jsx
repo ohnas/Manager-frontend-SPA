@@ -3,9 +3,6 @@ import LogIn from "../components/LogIn";
 
 
 function Home() {
-    // const { 
-    //     isPermission:[permission, setPermission],
-    // } = useOutletContext();
     const { userData } = useOutletContext();
     return (
         <div>

@@ -50,11 +50,9 @@ export async function postLogIn(logInData) {
         },
         body : JSON.stringify(logInData),
     });
-    // if (response.ok) {
-    //     setPermission(true);
-    // } else {
-    //     alert("활성화 상태 또는 id 와 pw를 확인해주세요");
-    // }
-    let data = await response.json();
-    return data;
+    if(response.ok) {
+        return;
+    } else {
+        return response.status;
+    }
 }
