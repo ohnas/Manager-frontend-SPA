@@ -27,7 +27,7 @@ function Root() {
                                 brandName: [setBrandName],
                             }
                         } />
-                    <Footer isLoading={isLoading} />
+                    <Footer userData={userData}/>
                 </>
             }
         </div>

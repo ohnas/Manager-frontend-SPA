@@ -56,3 +56,15 @@ export async function postLogIn(logInData) {
         return response.status;
     }
 }
+
+export async function getBrands() {
+    let response = await fetch(`${baseUrl}/brands`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
