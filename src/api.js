@@ -107,3 +107,45 @@ export async function getInactiveUser() {
     let data = await response.json();
     return data;
 }
+
+export async function getUserDetail(userPk) {
+    let response = await fetch(`${baseUrl}/users/update/${userPk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putUser(userPk, updateData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/users/update/${userPk}` , {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(updateData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteUser(userPk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/users/update/${userPk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}
