@@ -93,11 +93,17 @@ export async function postSignUp(signUpData) {
         body : JSON.stringify(signUpData),
     });
     let data = await response.json();
-    // if (data.username[0] === "A user with that username already exists.") {
-    //     alert("이미 사용중인 아이디입니다.");
-    // } else {
-    //     alert("회원가입 완료");
-    //     return navigate("/");
-    // }
+    return data;
+}
+
+export async function getInactiveUser() {
+    let response = await fetch(`${baseUrl}/users/inactive`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
     return data;
 }
