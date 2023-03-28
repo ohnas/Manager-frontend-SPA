@@ -2,22 +2,17 @@ import { useEffect } from "react";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
 
 function Management() {
-    const { 
-        userData:[user],
-    } = useOutletContext();
+    const { userData } = useOutletContext();
     const navigate = useNavigate();
-    function goHome() {
-        if(user.is_staff === false) {
+    useEffect(() => {
+        if(userData.is_staff === false) {
             alert("이용 할 수 없는 페이지 입니다");
             return navigate("/");
         }
-    }
-    useEffect(() => {
-        goHome();
-    }, [user]);
+    }, [userData]);
     return (
         <>
-            {user.is_staff ? 
+            {userData.is_staff ? 
                     <div className="flex flex-col justify-center items-center mt-10">
                         <div className="flex flex-col items-center mb-14">
                             <span className="text-2xl mb-5">USER</span>

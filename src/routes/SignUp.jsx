@@ -26,7 +26,7 @@ function SignUp() {
     useEffect(() => {
         if(!userData.detail) {
             alert("이용 할 수 없는 페이지 입니다");
-            navigate("/");
+            return navigate("/");
         }
     }, [userData]);
     return (
