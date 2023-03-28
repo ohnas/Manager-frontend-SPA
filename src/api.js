@@ -80,3 +80,24 @@ export async function getMyBrand() {
     let data = await response.json();
     return data;
 }
+
+export async function postSignUp(signUpData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/users/create` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(signUpData),
+    });
+    let data = await response.json();
+    // if (data.username[0] === "A user with that username already exists.") {
+    //     alert("이미 사용중인 아이디입니다.");
+    // } else {
+    //     alert("회원가입 완료");
+    //     return navigate("/");
+    // }
+    return data;
+}
