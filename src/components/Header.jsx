@@ -1,9 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from '@tanstack/react-query';
 import { postLogOut } from "../api";
 
 function Header({userData, brandName}) {
-    const mutation = useMutation(postLogOut, {onSuccess: () => alert("Log out")});
+    const navigate = useNavigate();
+    const mutation = useMutation(postLogOut, 
+        {
+            onSuccess: () => {
+                alert("Log out")
+                navigate("/");
+            }
+        });
     function logOut() {
         mutation.mutate();
     }
