@@ -68,3 +68,15 @@ export async function getBrands() {
     let data = await response.json();
     return data;
 }
+
+export async function getMyBrand() {
+    let response = await fetch(`${baseUrl}/brands/my`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
