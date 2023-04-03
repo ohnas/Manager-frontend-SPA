@@ -65,7 +65,7 @@ function CreateProduct() {
         <div className="flex flex-col mt-8 justify-center items-center">
             {user.is_staff ? 
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center">
-                    <label htmlFor="name">NAME</label>
+                    <label htmlFor="name">PRODUCT NAME</label>
                     <input {...register("name", {required: true})} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                     <label htmlFor="cost">COST</label>
                     <input {...register("cost", {required: true})} id="cost" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />

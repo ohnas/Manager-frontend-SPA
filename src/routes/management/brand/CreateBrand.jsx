@@ -56,7 +56,7 @@ function CreateBrand() {
         <div className="flex flex-col mt-32 justify-center items-center">
             {user.is_staff ? 
                 <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col justify-center items-center">
-                    <label htmlFor="name">NAME</label>
+                    <label htmlFor="name">BRAND NAME</label>
                     <input {...register("name", {required: true})} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                     <label htmlFor="description">DESCRIPTION</label>
                     <input {...register("description")} id="description" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
