@@ -176,3 +176,15 @@ export async function postBrand(brandData) {
     let data = await response.json();
     return data;
 }
+
+export async function getBrandList() {
+    let response = await fetch(`${baseUrl}/brands`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
