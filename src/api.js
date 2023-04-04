@@ -149,3 +149,30 @@ export async function deleteUser(userPk) {
         return;
     }
 }
+
+export async function getAllUsers() {
+    let response = await fetch(`${baseUrl}/brands/create`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function postBrand(brandData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/create` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(brandData),
+    });
+    let data = await response.json();
+    return data;
+}
