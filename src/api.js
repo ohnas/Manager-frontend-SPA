@@ -188,3 +188,54 @@ export async function getBrandList() {
     let data = await response.json();
     return data;
 }
+
+export async function getBrandDetail(brandPk) {
+    let response = await fetch(`${baseUrl}/brands/update/${brandPk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putBrandDetail(brandPk, updateData) {
+    if(updateData.name === "") {
+        delete updateData.name;
+    }
+    if(updateData.description === "") {
+        delete updateData.description;
+    }
+    if(updateData.user === "") {
+        delete updateData.user;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/update/${brandPk}` , {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(updateData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteBrandDetail(brandPk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/update/${brandPk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}
