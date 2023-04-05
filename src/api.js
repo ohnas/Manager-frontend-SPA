@@ -275,3 +275,15 @@ export async function postProduct(productData) {
     let data = await response.json();
     return data;
 }
+
+export async function getProductList() {
+    let response = await fetch(`${baseUrl}/products`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
