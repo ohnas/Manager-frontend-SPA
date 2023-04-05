@@ -287,3 +287,69 @@ export async function getProductList() {
     let data = await response.json();
     return data;
 }
+
+export async function getProductDetail(productPk) {
+    let response = await fetch(`${baseUrl}/products/update/product/${productPk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putProductDetail(productPk, updateData) {
+    if(updateData.name === "") {
+        delete updateData.name;
+    }
+    if(updateData.price === "") {
+        delete updateData.price;
+    }
+    if(updateData.delivery_price === "") {
+        delete updateData.delivery_price;
+    }
+    if(updateData.cost === "") {
+        delete updateData.cost;
+    }
+    if(updateData.logistic_fee === "") {
+        delete updateData.logistic_fee;
+    }
+    if(updateData.quantity === "") {
+        delete updateData.quantity;
+    }
+    if(updateData.gift_quantity === "") {
+        delete updateData.gift_quantity;
+    }
+    if(updateData.brand === "") {
+        delete updateData.brand;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/products/update/product/${productPk}` , {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(updateData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteProductDetail(productPk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/products/update/product/${productPk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}

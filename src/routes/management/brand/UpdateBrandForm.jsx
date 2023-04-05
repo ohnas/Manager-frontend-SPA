@@ -18,7 +18,7 @@ function UpdateBrandForm() {
                 queryClient.invalidateQueries("brandDetail");
             }
         }
-    )
+    );
     const deleteMutation = useMutation(() => deleteBrandDetail(brandPk),
         {
             onSuccess: () => {
@@ -26,7 +26,7 @@ function UpdateBrandForm() {
                 return navigate("/");
             }
         }
-    )
+    );
     function updateBrand(updateData) {
         putMutation.mutate(updateData);
     }
