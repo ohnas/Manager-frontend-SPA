@@ -239,3 +239,39 @@ export async function deleteBrandDetail(brandPk) {
         return;
     }
 }
+
+export async function getAllBrands() {
+    let response = await fetch(`${baseUrl}/products/create/product`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function postProduct(productData) {
+    if(productData.quantity === "") {
+        productData.quantity = 0;
+    }
+    if(productData.gift_quantity === "") {
+        productData.gift_quantity = 0;
+    }
+    if(productData.logistic_fee === "") {
+        productData.logistic_fee = 0;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/products/create/product` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(productData),
+    });
+    let data = await response.json();
+    return data;
+}
