@@ -353,3 +353,36 @@ export async function deleteProductDetail(productPk) {
         return;
     }
 }
+
+export async function getAllProducts() {
+    let response = await fetch(`${baseUrl}/products/create/option`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function postOption(optionData) {
+    if(optionData.quantity === "") {
+        optionData.quantity = 0;
+    }
+    if(optionData.gift_quantity === "") {
+        optionData.gift_quantity = 0;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/products/create/option` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(optionData),
+    });
+    let data = await response.json();
+    return data;
+}
