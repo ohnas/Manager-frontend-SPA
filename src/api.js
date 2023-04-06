@@ -386,3 +386,15 @@ export async function postOption(optionData) {
     let data = await response.json();
     return data;
 }
+
+export async function getOptionList() {
+    let response = await fetch(`${baseUrl}/products/options`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
