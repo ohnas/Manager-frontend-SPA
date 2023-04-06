@@ -398,3 +398,63 @@ export async function getOptionList() {
     let data = await response.json();
     return data;
 }
+
+export async function getOptionDetail(optionPk) {
+    let response = await fetch(`${baseUrl}/products/update/option/${optionPk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putOptionDetail(optionPk, updateData) {
+    if(updateData.name === "") {
+        delete updateData.name;
+    }
+    if(updateData.price === "") {
+        delete updateData.price;
+    }
+    if(updateData.logistic_fee === "") {
+        delete updateData.logistic_fee;
+    }
+    if(updateData.quantity === "") {
+        delete updateData.quantity;
+    }
+    if(updateData.gift_quantity === "") {
+        delete updateData.gift_quantity;
+    }
+    if(updateData.product === "") {
+        delete updateData.product;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/products/update/option/${optionPk}` , {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(updateData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteOptionDetail(optionPk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/products/update/option/${optionPk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}
