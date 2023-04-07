@@ -485,3 +485,15 @@ export async function postSite(siteData) {
     let data = await response.json();
     return data;
 }
+
+export async function getSiteList() {
+    let response = await fetch(`${baseUrl}/sites`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
