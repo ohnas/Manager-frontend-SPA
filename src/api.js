@@ -458,3 +458,30 @@ export async function deleteOptionDetail(optionPk) {
         return;
     }
 }
+
+export async function getAllBrandList() {
+    let response = await fetch(`${baseUrl}/sites/create`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function postSite(siteData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/sites/create` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(siteData),
+    });
+    let data = await response.json();
+    return data;
+}
