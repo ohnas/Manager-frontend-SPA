@@ -497,3 +497,57 @@ export async function getSiteList() {
     let data = await response.json();
     return data;
 }
+
+export async function getSiteDetail(sitePk) {
+    let response = await fetch(`${baseUrl}/sites/update/${sitePk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putSiteDetail(sitePk, updateData) {
+    if(updateData.name === "") {
+        delete updateData.name;
+    }
+    if(updateData.url === "") {
+        delete updateData.url;
+    }
+    if(updateData.kind === "") {
+        delete updateData.kind;
+    }
+    if(updateData.brand === "") {
+        delete updateData.brand;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/sites/update/${sitePk}` , {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(updateData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteSiteDetail(sitePk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/sites/update/${sitePk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}
