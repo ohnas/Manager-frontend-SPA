@@ -81,6 +81,34 @@ export async function getMyBrand() {
     return data;
 }
 
+export async function getBrand(brandPk) {
+    let response = await fetch(`${baseUrl}/brands/${brandPk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getRetrieve(brandPk, retrieveData) {
+    if (retrieveData.dateTo < retrieveData.dateFrom) {
+        alert("조회 조건을 확인하세요");
+        return;
+    } 
+    let response = await fetch(`${baseUrl}/retrieves/?brandPk=${brandPk}&saleSite=${retrieveData.saleSite}&advertisingSite=${retrieveData.advertisingSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
 export async function postSignUp(signUpData) {
     let csrftoken = getCookie('csrftoken');
     let response = await fetch(`${baseUrl}/users/create` , {

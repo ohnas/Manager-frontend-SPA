@@ -22,7 +22,6 @@ function Root() {
                 <>
                     <Header userData={userData} brandName={brandName} />
                     <Outlet context={{
-                                isLoading:[isLoading],
                                 userData: userData,
                                 brandName: [setBrandName],
                             }
