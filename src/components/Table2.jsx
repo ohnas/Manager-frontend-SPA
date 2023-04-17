@@ -118,77 +118,38 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                                 :
                                     <td className="border-2 bg-gray-50">0%</td>
                             } */}
-                            {completeData[date] ?
-                                <>
-                                    <td className="border-2 bg-gray-50">{completeData[date]["imweb_count"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["reach"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["impressions"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["frequency"].toFixed(2)}</td>
-                                    <td className="border-2 bg-blue-50">US${completeData[date]["spend"].toFixed(2)}</td>
-                                    <td className="border-2 bg-blue-50">US${completeData[date]["cpm"].toFixed(2)}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["website_ctr"].toFixed(2)}</td>
-                                    <td className="border-2 bg-blue-50">{Math.round(completeData[date]["purchase_roas"]*100)}%</td>
-                                    <td className="border-2 bg-blue-50">US${completeData[date]["cost_per_unique_inline_link_click"].toFixed(2)}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["purchase"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["landing_page_view"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["link_click"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["add_payment_info"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["add_to_cart"]}</td>
-                                    <td className="border-2 bg-blue-50">{completeData[date]["conversion_rate"].toFixed(2)}%</td>
-                                    <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData[date]["imweb_price"])}</td>
-                                    <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_deliv_price"])}</td>
-                                    <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["product_cost"])}</td>
-                                    <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["product_profit"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["logistic_fee"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["sale_expense"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["facebook_ad_expense_krw"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_coupon"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_point"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_membership_discount"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_price_sale"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_period_discount"])}</td>
-                                    <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["expense"])}</td>
-                                    <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["operating_profit"])}</td>
-                                    <td className="border-2 bg-yellow-50">{completeData[date]["operating_profit_rate"].toFixed(2)}%</td>
-                                    <td className="border-2 bg-yellow-50">{completeData[date]["product_cost_rate"].toFixed(2)}%</td>
-                                    <td className="border-2 bg-yellow-50">{completeData[date]["facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
-                                </>
-                                :
-                                <>
-                                    <td className="border-2 bg-gray-50">0</td>
-                                    <td className="border-2 bg-blue-50">0</td>
-                                    <td className="border-2 bg-blue-50">0</td>
-                                    <td className="border-2 bg-blue-50">0.00</td>
-                                    <td className="border-2 bg-blue-50">US$0.00</td>
-                                    <td className="border-2 bg-blue-50">US$0.00</td>
-                                    <td className="border-2 bg-blue-50">0.00</td>
-                                    <td className="border-2 bg-blue-50">0%</td>
-                                    <td className="border-2 bg-blue-50">US$0.00</td>
-                                    <td className="border-2 bg-blue-50">0</td>
-                                    <td className="border-2 bg-blue-50">0</td>
-                                    <td className="border-2 bg-blue-50">0</td>
-                                    <td className="border-2 bg-blue-50">0</td>
-                                    <td className="border-2 bg-blue-50">0</td>
-                                    <td className="border-2 bg-blue-50">0%</td>
-                                    <td className="border-2 bg-rose-50">₩0</td>
-                                    <td className="border-2 bg-rose-50">₩0</td>
-                                    <td className="border-2 bg-fuchsia-50">₩0</td>
-                                    <td className="border-2 bg-indigo-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-green-50">₩0</td>
-                                    <td className="border-2 bg-indigo-50">₩0</td> 
-                                    <td className="border-2 bg-yellow-50">0%</td>
-                                    <td className="border-2 bg-yellow-50">0%</td>
-                                    <td className="border-2 bg-yellow-50">0%</td>
-                                </>
-                            }
+                            <td className="border-2 bg-gray-50">{completeData[date]["imweb_count"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["reach"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["impressions"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["frequency"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">US${completeData[date]["spend"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">US${completeData[date]["cpm"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["website_ctr"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{Math.round(completeData[date]["purchase_roas"]*100)}%</td>
+                            <td className="border-2 bg-blue-50">US${completeData[date]["cost_per_unique_inline_link_click"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["purchase"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["landing_page_view"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["link_click"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["add_payment_info"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["add_to_cart"]}</td>
+                            <td className="border-2 bg-blue-50">{completeData[date]["conversion_rate"].toFixed(2)}%</td>
+                            <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData[date]["imweb_price"])}</td>
+                            <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_deliv_price"])}</td>
+                            <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["product_cost"])}</td>
+                            <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["product_profit"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["logistic_fee"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["sale_expense"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["facebook_ad_expense_krw"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_coupon"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_point"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_membership_discount"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_price_sale"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["imweb_period_discount"])}</td>
+                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["expense"])}</td>
+                            <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[date]["operating_profit"])}</td>
+                            <td className="border-2 bg-yellow-50">{completeData[date]["operating_profit_rate"].toFixed(2)}%</td>
+                            <td className="border-2 bg-yellow-50">{completeData[date]["product_cost_rate"].toFixed(2)}%</td>
+                            <td className="border-2 bg-yellow-50">{completeData[date]["facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
                         </tr>
                     )}
                 </tbody>
