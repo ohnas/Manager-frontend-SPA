@@ -1,34 +1,33 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useOutletContext, useParams } from "react-router-dom";
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { getBrand, getRetrieve } from "../api";
-import Table from "../components/Table";
+// import Table from "../components/Table";
 import Loading from "../components/Loading";
 import Table2 from "../components/Table2";
+
 
 function BrandDetail() {
     const { 
         brandName: [setBrandName],
     } = useOutletContext();
     let { brandPk } = useParams();
-    const [completeData, setCompleteData] = useState();
-    const [completeDataLoading, setCompleteDataLoding] = useState(true);
+    const [noData, setNodata] = useState(true);
+    const [formData, setFormData] = useState();
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
     const [maxDate, setMaxDate] = useState();
     const { register, handleSubmit } = useForm();
     const { isLoading: brandDataLoading, data: brandData } = useQuery(['Brand', brandPk], () => getBrand(brandPk));
-    const getMutation = useMutation((retrieveData) => getRetrieve(brandPk, retrieveData),
+    const { isLoading: completeDataLoading, data: completeData } = useQuery(['Retrieve', brandPk, formData], () => getRetrieve(brandPk, formData),
         {
-            onSuccess: (data) => {
-                setCompleteData(data);
-                setCompleteDataLoding(false);
-            }
+            enabled: !!formData,
         }
     );
     function onSubmit(retrieveData) {
-        getMutation.mutate(retrieveData);
+        setFormData(retrieveData);
+        setNodata(false);
         setSelectedDate({
             "dateFrom" : retrieveData.dateFrom,
             "dateTo" : retrieveData.dateTo,
@@ -52,10 +51,6 @@ function BrandDetail() {
     // const [events, setEvents] = useState({});
     // const [pageView, setPageView] = useState({});
     // const [visit, setVisit] = useState({});
-
-
-
-
     // async function getEvent() {
     //     if(Object.keys(selectedDate).length === 0) {
     //         return;
@@ -211,11 +206,21 @@ function BrandDetail() {
                         <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
                         <button className="border-solid border-2 border-emerald-300 rounded-md w-28 h-12 text-black">조회</button> 
                     </form>
-                    {completeDataLoading ? 
-                        <Loading />
+                    {noData ? 
+                        <div className="flex justify-center items-center h-screen">
+                            <div className="flex justify-center items-center">
+                                <span className="text-gray-400">No data.</span>
+                            </div>
+                        </div>
                         :
-                        // <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} pageView={pageView} visit={visit} />
-                        <Table2 brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
+                        <>
+                            {completeDataLoading ? 
+                                <Loading />
+                                :
+                                // <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} pageView={pageView} visit={visit} />
+                                <Table2 brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
+                            }
+                        </>
                     }
                 </>
             }
