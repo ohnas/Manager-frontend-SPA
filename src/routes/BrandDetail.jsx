@@ -17,21 +17,36 @@ function BrandDetail() {
     const [formData, setFormData] = useState();
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
+    const [isDateLoading, setIsDateLoading] = useState();
     const [maxDate, setMaxDate] = useState();
     const { register, handleSubmit } = useForm();
     const { isLoading: brandDataLoading, data: brandData } = useQuery(['Brand', brandPk], () => getBrand(brandPk));
     const { isLoading: completeDataLoading, data: completeData } = useQuery(['Retrieve', brandPk, formData], () => getRetrieve(brandPk, formData),
         {
             enabled: !!formData,
+            refetchOnWindowFocus: false,
+            staleTime: 5 * 60 * 1000,
         }
     );
     function onSubmit(retrieveData) {
-        setFormData(retrieveData);
-        setNodata(false);
+        setIsDateLoading(true);
         setSelectedDate({
             "dateFrom" : retrieveData.dateFrom,
             "dateTo" : retrieveData.dateTo,
         });
+        setNodata(false);
+        setFormData(retrieveData);
+    }
+    console.log(listOfDate);
+    function dateList() {
+        let result = [];
+        let curDate = new Date(selectedDate.dateFrom);
+        while(curDate <= new Date(selectedDate.dateTo)) {
+            result.push(curDate.toISOString().split("T")[0]);
+            curDate.setDate(curDate.getDate() + 1);
+        }
+        setListOfDate(result);
+        setIsDateLoading(false);
     }
     const maxDateVale = (() => {
         const today = new Date();
@@ -146,15 +161,15 @@ function BrandDetail() {
     //         }
     //     }
     // }
-    function dateList() {
-        let result = [];
-        let curDate = new Date(selectedDate.dateFrom);
-        while(curDate <= new Date(selectedDate.dateTo)) {
-            result.push(curDate.toISOString().split("T")[0]);
-            curDate.setDate(curDate.getDate() + 1);
-        }
-        setListOfDate(result);
-    }
+    // function dateList() {
+    //     let result = [];
+    //     let curDate = new Date(selectedDate.dateFrom);
+    //     while(curDate <= new Date(selectedDate.dateTo)) {
+    //         result.push(curDate.toISOString().split("T")[0]);
+    //         curDate.setDate(curDate.getDate() + 1);
+    //     }
+    //     setListOfDate(result);
+    // }
     useEffect(() => {
         if(!brandDataLoading) {
             setBrandName(brandData.name);
@@ -214,7 +229,7 @@ function BrandDetail() {
                         </div>
                         :
                         <>
-                            {completeDataLoading ? 
+                            {completeDataLoading || isDateLoading ? 
                                 <Loading />
                                 :
                                 // <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} pageView={pageView} visit={visit} />
