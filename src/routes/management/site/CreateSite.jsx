@@ -37,7 +37,7 @@ function CreateSite() {
                             <label htmlFor="name">NAME</label>
                             <input {...register("name", {required: true})} id="name" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                             <label htmlFor="url">URL</label>
-                            <input {...register("url", {required: true})} id="url" type="url" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                            <input {...register("url")} id="url" type="url" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                             <label htmlFor="apiKey">API KEY</label>
                             <input {...register("apiKey")} id="apiKey" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                             <label htmlFor="secretKey">SECRET KEY</label>
