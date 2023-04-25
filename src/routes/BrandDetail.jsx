@@ -7,7 +7,6 @@ import { getBrand, getRetrieve } from "../api";
 import Loading from "../components/Loading";
 import Table2 from "../components/Table2";
 
-
 function BrandDetail() {
     const { 
         brandName: [setBrandName],
@@ -37,7 +36,6 @@ function BrandDetail() {
         setNodata(false);
         setFormData(retrieveData);
     }
-    console.log(listOfDate);
     function dateList() {
         let result = [];
         let curDate = new Date(selectedDate.dateFrom);
