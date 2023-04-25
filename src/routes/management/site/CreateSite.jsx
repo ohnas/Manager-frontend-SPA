@@ -18,6 +18,10 @@ function CreateSite() {
         }
     )
     function createSite(siteData) {
+        siteData.name = siteData.name.trim();
+        siteData.apiKey = siteData.apiKey.trim();
+        siteData.secretKey = siteData.secretKey.trim();
+        siteData.adAccountId = siteData.adAccountId.trim();
         mutation.mutate(siteData);
     }
     useEffect(() => {

@@ -28,6 +28,7 @@ function UpdateOptionForm() {
         }
     );
     function updateOption(updateData) {
+        updateData.name = updateData.name.trim();
         putMutation.mutate(updateData);
     }
     function delOption() {

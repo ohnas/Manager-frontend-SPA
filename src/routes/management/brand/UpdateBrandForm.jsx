@@ -28,6 +28,8 @@ function UpdateBrandForm() {
         }
     );
     function updateBrand(updateData) {
+        updateData.name = updateData.name.trim();
+        updateData.description = updateData.description.trim();
         putMutation.mutate(updateData);
     }
     function delBrand() {

@@ -22,6 +22,7 @@ function CreateProduct() {
         }
     )
     function createProduct(productData) {
+        productData.name = productData.name.trim();
         mutation.mutate(productData);
     }
     useEffect(() => {

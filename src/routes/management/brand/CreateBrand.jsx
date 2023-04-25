@@ -22,6 +22,8 @@ function CreateBrand() {
         }
     )
     function createBrand(brandData) {
+        brandData.name = brandData.name.trim();
+        brandData.description = brandData.description.trim();
         mutation.mutate(brandData);
     }
     useEffect(() => {

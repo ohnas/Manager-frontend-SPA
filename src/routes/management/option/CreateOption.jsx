@@ -22,6 +22,7 @@ function CreateOption() {
         }
     )
     function createOption(optionData) {
+        optionData.name = optionData.name.trim();
         mutation.mutate(optionData);
     }
     useEffect(() => {
