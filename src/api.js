@@ -579,3 +579,40 @@ export async function deleteSiteDetail(sitePk) {
         return;
     }
 }
+
+export async function getEvents(brandPk, listOfDate) {
+    let response = await fetch(`${baseUrl}/events/${brandPk}?dateFrom=${listOfDate[0]}&dateTo=${listOfDate[listOfDate.length - 1]}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+    // if (response.ok) {
+    //     let eventCountObj = {};
+    //     listOfDate.forEach((date) => {
+    //         let count = data.filter((d) => 
+    //             d.event_date === date
+    //         );
+    //         eventCountObj[date] = count.length;
+    //     });
+    //     setEventCount(eventCountObj);
+    //     let eventsObj = {};
+    //     brand.product_set.forEach((product) =>{
+    //         eventsObj[product.name] = {};
+    //         listOfDate.forEach((date) => {
+    //             let event = data.filter((d) =>
+    //                 d.product.name === product.name && d.event_date === date
+    //             );
+    //             if(event.length !== 0) {
+    //                 eventsObj[product.name][date] = event;
+    //             } else {
+    //                 return;
+    //             }
+    //         });
+    //     });
+    //     setEvents(eventsObj);
+    // }
+}

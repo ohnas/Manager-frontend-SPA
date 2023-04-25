@@ -26,7 +26,11 @@ function Root() {
                                 brandName: [setBrandName],
                             }
                         } />
-                    <Footer userData={userData}/>
+                    { userData.detail === "Authentication credentials were not provided." ? 
+                        null
+                        :
+                        <Footer />
+                    }
                 </>
             }
         </div>

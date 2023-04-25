@@ -1,4 +1,79 @@
-function Table2({ brandData, completeData, listOfDate}) {
+import { useState } from "react";
+import { useQuery } from '@tanstack/react-query'
+import { getEvents } from "../api";
+
+function Table2({ brandData, completeData, listOfDate, brandPk}) {
+    const [eventCount, setEventCount] = useState({});
+    const [events, setEvents] = useState({});
+    const [pageView, setPageView] = useState({});
+    const [visit, setVisit] = useState({});
+    const { isLoading: eventsDataLoading, data: eventsData } = useQuery(['Events', brandPk, listOfDate], () => getEvents(brandPk, listOfDate));
+    console.log(eventsData);
+    // async function getPageView() {
+    //     if(Object.keys(selectedDate).length === 0) {
+    //         return;
+    //     } else {
+    //         let response = await fetch(`${baseUrl}/pages/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
+    //             method : "GET",
+    //             credentials: "include",
+    //             headers : {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         });
+    //         let data = await response.json();
+    //         if (response.ok) {
+    //             let pageViewObj = {};
+    //             listOfDate.forEach((date) => {
+    //                 let page = data.find((d) => 
+    //                     d.page_date === date
+    //                 );
+    //                 if(page) {
+    //                     pageViewObj[date] = page;
+    //                 } else {
+    //                     return;
+    //                 }
+    //             });
+    //             setPageView(pageViewObj);
+    //         }
+    //     }
+    // }
+    // async function getVisit() {
+    //     if(Object.keys(selectedDate).length === 0) {
+    //         return;
+    //     } else {
+    //         let response = await fetch(`${baseUrl}/visits/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
+    //             method : "GET",
+    //             credentials: "include",
+    //             headers : {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //         });
+    //         let data = await response.json();
+    //         if (response.ok) {
+    //             let visitObj = {};
+    //             listOfDate.forEach((date) => {
+    //                 let visit = data.find((d) => 
+    //                     d.visit_date === date
+    //                 );
+    //                 if(visit) {
+    //                     visitObj[date] = visit;
+    //                 } else {
+    //                     return;
+    //                 }
+    //             });
+    //             setVisit(visitObj);
+    //         }
+    //     }
+    // }
+    // useEffect(() => {
+    //     getEvent();
+    // }, [selectedDate, completeData]);
+    // useEffect(() => {
+    //     getPageView();
+    // }, [selectedDate, completeData]);
+    // useEffect(() => {
+    //     getVisit();
+    // }, [selectedDate, completeData]);
     function handleToggleBtn(event) {
         let curretBtn = event.target.nextElementSibling;
         curretBtn.classList.toggle("hidden");
