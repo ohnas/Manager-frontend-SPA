@@ -11,11 +11,23 @@ function UpdateProductForm() {
     const queryClient = useQueryClient();
     const { isLoading: productDetailLoading, data: productDetailData } = useQuery(['productDetail', productPk], () => getProductDetail(productPk));
     const { isLoading: allBrandsLoading, data: allBrandsData } = useQuery(['AllBrands'], getAllBrands);
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const putMutation = useMutation((updateData) => putProductDetail(productPk, updateData),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("productDetail");
+                reset(
+                    {
+                        "name":"",
+                        "price":"",
+                        "delivery_price":"",
+                        "cost":"",
+                        "logistic_fee":"",
+                        "quantity":"",
+                        "gift_quantity":"",
+                        "brand":"",
+                    }
+                );
             }
         }
     );

@@ -11,11 +11,19 @@ function UpdateSiteForm() {
     const queryClient = useQueryClient();
     const { isLoading: siteDetailLoading, data: siteDetailData } = useQuery(['siteDetail', sitePk], () => getSiteDetail(sitePk));
     const { isLoading: allBrandListLoading, data: allBrandListData } = useQuery(['AllBrandList'], getAllBrandList);
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const putMutation = useMutation((updateData) => putSiteDetail(sitePk, updateData),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("siteDetail");
+                reset(
+                    {
+                        "name":"",
+                        "url":"",
+                        "kind":"",
+                        "brand":"",
+                    }
+                );
             }
         }
     );

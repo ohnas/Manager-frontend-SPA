@@ -11,11 +11,21 @@ function UpdateOptionForm() {
     const queryClient = useQueryClient();
     const { isLoading: optionDetailLoading, data: optionDetailData } = useQuery(['optionDetail', optionPk], () => getOptionDetail(optionPk));
     const { isLoading: allProductsLoading, data: allProductsData } = useQuery(['AllProducts'], getAllProducts);
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const putMutation = useMutation((updateData) => putOptionDetail(optionPk, updateData),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("optionDetail");
+                reset(
+                    {
+                        "name":"",
+                        "price":"",
+                        "logistic_fee":"",
+                        "quantity":"",
+                        "gift_quantity":"",
+                        "product":"",
+                    }
+                );
             }
         }
     );

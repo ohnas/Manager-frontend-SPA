@@ -9,12 +9,17 @@ function UpdateUserForm() {
     const navigate = useNavigate();
     let { userPk } = useParams();
     const queryClient = useQueryClient();
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const { isLoading, data: userDetailData } = useQuery(['userDetail', userPk], () => getUserDetail(userPk));
     const putMutation = useMutation((updateData) => putUser(userPk, updateData),
         {
             onSuccess: () => {
                 queryClient.invalidateQueries("userDetail");
+                reset(
+                    {
+                        "is_active":"",
+                    }
+                );
             }
         }
     )
