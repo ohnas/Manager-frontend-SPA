@@ -15,7 +15,7 @@ function UpdateBrandForm() {
     const putMutation = useMutation((updateData) => putBrandDetail(brandPk, updateData),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("brandDetail");
+                queryClient.refetchQueries(['brandDetail', brandPk]);
                 reset(
                     {
                         "name":"",

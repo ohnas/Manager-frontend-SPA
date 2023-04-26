@@ -1,15 +1,51 @@
 import { useEffect, useState } from "react";
-import { useQuery } from '@tanstack/react-query'
-import { getEventsCount, getPageView, getVisit } from "../api";
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { getEventsCount, getPageView, getVisit, postPageView, putPageView } from "../api";
 
 function Table2({ brandData, completeData, listOfDate, brandPk}) {
+    const [pageViewPk, setPageViewPk] = useState()
     const [totalAverageLoading, setTotalAverageLoading] = useState(true);
     const [totalAverage, setTotalAverage] = useState({});
     const [totalImwebConversionRateLoading, setTotalImwebConversionRateLoading] = useState(true);
     const [totalImwebConversionRate, setTotalImwebConversionRate] = useState({});
+    const queryClient = useQueryClient();
     const { isLoading: eventsCountDataLoading, data: eventsCountData } = useQuery(['EventsCount', brandPk, listOfDate], () => getEventsCount(brandPk, listOfDate));
     const { isLoading: pageViewDataLoading, data: pageViewData } = useQuery(['PageView', brandPk, listOfDate], () => getPageView(brandPk, listOfDate));
     const { isLoading: visitDataLoading, data: visitData } = useQuery(['Visit', brandPk, listOfDate], () => getVisit(brandPk, listOfDate));
+    const postPageViewMutation = useMutation((pageViewData) => postPageView(brandPk, pageViewData), 
+        {
+            onSuccess: () => {
+                queryClient.refetchQueries(['PageView', brandPk, listOfDate]);
+            }
+        }
+    );
+    const putPageViewMutation = useMutation((pageViewData) => putPageView(pageViewPk, pageViewData),
+        {
+            onSuccess: () => {
+                queryClient.refetchQueries(['PageView', brandPk, listOfDate]);
+            }
+        }
+    );
+    
+    function handlePageView(event) {
+        let selectedPk = event.target.id;
+        let selectedDate = event.target.parentElement.firstElementChild.innerText;
+        let selectedPageView = event.target.innerText;
+        if(selectedPageView === 0 || selectedPageView === '') {
+            alert("잘못된 입력입니다");
+            return;
+        }
+        let pageViewData = {
+            "view" : selectedPageView,
+            "page_date" : selectedDate,
+        };
+        if(selectedPk === 'None') {
+            postPageViewMutation.mutate(pageViewData);
+        } else {
+            setPageViewPk(selectedPk);
+            putPageViewMutation.mutate(pageViewData);
+        }
+    }
     function handleTotalAverage() {
         let totalAverageObj = {};
         listOfDate.forEach((date) => {
@@ -48,7 +84,7 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
         if(visitDataLoading === false) {
             handleTotalAverage();
         }
-    }, [visitData]);
+    }, [eventsCountData, visitData]);
     useEffect(() => {
         if(visitDataLoading === false) {
             handleTotalImwebConversionRate();
@@ -147,7 +183,12 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                                 {pageViewDataLoading ?
                                     <td className="border-2 bg-gray-50">0</td>
                                     :
-                                    <td className="border-2 bg-gray-50">{pageViewData[date]}</td>
+                                    <>
+                                        <td className="border-2 bg-gray-50" onBlur={handlePageView} id={pageViewData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>
+                                            {pageViewData[date]["view"]}
+                                            {/* <button onClick={handleDeletePageView} className="text-xs border-2 border-red-300 rounded-md text-gray-400 w-10 ml-2">del</button> */}
+                                        </td>
+                                    </>
                                 }
                                 {visitDataLoading ?
                                     <td className="border-2 bg-gray-50">0</td>

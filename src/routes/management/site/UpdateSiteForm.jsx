@@ -15,7 +15,7 @@ function UpdateSiteForm() {
     const putMutation = useMutation((updateData) => putSiteDetail(sitePk, updateData),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("siteDetail");
+                queryClient.refetchQueries(['siteDetail', sitePk]);
                 reset(
                     {
                         "name":"",

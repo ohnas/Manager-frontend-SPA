@@ -11,7 +11,7 @@ function LogIn() {
                     if(data === 400) {
                         alert("활성화 상태 또는 id 와 pw를 확인해주세요");
                     } else {
-                        queryClient.invalidateQueries("userProfile");
+                        queryClient.refetchQueries(['userProfile']);
                     }
                 }
             }

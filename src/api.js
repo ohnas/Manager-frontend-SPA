@@ -604,6 +604,36 @@ export async function getPageView(brandPk, listOfDate) {
     return data;
 }
 
+export async function postPageView(brandPk, pageViewData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/pages/${brandPk}/create` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(pageViewData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putPageView(pageViewPk, pageViewData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/pages/update/${pageViewPk}`, {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(pageViewData),
+    });
+    let data = await response.json();
+    return data;
+}
+
 export async function getVisit(brandPk, listOfDate) {
     let response = await fetch(`${baseUrl}/visits/${brandPk}?dateFrom=${listOfDate[0]}&dateTo=${listOfDate[listOfDate.length - 1]}`, {
         method : "GET",

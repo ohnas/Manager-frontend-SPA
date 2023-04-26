@@ -15,7 +15,7 @@ function UpdateProductForm() {
     const putMutation = useMutation((updateData) => putProductDetail(productPk, updateData),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("productDetail");
+                queryClient.refetchQueries(['productDetail', productPk]);
                 reset(
                     {
                         "name":"",

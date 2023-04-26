@@ -15,7 +15,7 @@ function UpdateOptionForm() {
     const putMutation = useMutation((updateData) => putOptionDetail(optionPk, updateData),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("optionDetail");
+                queryClient.refetchQueries(['optionDetail', optionPk]);
                 reset(
                     {
                         "name":"",

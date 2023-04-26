@@ -14,7 +14,7 @@ function UpdateUserForm() {
     const putMutation = useMutation((updateData) => putUser(userPk, updateData),
         {
             onSuccess: () => {
-                queryClient.invalidateQueries("userDetail");
+                queryClient.refetchQueries(['userDetail', userPk]);
                 reset(
                     {
                         "is_active":"",
