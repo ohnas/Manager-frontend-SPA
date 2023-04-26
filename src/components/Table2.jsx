@@ -1,79 +1,39 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from '@tanstack/react-query'
-import { getEvents } from "../api";
+import { getEventsCount, getPageView, getVisit } from "../api";
 
 function Table2({ brandData, completeData, listOfDate, brandPk}) {
-    const [eventCount, setEventCount] = useState({});
-    const [events, setEvents] = useState({});
-    const [pageView, setPageView] = useState({});
-    const [visit, setVisit] = useState({});
-    const { isLoading: eventsDataLoading, data: eventsData } = useQuery(['Events', brandPk, listOfDate], () => getEvents(brandPk, listOfDate));
-    console.log(eventsData);
-    // async function getPageView() {
-    //     if(Object.keys(selectedDate).length === 0) {
-    //         return;
-    //     } else {
-    //         let response = await fetch(`${baseUrl}/pages/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
-    //             method : "GET",
-    //             credentials: "include",
-    //             headers : {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //         let data = await response.json();
-    //         if (response.ok) {
-    //             let pageViewObj = {};
-    //             listOfDate.forEach((date) => {
-    //                 let page = data.find((d) => 
-    //                     d.page_date === date
-    //                 );
-    //                 if(page) {
-    //                     pageViewObj[date] = page;
-    //                 } else {
-    //                     return;
-    //                 }
-    //             });
-    //             setPageView(pageViewObj);
-    //         }
-    //     }
-    // }
-    // async function getVisit() {
-    //     if(Object.keys(selectedDate).length === 0) {
-    //         return;
-    //     } else {
-    //         let response = await fetch(`${baseUrl}/visits/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
-    //             method : "GET",
-    //             credentials: "include",
-    //             headers : {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //         });
-    //         let data = await response.json();
-    //         if (response.ok) {
-    //             let visitObj = {};
-    //             listOfDate.forEach((date) => {
-    //                 let visit = data.find((d) => 
-    //                     d.visit_date === date
-    //                 );
-    //                 if(visit) {
-    //                     visitObj[date] = visit;
-    //                 } else {
-    //                     return;
-    //                 }
-    //             });
-    //             setVisit(visitObj);
-    //         }
-    //     }
-    // }
-    // useEffect(() => {
-    //     getEvent();
-    // }, [selectedDate, completeData]);
-    // useEffect(() => {
-    //     getPageView();
-    // }, [selectedDate, completeData]);
-    // useEffect(() => {
-    //     getVisit();
-    // }, [selectedDate, completeData]);
+    const [totalAverageLoading, setTotalAverageLoading] = useState(true);
+    const [totalAverage, setTotalAverage] = useState({});
+    const [totalImwebConversionRateLoading, setTotalImwebConversionRateLoading] = useState(true);
+    const [totalImwebConversionRate, setTotalImwebConversionRate] = useState({});
+    const { isLoading: eventsCountDataLoading, data: eventsCountData } = useQuery(['EventsCount', brandPk, listOfDate], () => getEventsCount(brandPk, listOfDate));
+    const { isLoading: pageViewDataLoading, data: pageViewData } = useQuery(['PageView', brandPk, listOfDate], () => getPageView(brandPk, listOfDate));
+    const { isLoading: visitDataLoading, data: visitData } = useQuery(['Visit', brandPk, listOfDate], () => getVisit(brandPk, listOfDate));
+    function handleTotalAverage() {
+        let totalAverageObj = {};
+        listOfDate.forEach((date) => {
+            let average = (pageViewData[date] / visitData[date]);
+            if(isNaN(average) === true) {
+                average = 0;
+            }
+            totalAverageObj[date] = average
+        });
+        setTotalAverage(totalAverageObj);
+        setTotalAverageLoading(false);
+    }
+    function handleTotalImwebConversionRate() {
+        let totalImwebConversionRateObj = {};
+        listOfDate.forEach((date) => {
+            let rate = ((completeData["total"][date]["imweb_count"] / visitData[date]) * 100);
+            if(isNaN(rate) === true) {
+                rate = 0;
+            }
+            totalImwebConversionRateObj[date] = rate;
+        });
+        setTotalImwebConversionRate(totalImwebConversionRateObj);
+        setTotalImwebConversionRateLoading(false);
+    }
     function handleToggleBtn(event) {
         let curretBtn = event.target.nextElementSibling;
         curretBtn.classList.toggle("hidden");
@@ -84,6 +44,16 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
             event.target.innerText = "▶︎";
         }
     }
+    useEffect(() => {
+        if(visitDataLoading === false) {
+            handleTotalAverage();
+        }
+    }, [visitData]);
+    useEffect(() => {
+        if(visitDataLoading === false) {
+            handleTotalImwebConversionRate();
+        }
+    }, [visitData]);
     return (
         <>
             <div className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
@@ -126,11 +96,11 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                     <thead>
                         <tr>
                             <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
-                            {/* <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th>
+                            <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th>
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">페이지 뷰</th>
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">방문자</th>
-                            <th className="border-2 border-slate-400 px-8 bg-gray-300">방문평균페이지</th> */}
-                            {/* <th className="border-2 border-slate-400 px-8 bg-gray-300">전환율</th> */}
+                            <th className="border-2 border-slate-400 px-8 bg-gray-300">방문평균페이지</th>
+                            <th className="border-2 border-slate-400 px-8 bg-gray-300">전환율</th>
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
@@ -169,41 +139,31 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                         {listOfDate.map((date, index) => 
                             <tr key={index}>
                                 <td className="sticky left-0 z-50 bg-white border-2">{date}</td>
-                                {/* {eventCount.hasOwnProperty(date) ? 
-                                        <td className="border-2 bg-red-50">{eventCount[date]}건</td>
+                                {eventsCountDataLoading ?
+                                    <td className="border-2 bg-red-50">0</td>
                                     :
-                                        <td className="border-2 bg-red-50">0건</td>
-                                } */}
-                                {/* {pageView.hasOwnProperty(date) ? 
-                                        <td className="border-2 bg-gray-50">
-                                            <div id={`pageViewPk${pageView[date].pk}`} className="flex justify-center items-center">
-                                                <span>{pageView[date].view}</span>
-                                                <button onClick={handleDeletePageView} className="text-xs border-2 border-red-300 rounded-md text-gray-400 w-10 ml-2">del</button>
-                                            </div>
-                                        </td>
-                                    :
-                                        <td className="border-2 bg-gray-50">0</td>
+                                    <td className="border-2 bg-red-50">{eventsCountData[date]}</td>
                                 }
-                                {visit.hasOwnProperty(date) ? 
-                                        <td className="border-2 bg-gray-50">
-                                            <div id={`visitPk${visit[date].pk}`} className="flex justify-center items-center">
-                                                {visit[date].num}
-                                                <button onClick={handleDeleteVisit} className="text-xs border-2 border-red-300 rounded-md text-gray-400 w-10 ml-2">del</button>
-                                            </div>
-                                        </td>
+                                {pageViewDataLoading ?
+                                    <td className="border-2 bg-gray-50">0</td>
                                     :
-                                        <td className="border-2 bg-gray-50">0</td>
-                                } */}
-                                {/* {totalAverage[date] ? 
-                                        <td className="border-2 bg-gray-50">{totalAverage[date]["totalAverage"]}</td>
-                                    :
-                                        <td className="border-2 bg-gray-50">0</td>
+                                    <td className="border-2 bg-gray-50">{pageViewData[date]}</td>
                                 }
-                                {totalImwebConversionRate[date] ? 
-                                        <td className="border-2 bg-gray-50">{totalImwebConversionRate[date]["totalImwebConversionRate"]}%</td>
+                                {visitDataLoading ?
+                                    <td className="border-2 bg-gray-50">0</td>
                                     :
-                                        <td className="border-2 bg-gray-50">0%</td>
-                                } */}
+                                    <td className="border-2 bg-gray-50">{visitData[date]}</td>
+                                }
+                                {totalAverageLoading ? 
+                                    <td className="border-2 bg-gray-50">0</td>
+                                    :
+                                    <td className="border-2 bg-gray-50">{totalAverage[date].toFixed(2)}</td>
+                                }
+                                {totalImwebConversionRateLoading ? 
+                                    <td className="border-2 bg-gray-50">0</td>
+                                    :
+                                    <td className="border-2 bg-gray-50">{totalImwebConversionRate[date].toFixed(2)}%</td>
+                                }
                                 <td className="border-2 bg-gray-50">{completeData["total"][date]["imweb_count"]}</td>
                                 <td className="border-2 bg-blue-50">{completeData["total"][date]["reach"]}</td>
                                 <td className="border-2 bg-blue-50">{completeData["total"][date]["impressions"]}</td>
@@ -240,6 +200,23 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                         )}
                         <tr>
                             <td className="sticky left-0 z-50 bg-white border-2">합계</td>
+                            {eventsCountDataLoading ?
+                                <td className="border-2 bg-red-50">0</td>
+                                :
+                                <td className="border-2 bg-red-50">{eventsCountData["sum"]}</td>
+                            }
+                            {pageViewDataLoading ?
+                                <td className="border-2 bg-gray-50">0</td>
+                                :
+                                <td className="border-2 bg-gray-50">{pageViewData["sum"]}</td>
+                            }
+                            {visitDataLoading ?
+                                <td className="border-2 bg-gray-50">0</td>
+                                :
+                                <td className="border-2 bg-gray-50">{visitData["sum"]}</td>
+                            }
+                            <td className="border-2 bg-gray-50">-</td>
+                            <td className="border-2 bg-gray-50">-</td>
                             <td className="border-2 bg-gray-50">{completeData["sum"]["imweb_count"]}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["reach"]}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["impressions"]}</td>
