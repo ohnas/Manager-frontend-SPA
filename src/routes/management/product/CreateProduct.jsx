@@ -8,7 +8,11 @@ function CreateProduct() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
-    const { isLoading, data: allBrandsData } = useQuery(['AllBrands'], getAllBrands);
+    const { isLoading, data: allBrandsData } = useQuery(['AllBrands'], getAllBrands,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const mutation = useMutation(postProduct, 
         {
             onSuccess: (data) => {

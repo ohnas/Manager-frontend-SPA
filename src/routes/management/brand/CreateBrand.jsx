@@ -8,7 +8,11 @@ function CreateBrand() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
-    const { isLoading, data: allUsersData } = useQuery(['AllUsers'], getAllUsers);
+    const { isLoading, data: allUsersData } = useQuery(['AllUsers'], getAllUsers,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const mutation = useMutation(postBrand, 
         {
             onSuccess: (data) => {

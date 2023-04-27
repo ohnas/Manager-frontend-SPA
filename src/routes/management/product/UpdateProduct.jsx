@@ -6,7 +6,11 @@ import { getProductList } from "../../../api";
 function UpdateProduct() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
-    const { isLoading, data: productListData } = useQuery(['ProductList'], getProductList);
+    const { isLoading, data: productListData } = useQuery(['ProductList'], getProductList,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     useEffect(() => {
         if(userData.is_staff === false) {
             alert("이용 할 수 없는 페이지 입니다");

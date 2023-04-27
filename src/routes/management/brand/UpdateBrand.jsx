@@ -6,7 +6,11 @@ import { getBrandList } from "../../../api";
 function UpdateBrand() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
-    const { isLoading, data: brandListData } = useQuery(['BrandList'], getBrandList);
+    const { isLoading, data: brandListData } = useQuery(['BrandList'], getBrandList,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     useEffect(() => {
         if(userData.is_staff === false) {
             alert("이용 할 수 없는 페이지 입니다");

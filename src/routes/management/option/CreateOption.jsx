@@ -8,7 +8,11 @@ function CreateOption() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
-    const { isLoading, data: allProductsData } = useQuery(['AllProducts'], getAllProducts);
+    const { isLoading, data: allProductsData } = useQuery(['AllProducts'], getAllProducts,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const mutation = useMutation(postOption, 
         {
             onSuccess: (data) => {

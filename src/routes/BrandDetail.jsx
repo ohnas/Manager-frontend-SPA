@@ -19,7 +19,11 @@ function BrandDetail() {
     const [isDateLoading, setIsDateLoading] = useState();
     const [maxDate, setMaxDate] = useState();
     const { register, handleSubmit } = useForm();
-    const { isLoading: brandDataLoading, data: brandData } = useQuery(['Brand', brandPk], () => getBrand(brandPk));
+    const { isLoading: brandDataLoading, data: brandData } = useQuery(['Brand', brandPk], () => getBrand(brandPk),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const { isLoading: completeDataLoading, data: completeData } = useQuery(['Retrieve', brandPk, formData], () => getRetrieve(brandPk, formData),
         {
             enabled: !!formData,

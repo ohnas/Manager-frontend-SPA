@@ -9,8 +9,16 @@ function UpdateProductForm() {
     const navigate = useNavigate();
     let { productPk } = useParams();
     const queryClient = useQueryClient();
-    const { isLoading: productDetailLoading, data: productDetailData } = useQuery(['productDetail', productPk], () => getProductDetail(productPk));
-    const { isLoading: allBrandsLoading, data: allBrandsData } = useQuery(['AllBrands'], getAllBrands);
+    const { isLoading: productDetailLoading, data: productDetailData } = useQuery(['productDetail', productPk], () => getProductDetail(productPk),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    const { isLoading: allBrandsLoading, data: allBrandsData } = useQuery(['AllBrands'], getAllBrands,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const { register, handleSubmit, reset } = useForm();
     const putMutation = useMutation((updateData) => putProductDetail(productPk, updateData),
         {

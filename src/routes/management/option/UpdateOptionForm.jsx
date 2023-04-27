@@ -9,8 +9,16 @@ function UpdateOptionForm() {
     const navigate = useNavigate();
     let { optionPk } = useParams();
     const queryClient = useQueryClient();
-    const { isLoading: optionDetailLoading, data: optionDetailData } = useQuery(['optionDetail', optionPk], () => getOptionDetail(optionPk));
-    const { isLoading: allProductsLoading, data: allProductsData } = useQuery(['AllProducts'], getAllProducts);
+    const { isLoading: optionDetailLoading, data: optionDetailData } = useQuery(['optionDetail', optionPk], () => getOptionDetail(optionPk),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    const { isLoading: allProductsLoading, data: allProductsData } = useQuery(['AllProducts'], getAllProducts,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const { register, handleSubmit, reset } = useForm();
     const putMutation = useMutation((updateData) => putOptionDetail(optionPk, updateData),
         {

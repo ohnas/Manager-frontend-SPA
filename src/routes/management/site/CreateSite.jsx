@@ -8,7 +8,11 @@ function CreateSite() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
     const { register, handleSubmit } = useForm();
-    const { isLoading, data: allBrandListData } = useQuery(['AllBrandList'], getAllBrandList);
+    const { isLoading, data: allBrandListData } = useQuery(['AllBrandList'], getAllBrandList,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const mutation = useMutation(postSite, 
         {
             onSuccess: () => {

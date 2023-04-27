@@ -10,7 +10,11 @@ function UpdateUserForm() {
     let { userPk } = useParams();
     const queryClient = useQueryClient();
     const { register, handleSubmit, reset } = useForm();
-    const { isLoading, data: userDetailData } = useQuery(['userDetail', userPk], () => getUserDetail(userPk));
+    const { isLoading, data: userDetailData } = useQuery(['userDetail', userPk], () => getUserDetail(userPk),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const putMutation = useMutation((updateData) => putUser(userPk, updateData),
         {
             onSuccess: () => {

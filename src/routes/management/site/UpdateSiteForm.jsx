@@ -9,8 +9,16 @@ function UpdateSiteForm() {
     const navigate = useNavigate();
     let { sitePk } = useParams();
     const queryClient = useQueryClient();
-    const { isLoading: siteDetailLoading, data: siteDetailData } = useQuery(['siteDetail', sitePk], () => getSiteDetail(sitePk));
-    const { isLoading: allBrandListLoading, data: allBrandListData } = useQuery(['AllBrandList'], getAllBrandList);
+    const { isLoading: siteDetailLoading, data: siteDetailData } = useQuery(['siteDetail', sitePk], () => getSiteDetail(sitePk),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    const { isLoading: allBrandListLoading, data: allBrandListData } = useQuery(['AllBrandList'], getAllBrandList,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const { register, handleSubmit, reset } = useForm();
     const putMutation = useMutation((updateData) => putSiteDetail(sitePk, updateData),
         {

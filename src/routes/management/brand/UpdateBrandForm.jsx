@@ -9,8 +9,16 @@ function UpdateBrandForm() {
     const navigate = useNavigate();
     let { brandPk } = useParams();
     const queryClient = useQueryClient();
-    const { isLoading: brandDetailLoading, data: brandDetailData } = useQuery(['brandDetail', brandPk], () => getBrandDetail(brandPk));
-    const { isLoading: allUsersLoading, data: allUsersData } = useQuery(['AllUsers'], getAllUsers);
+    const { isLoading: brandDetailLoading, data: brandDetailData } = useQuery(['brandDetail', brandPk], () => getBrandDetail(brandPk),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    const { isLoading: allUsersLoading, data: allUsersData } = useQuery(['AllUsers'], getAllUsers,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const { register, handleSubmit, reset } = useForm();
     const putMutation = useMutation((updateData) => putBrandDetail(brandPk, updateData),
         {

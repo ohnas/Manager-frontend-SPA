@@ -10,9 +10,21 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
     const [totalImwebConversionRateLoading, setTotalImwebConversionRateLoading] = useState(true);
     const [totalImwebConversionRate, setTotalImwebConversionRate] = useState({});
     const queryClient = useQueryClient();
-    const { isLoading: eventsCountDataLoading, data: eventsCountData } = useQuery(['EventsCount', brandPk, listOfDate], () => getEventsCount(brandPk, listOfDate));
-    const { isLoading: pageViewDataLoading, data: pageViewData } = useQuery(['PageView', brandPk, listOfDate], () => getPageView(brandPk, listOfDate));
-    const { isLoading: visitDataLoading, data: visitData } = useQuery(['Visit', brandPk, listOfDate], () => getVisit(brandPk, listOfDate));
+    const { isLoading: eventsCountDataLoading, data: eventsCountData } = useQuery(['EventsCount', brandPk, listOfDate], () => getEventsCount(brandPk, listOfDate),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    const { isLoading: pageViewDataLoading, data: pageViewData } = useQuery(['PageView', brandPk, listOfDate], () => getPageView(brandPk, listOfDate),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    const { isLoading: visitDataLoading, data: visitData } = useQuery(['Visit', brandPk, listOfDate], () => getVisit(brandPk, listOfDate),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const postPageViewMutation = useMutation((pageViewData) => postPageView(brandPk, pageViewData), 
         {
             onSuccess: () => {
@@ -301,12 +313,24 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                             {pageViewDataLoading ?
                                 <td className="border-2 bg-gray-50">0</td>
                                 :
-                                <td className="border-2 bg-gray-50">{pageViewData["sum"]}</td>
+                                <>
+                                    {pageViewData["sum"] === null ? 
+                                        <td className="border-2 bg-gray-50">0</td>
+                                        :
+                                        <td className="border-2 bg-gray-50">{pageViewData["sum"]}</td>
+                                    }
+                                </>
                             }
                             {visitDataLoading ?
                                 <td className="border-2 bg-gray-50">0</td>
                                 :
-                                <td className="border-2 bg-gray-50">{visitData["sum"]}</td>
+                                <>
+                                    {visitData["sum"] === null ? 
+                                        <td className="border-2 bg-gray-50">0</td>
+                                        :
+                                        <td className="border-2 bg-gray-50">{visitData["sum"]}</td>
+                                    }
+                                </>
                             }
                             <td className="border-2 bg-gray-50">-</td>
                             <td className="border-2 bg-gray-50">-</td>

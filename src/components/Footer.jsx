@@ -4,7 +4,11 @@ import { useQuery } from '@tanstack/react-query'
 import { getBrands } from "../api";
 
 function Footer() {
-    const { isLoading, data: brandsData } = useQuery(['brands'], getBrands);
+    const { isLoading, data: brandsData } = useQuery(['brands'], getBrands, 
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
     function onSubmit(data) {

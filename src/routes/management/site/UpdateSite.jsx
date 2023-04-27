@@ -6,7 +6,11 @@ import { getSiteList } from "../../../api";
 function UpdateSite() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
-    const { isLoading, data: siteListData } = useQuery(['SiteList'], getSiteList);
+    const { isLoading, data: siteListData } = useQuery(['SiteList'], getSiteList,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
     useEffect(() => {
         if(userData.is_staff === false) {
             alert("이용 할 수 없는 페이지 입니다");
