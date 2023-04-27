@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getEventsCount, getPageView, getVisit, postPageView, putPageView } from "../api";
+import { getEventsCount, getPageView, getVisit, postPageView, putPageView, postVisit, putVisit } from "../api";
 
 function Table2({ brandData, completeData, listOfDate, brandPk}) {
     const [pageViewPk, setPageViewPk] = useState()
+    const [visitNumPk, setVisitNumPk] = useState()
     const [totalAverageLoading, setTotalAverageLoading] = useState(true);
     const [totalAverage, setTotalAverage] = useState({});
     const [totalImwebConversionRateLoading, setTotalImwebConversionRateLoading] = useState(true);
@@ -26,30 +27,86 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
             }
         }
     );
-    
-    function handlePageView(event) {
-        let selectedPk = event.target.id;
-        let selectedDate = event.target.parentElement.firstElementChild.innerText;
-        let selectedPageView = event.target.innerText;
-        if(selectedPageView === 0 || selectedPageView === '') {
-            alert("잘못된 입력입니다");
+    const postVisitMutation = useMutation((visitNumData) => postVisit(brandPk, visitNumData),
+        {
+            onSuccess: () => {
+                queryClient.refetchQueries(['Visit', brandPk, listOfDate]);
+            }
+        }
+    );
+    const putVisitMutation = useMutation((visitNumData) => putVisit(visitNumPk, visitNumData),
+        {
+            onSuccess: () => {
+                queryClient.refetchQueries(['Visit', brandPk, listOfDate]);
+            }
+        }
+    );
+    function handlePageView(event) {        
+        if(event.key === 'Enter'){
+            event.preventDefault();
+            const regex = /^[0-9]*$/;
+            let selectedPk = event.target.id;
+            let selectedDate = event.target.parentElement.firstElementChild.innerText;
+            let selectedPageView = event.target.innerText.trim();
+            if(selectedPageView === '0') {
+                alert("0은 입력할 수 없습니다.");
+                return;
+            } else if(selectedPageView === '') {
+                alert("공백은 잘못된 입력 입니다.");
+                return;
+            } else if(!regex.test(selectedPageView)) {
+                alert("숫자만 입력 가능합니다. 문자는 입력 할 수 없습니다");
+                return;
+            }
+            let pageViewData = {
+                "view" : selectedPageView,
+                "page_date" : selectedDate,
+            };
+            if(selectedPk === 'None') {
+                postPageViewMutation.mutate(pageViewData);
+            } else {
+                setPageViewPk(selectedPk);
+                putPageViewMutation.mutate(pageViewData);
+            }
+        } else {
             return;
         }
-        let pageViewData = {
-            "view" : selectedPageView,
-            "page_date" : selectedDate,
-        };
-        if(selectedPk === 'None') {
-            postPageViewMutation.mutate(pageViewData);
+    }
+    function handleVisit(event) {        
+        if(event.key === 'Enter'){
+            event.preventDefault();
+            const regex = /^[0-9]*$/;
+            let selectedPk = event.target.id;
+            let selectedDate = event.target.parentElement.firstElementChild.innerText;
+            let selectedVisitNum = event.target.innerText.trim();
+            if(selectedVisitNum === '0') {
+                alert("0은 입력할 수 없습니다.");
+                return;
+            } else if(selectedVisitNum === '') {
+                alert("공백은 잘못된 입력 입니다.");
+                return;
+            } else if(!regex.test(selectedVisitNum)) {
+                alert("숫자만 입력 가능합니다. 문자는 입력 할 수 없습니다");
+                return;
+            }
+            let visitNumData = {
+                "num" : selectedVisitNum,
+                "visit_date" : selectedDate,
+            };
+            if(selectedPk === 'None') {
+                postVisitMutation.mutate(visitNumData);
+            } else {
+                setVisitNumPk(selectedPk);
+                putVisitMutation.mutate(visitNumData);
+            }
         } else {
-            setPageViewPk(selectedPk);
-            putPageViewMutation.mutate(pageViewData);
+            return;
         }
     }
     function handleTotalAverage() {
         let totalAverageObj = {};
         listOfDate.forEach((date) => {
-            let average = (pageViewData[date] / visitData[date]);
+            let average = (pageViewData[date]["view"] / visitData[date]["num"]);
             if(isNaN(average) === true) {
                 average = 0;
             }
@@ -81,10 +138,10 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
         }
     }
     useEffect(() => {
-        if(visitDataLoading === false) {
+        if(pageViewDataLoading === false && visitDataLoading === false) {
             handleTotalAverage();
         }
-    }, [eventsCountData, visitData]);
+    }, [pageViewData, visitData]);
     useEffect(() => {
         if(visitDataLoading === false) {
             handleTotalImwebConversionRate();
@@ -183,17 +240,12 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                                 {pageViewDataLoading ?
                                     <td className="border-2 bg-gray-50">0</td>
                                     :
-                                    <>
-                                        <td className="border-2 bg-gray-50" onBlur={handlePageView} id={pageViewData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>
-                                            {pageViewData[date]["view"]}
-                                            {/* <button onClick={handleDeletePageView} className="text-xs border-2 border-red-300 rounded-md text-gray-400 w-10 ml-2">del</button> */}
-                                        </td>
-                                    </>
+                                    <td className="border-2 bg-gray-50" onKeyDown={handlePageView} id={pageViewData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>{pageViewData[date]["view"]}</td>
                                 }
                                 {visitDataLoading ?
                                     <td className="border-2 bg-gray-50">0</td>
                                     :
-                                    <td className="border-2 bg-gray-50">{visitData[date]}</td>
+                                    <td className="border-2 bg-gray-50" onKeyDown={handleVisit} id={visitData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>{visitData[date]["num"]}</td>
                                 }
                                 {totalAverageLoading ? 
                                     <td className="border-2 bg-gray-50">0</td>

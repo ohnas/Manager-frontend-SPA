@@ -645,3 +645,33 @@ export async function getVisit(brandPk, listOfDate) {
     let data = await response.json();
     return data;
 }
+
+export async function postVisit(brandPk, visitNumData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/visits/${brandPk}/create` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(visitNumData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putVisit(visitNumPk, visitNumData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/visits/update/${visitNumPk}`, {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(visitNumData),
+    });
+    let data = await response.json();
+    return data;
+}
