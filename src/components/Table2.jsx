@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getEventsCount, getPageView, getVisit, postPageView, putPageView, postVisit, putVisit } from "../api";
+import { getEventsCount, getPageView, getVisit, postPageView, putPageView, postVisit, putVisit, getEvents, postEvent, putEvent, deleteEvent } from "../api";
 
 function Table2({ brandData, completeData, listOfDate, brandPk}) {
+    const [eventPk, setEventPk] = useState()
     const [pageViewPk, setPageViewPk] = useState()
     const [visitNumPk, setVisitNumPk] = useState()
     const [totalAverageLoading, setTotalAverageLoading] = useState(true);
@@ -11,6 +12,11 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
     const [totalImwebConversionRate, setTotalImwebConversionRate] = useState({});
     const queryClient = useQueryClient();
     const { isLoading: eventsCountDataLoading, data: eventsCountData } = useQuery(['EventsCount', brandPk, listOfDate], () => getEventsCount(brandPk, listOfDate),
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    const { isLoading: eventsDataLoading, data: eventsData } = useQuery(['Events', brandPk, listOfDate], () => getEvents(brandPk, listOfDate),
         {
             refetchOnWindowFocus: false,
         }
@@ -25,6 +31,30 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
             refetchOnWindowFocus: false,
         }
     );
+    const postEventMutation = useMutation((eventData) => postEvent(brandPk, eventData), 
+        {
+            onSuccess: () => {
+                queryClient.refetchQueries(['Events', brandPk, listOfDate]);
+                queryClient.refetchQueries(['EventsCount', brandPk, listOfDate]);
+            }
+        }
+    );
+    const putEventMutation = useMutation((eventData) => putEvent(eventPk, eventData),
+        {
+            onSuccess: () => {
+                queryClient.refetchQueries(['Events', brandPk, listOfDate]);
+                queryClient.refetchQueries(['EventsCount', brandPk, listOfDate]);
+            }
+        }
+    );
+    const deleteEventMutation = useMutation(() => deleteEvent(eventPk),
+    {
+        onSuccess: () => {
+            queryClient.refetchQueries(['Events', brandPk, listOfDate]);
+            queryClient.refetchQueries(['EventsCount', brandPk, listOfDate]);
+        }
+    }
+);
     const postPageViewMutation = useMutation((pageViewData) => postPageView(brandPk, pageViewData), 
         {
             onSuccess: () => {
@@ -53,8 +83,67 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
             }
         }
     );
+    function handleEvent(event) {
+        if(event.keyCode === 13) {
+            event.preventDefault();
+            let selectedPk = event.target.id;
+            if(selectedPk === 'None') {
+                let selectedProductPk = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.id;
+                let selectedDate = event.target.parentElement.parentElement.firstElementChild.innerText;
+                let selectedEventContent = event.target.innerText.trim();
+                if(selectedEventContent.length > 50) {
+                    alert("글자수 초과입니다.");
+                    return;
+                } else if(selectedEventContent === '') {
+                    alert("잘못된 입력 입니다.");
+                    return;
+                }
+                let eventData = {
+                    "name" : selectedEventContent,
+                    "product" : selectedProductPk,
+                    "event_date" : selectedDate,
+                };
+                postEventMutation.mutate(eventData);
+            } else if(selectedPk === 'add') {
+                let selectedProductPk = event.target.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement.id;
+                let selectedDate = event.target.parentElement.parentElement.parentElement.firstElementChild.innerText;
+                let selectedEventContent = event.target.innerText.trim();
+                if(selectedEventContent.length > 50) {
+                    alert("글자수 초과입니다.");
+                    return;
+                } else if(selectedEventContent === '') {
+                    alert("잘못된 입력 입니다.");
+                    return;
+                }
+                let eventData = {
+                    "name" : selectedEventContent,
+                    "product" : selectedProductPk,
+                    "event_date" : selectedDate,
+                };
+                postEventMutation.mutate(eventData);
+                event.target.innerText = '추가';
+            } else {
+                setEventPk(selectedPk);
+                let selectedEventContent = event.target.innerText.trim();
+                if(selectedEventContent.length > 50) {
+                    alert("글자수 초과입니다.");
+                    return;
+                } else if(selectedEventContent === '') {
+                    deleteEventMutation.mutate();
+                    return;
+                }
+                let eventData = {
+                    "name" : selectedEventContent,
+                };
+                putEventMutation.mutate(eventData);
+            }
+            event.target.blur();
+        } else {
+            return;
+        }
+    }
     function handlePageView(event) {        
-        if(event.key === 'Enter'){
+        if(event.keyCode === 13){
             event.preventDefault();
             const regex = /^[0-9]*$/;
             let selectedPk = event.target.id;
@@ -80,12 +169,13 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                 setPageViewPk(selectedPk);
                 putPageViewMutation.mutate(pageViewData);
             }
+            event.target.blur();
         } else {
             return;
         }
     }
-    function handleVisit(event) {        
-        if(event.key === 'Enter'){
+    function handleVisit(event) {
+        if(event.keyCode === 13){
             event.preventDefault();
             const regex = /^[0-9]*$/;
             let selectedPk = event.target.id;
@@ -111,6 +201,7 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                 setVisitNumPk(selectedPk);
                 putVisitMutation.mutate(visitNumData);
             }
+            event.target.blur();
         } else {
             return;
         }
@@ -234,7 +325,7 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                             <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(즉시 할인)</th>
                             <th className="border-2 border-slate-400 px-8 bg-green-300">imweb(기간 할인)</th>
                             <th className="border-2 border-slate-400 px-8 bg-green-300">비용</th>
-                            <th className="border-4 border-black px-8 bg-indigo-300">영업 이익</th>
+                            <th className="border-t-4 border-l-4 border-r-4 border-b-2 border-purple-900 px-8 bg-indigo-300">영업 이익</th>
                             <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 이익율</th>
                             <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 원가율</th>
                             <th className="border-2 border-slate-400 px-8 bg-yellow-300">매출 대비 광고비율</th>
@@ -297,7 +388,7 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                                 <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["total"][date]["imweb_price_sale"])}</td>
                                 <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["total"][date]["imweb_period_discount"])}</td>
                                 <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["total"][date]["expense"])}</td>
-                                <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["total"][date]["operating_profit"])}</td>
+                                <td className="border-l-4 border-r-4 border-b-2 border-purple-900 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["total"][date]["operating_profit"])}</td>
                                 <td className="border-2 bg-yellow-50">{completeData["total"][date]["operating_profit_rate"].toFixed(2)}%</td>
                                 <td className="border-2 bg-yellow-50">{completeData["total"][date]["product_cost_rate"].toFixed(2)}%</td>
                                 <td className="border-2 bg-yellow-50">{completeData["total"][date]["facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
@@ -362,7 +453,7 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["imweb_price_sale"])}</td>
                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["imweb_period_discount"])}</td>
                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["expense"])}</td>
-                            <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["operating_profit"])}</td>
+                            <td className="border-l-4 border-r-4 border-b-4 border-purple-900 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["operating_profit"])}</td>
                             <td className="border-2 bg-yellow-50">-</td>
                             <td className="border-2 bg-yellow-50">-</td>
                             <td className="border-2 bg-yellow-50">-</td>
@@ -371,7 +462,7 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                 </table>
             </div>
             {brandData.product_set.map((product) => 
-                <div key={product.pk} className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
+                <div key={product.pk} id={product.pk} className="overflow-x-scroll w-full mt-5 mb-5 hover:border-2 border-blue-100">
                     <div className="sticky left-0 z-50 bg-white flex">
                         <span>{product.name}</span>
                         <div className="flex items-center ml-5 text-xs text-gray-500">
@@ -412,7 +503,7 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                         <thead>
                             <tr>
                                 <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
-                                {/* <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th> */}
+                                <th className="border-2 border-slate-400 px-8 bg-red-400">이벤트</th>
                                 <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
                                 {product.options_set.map((option) =>
                                     <th key={option.pk} className="border-2 border-slate-400 px-16 bg-gray-300">{option.name}</th>
@@ -459,35 +550,24 @@ function Table2({ brandData, completeData, listOfDate, brandPk}) {
                             {listOfDate.map((date, index) => 
                                 <tr key={index}>
                                     <td className="sticky left-0 z-50 bg-white border-2">{date}</td>
-                                    {/* <td className="border-2 bg-red-50">
-                                    {Object.keys(events[product.name]).length !== 0 ? 
-                                            <>
-                                                {events[product.name][date] ?
-                                                        <>
-                                                            <button onClick={handleOpenEvent}>{events[product.name][date].length}건</button>
-                                                            <dialog className="rounded-md w-1/2 h-1/2">
-                                                                <div className="flex flex-col justify-center items-center w-full h-full">
-                                                                    {events[product.name][date].map((e) =>
-                                                                        <div key={e.pk} id={e.pk} className="flex flex-col justify-center items-center border-2 mb-5 rounded-md shadow-md p-5">
-                                                                            <span className="mt-3">날짜 : {e.event_date}</span>
-                                                                            <span className="mt-3">내용 : {e.name}</span>
-                                                                            <button onClick={handleDeleteEvent} className="text-xs mt-3">DELETE</button>
-                                                                        </div>
-                                                                    )}
-                                                                    <form method="dialog">
-                                                                        <button className="text-gray-400">close</button>
-                                                                    </form>
-                                                                </div>
-                                                            </dialog>
-                                                        </>
-                                                    :
-                                                        <span>0건</span>
-                                                }
-                                            </>
+                                    {eventsDataLoading ? 
+                                        null
                                         :
-                                            <span>0건</span>
+                                        <td className="border-2 bg-red-50">
+                                            {eventsData[product.name][date].length === 0 ? 
+                                                <span className="text-gray-400" id={"None"} onKeyDown={handleEvent} contentEditable={true} suppressContentEditableWarning={true}>생성</span>
+                                                :
+                                                <div className="flex flex-col">
+                                                    <div className="flex flex-col">
+                                                        {eventsData[product.name][date].map((e) =>
+                                                            <span className="border-b-2" key={e.pk} id={e.pk} onKeyDown={handleEvent} contentEditable={true} suppressContentEditableWarning={true}>{e.name}</span>
+                                                        )}
+                                                    </div>
+                                                    <span className="text-gray-400" id={"add"} onKeyDown={handleEvent} contentEditable={true} suppressContentEditableWarning={true}>추가</span>
+                                                </div>
+                                            }
+                                        </td>
                                     }
-                                    </td> */}
                                     <td className="border-2 bg-gray-50">{completeData[product.name]["date"][date]["imweb_count"]}</td>
                                     {product.options_set.map((option) => 
                                         <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name][date]["option_count"]}</td>

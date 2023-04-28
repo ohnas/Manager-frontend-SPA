@@ -592,6 +592,63 @@ export async function getEventsCount(brandPk, listOfDate) {
     return data;
 }
 
+export async function getEvents(brandPk, listOfDate) {
+    let response = await fetch(`${baseUrl}/events/${brandPk}?dateFrom=${listOfDate[0]}&dateTo=${listOfDate[listOfDate.length - 1]}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function postEvent(brandPk, eventData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/events/${brandPk}/create` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(eventData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putEvent(eventPk, eventData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/events/update/${eventPk}`, {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(eventData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteEvent(eventPk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/events/update/${eventPk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}
+
 export async function getPageView(brandPk, listOfDate) {
     let response = await fetch(`${baseUrl}/pages/${brandPk}?dateFrom=${listOfDate[0]}&dateTo=${listOfDate[listOfDate.length - 1]}`, {
         method : "GET",

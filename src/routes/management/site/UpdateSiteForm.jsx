@@ -43,7 +43,6 @@ function UpdateSiteForm() {
             }
         }
     );
-
     function updateSite(updateData) {
         updateData.name = updateData.name.trim();
         putMutation.mutate(updateData);
