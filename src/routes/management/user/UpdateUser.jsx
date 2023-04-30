@@ -1,54 +1,46 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Link, useNavigate, useOutletContext } from "react-router-dom";
-import { baseUrl } from "../../../api";
+import { useQuery } from '@tanstack/react-query'
+import { getInactiveUser } from "../../../api";
 
 function UpdateUser() {
-    const { 
-        userData:[user],
-    } = useOutletContext();
+    const { userData } = useOutletContext();
     const navigate = useNavigate();
-    const [userList, setUserList] = useState([]);
-    function goHome() {
-        if(user.is_staff === false) {
+    const { isLoading, data: inactiveUserData } = useQuery(['inactiveUser'], getInactiveUser,
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
+    useEffect(() => {
+        if(userData.is_staff === false) {
             alert("이용 할 수 없는 페이지 입니다");
             return navigate("/");
         }
-    }
-    async function handleUserList() {
-        let response = await fetch(`${baseUrl}/users/inactive`, {
-            method : "GET",
-            credentials: "include",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-        });
-        let data = await response.json();
-        setUserList(data);
-    }
-    useEffect(() => {
-        goHome();
-    }, [user]);
-    useEffect(() => {
-        handleUserList();
-    }, []);
+    }, [userData]);
     return (
         <div className="flex flex-col mt-12 justify-center items-center">
-            {user.is_staff ?
+            {userData.is_staff ?
                 <>
-                    {userList.length === 0 ? 
-                            <span>There is no inactive user</span>
+                    {isLoading? 
+                        <span>Loading...</span>
                         :
-                            <ul>
-                                {userList.map((user) =>
-                                    <Link to={`/management/manageuser/update/${user.pk}`} key={user.pk}>
-                                        <li className="mb-10">{user.name}</li>
-                                    </Link>
-                                )}
-                            </ul>
+                        <>
+                            {inactiveUserData.length === 0 ?
+                                <span>There is no inactive user</span>
+                                :
+                                <ul>
+                                    {inactiveUserData.map((user) =>
+                                        <Link to={`/management/manageuser/update/${user.pk}`} key={user.pk}>
+                                            <li className="mb-10">{user.name}</li>
+                                        </Link>
+                                    )}
+                                </ul>
+                            }
+                        </>
                     }
                 </>
                 :
-                    null
+                null
             }
         </div>
     );

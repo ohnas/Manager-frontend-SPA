@@ -4,6 +4,7 @@ import NotFound from "./routes/NotFound";
 import Home from "./routes/Home";
 import Brand from "./routes/Brand";
 import BrandDetail from "./routes/BrandDetail";
+import Unlisting from "./routes/Unlisting";
 import SignUp from "./routes/SignUp";
 import Management from "./routes/Management";
 import UpdateUser from "./routes/management/user/UpdateUser";
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
             {
                 path: "brands/:brandPk",
                 element: <BrandDetail />,
+            },
+            {
+                path: "brands/:brandPk/unlisting",
+                element: <Unlisting />,
             },
             {
                 path: "signup",

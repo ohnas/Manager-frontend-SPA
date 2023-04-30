@@ -1,40 +1,53 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useOutletContext, useParams } from "react-router-dom";
-import { baseUrl } from "../api";
-import Table from "../components/Table";
+import { useOutletContext, useParams, Link } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query'
+import { getBrand, getRetrieve } from "../api";
 import Loading from "../components/Loading";
+import Table from "../components/Table";
 
 function BrandDetail() {
     const { 
         brandName: [setBrandName],
     } = useOutletContext();
-    let {brandPk} = useParams();
-    const [brand, setBrand] = useState({});
-    const [completeData, setCompleteData] = useState({});
-    const [eventCount, setEventCount] = useState({});
-    const [events, setEvents] = useState({});
-    const [pageView, setPageView] = useState({});
-    const [visit, setVisit] = useState({});
+    let { brandPk } = useParams();
+    const [noData, setNodata] = useState(true);
+    const [formData, setFormData] = useState();
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const { register, handleSubmit } = useForm();
+    const [isDateLoading, setIsDateLoading] = useState();
     const [maxDate, setMaxDate] = useState();
-    async function brandDetail() {
-        let response = await fetch(`${baseUrl}/brands/${brandPk}`, {
-            method : "GET",
-            credentials: "include",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-        });
-        let data = await response.json();
-        if (response.ok) {
-            setBrand(data);
-            setBrandName(data.name);
-            setCompleteData({});
+    const { register, handleSubmit } = useForm();
+    const { isLoading: brandDataLoading, data: brandData } = useQuery(['Brand', brandPk], () => getBrand(brandPk),
+        {
+            refetchOnWindowFocus: false,
         }
+    );
+    const { isLoading: completeDataLoading, data: completeData } = useQuery(['Retrieve', brandPk, formData], () => getRetrieve(brandPk, formData),
+        {
+            enabled: !!formData,
+            refetchOnWindowFocus: false,
+            staleTime: 5 * 60 * 1000,
+        }
+    );
+    function onSubmit(retrieveData) {
+        setIsDateLoading(true);
+        setSelectedDate({
+            "dateFrom" : retrieveData.dateFrom,
+            "dateTo" : retrieveData.dateTo,
+        });
+        setNodata(false);
+        setFormData(retrieveData);
+    }
+    function dateList() {
+        let result = [];
+        let curDate = new Date(selectedDate.dateFrom);
+        while(curDate <= new Date(selectedDate.dateTo)) {
+            result.push(curDate.toISOString().split("T")[0]);
+            curDate.setDate(curDate.getDate() + 1);
+        }
+        setListOfDate(result);
+        setIsDateLoading(false);
     }
     const maxDateVale = (() => {
         const today = new Date();
@@ -50,145 +63,11 @@ function BrandDetail() {
         const yesterdayValue = `${yesterday.getFullYear()}-${month}-${date}`;
         setMaxDate(yesterdayValue);
     });
-    async function onSubmit(retrieveData) {
-        if (retrieveData.dateTo < retrieveData.dateFrom) {
-            alert("조회 조건을 확인하세요");
-            return;
-        } 
-        setSelectedDate({
-            "dateFrom" : retrieveData.dateFrom,
-            "dateTo" : retrieveData.dateTo,
-        });
-        setIsLoading(true);
-        let response = await fetch(`${baseUrl}/retrieves/?brandPk=${brandPk}&saleSite=${retrieveData.saleSite}&advertisingSite=${retrieveData.advertisingSite}&dateFrom=${retrieveData.dateFrom}&dateTo=${retrieveData.dateTo}`, {
-            method : "GET",
-            credentials: "include",
-            headers : {
-                'Content-Type': 'application/json',
-            },
-        });
-        let data = await response.json();
-        if (response.ok) {
-            setCompleteData(data);
-            setIsLoading(false);
-        }
-    }
-    async function getEvent() {
-        if(Object.keys(selectedDate).length === 0) {
-            return;
-        } else {
-            let response = await fetch(`${baseUrl}/events/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
-                method : "GET",
-                credentials: "include",
-                headers : {
-                    'Content-Type': 'application/json',
-                },
-            });
-            let data = await response.json();
-            if (response.ok) {
-                let eventCountObj = {};
-                listOfDate.forEach((date) => {
-                    let count = data.filter((d) => 
-                        d.event_date === date
-                    );
-                    eventCountObj[date] = count.length;
-                });
-                setEventCount(eventCountObj);
-                let eventsObj = {};
-                brand.product_set.forEach((product) =>{
-                    eventsObj[product.name] = {};
-                    listOfDate.forEach((date) => {
-                        let event = data.filter((d) =>
-                            d.product.name === product.name && d.event_date === date
-                        );
-                        if(event.length !== 0) {
-                            eventsObj[product.name][date] = event;
-                        } else {
-                            return;
-                        }
-                    });
-                });
-                setEvents(eventsObj);
-            }
-        }
-    }
-    async function getPageView() {
-        if(Object.keys(selectedDate).length === 0) {
-            return;
-        } else {
-            let response = await fetch(`${baseUrl}/pages/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
-                method : "GET",
-                credentials: "include",
-                headers : {
-                    'Content-Type': 'application/json',
-                },
-            });
-            let data = await response.json();
-            if (response.ok) {
-                let pageViewObj = {};
-                listOfDate.forEach((date) => {
-                    let page = data.find((d) => 
-                        d.page_date === date
-                    );
-                    if(page) {
-                        pageViewObj[date] = page;
-                    } else {
-                        return;
-                    }
-                });
-                setPageView(pageViewObj);
-            }
-        }
-    }
-    async function getVisit() {
-        if(Object.keys(selectedDate).length === 0) {
-            return;
-        } else {
-            let response = await fetch(`${baseUrl}/visits/${brandPk}?dateFrom=${selectedDate.dateFrom}&dateTo=${selectedDate.dateTo}`, {
-                method : "GET",
-                credentials: "include",
-                headers : {
-                    'Content-Type': 'application/json',
-                },
-            });
-            let data = await response.json();
-            if (response.ok) {
-                let visitObj = {};
-                listOfDate.forEach((date) => {
-                    let visit = data.find((d) => 
-                        d.visit_date === date
-                    );
-                    if(visit) {
-                        visitObj[date] = visit;
-                    } else {
-                        return;
-                    }
-                });
-                setVisit(visitObj);
-            }
-        }
-    }
-    function dateList() {
-        let result = [];
-        let curDate = new Date(selectedDate.dateFrom);
-        while(curDate <= new Date(selectedDate.dateTo)) {
-            result.push(curDate.toISOString().split("T")[0]);
-            curDate.setDate(curDate.getDate() + 1);
-        }
-        setListOfDate(result);
-    }
     useEffect(() => {
-        brandDetail();
-    }, [brandPk]);
-    useEffect(() => {
-        getEvent();
-    }, [selectedDate, completeData]);
-    useEffect(() => {
-        getPageView();
-    }, [selectedDate, completeData]);
-    useEffect(() => {
-        getVisit();
-    }, [selectedDate, completeData]);
+        if(!brandDataLoading) {
+            setBrandName(brandData.name);
+        }
+    }, [brandDataLoading]);
     useEffect(() => {
         maxDateVale();
     }, []);
@@ -197,16 +76,14 @@ function BrandDetail() {
     }, [selectedDate]);
     return (
         <>
-            { Object.keys(brand).length === 0 ? 
-                    <div className="flex flex-col mt-32 justify-center items-center">
-                        <span>There is no Brand Detail.</span>
-                    </div>
+            { brandDataLoading ? 
+                <span>Loading...</span> 
                 :
                 <>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex items-center justify-evenly mt-5" >
                         <select {...register("saleSite", {required:true})} name="saleSite" className="border-2 rounded-md w-72 border-gray-200 text-center">
                             <option value="">Choose a sale site</option>
-                            { brand.site_set.map((site) => (
+                            { brandData.site_set.map((site) => (
                                 site.kind === "sale_site" ? 
                                     <option key={site.pk} value={site.pk}>{site.name}</option>
                                 :
@@ -215,7 +92,7 @@ function BrandDetail() {
                         </select>
                         <select {...register("advertisingSite", {required:true})} name="advertisingSite" className="border-2 rounded-md w-72 border-gray-200 text-center">
                             <option value="">Choose an advertising site</option>
-                            { brand.site_set.map((site) => (
+                            { brandData.site_set.map((site) => (
                                 site.kind === "advertising_site" ? 
                                     <option key={site.pk} value={site.pk}>{site.name}</option>
                                 :
@@ -227,11 +104,24 @@ function BrandDetail() {
                         <label htmlFor="retrieve_date_to">TO</label>
                         <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
                         <button className="border-solid border-2 border-emerald-300 rounded-md w-28 h-12 text-black">조회</button> 
+                        <Link to={`/brands/${brandPk}/unlisting`}>
+                            <button className="border-solid border-2 border-red-300 rounded-md w-28 h-12 text-black">미등록 조회</button> 
+                        </Link>
                     </form>
-                    {isLoading ? 
-                            <Loading />
+                    {noData ? 
+                        <div className="flex justify-center items-center h-screen">
+                            <div className="flex justify-center items-center">
+                                <span className="text-gray-400">No data.</span>
+                            </div>
+                        </div>
                         :
-                            <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} pageView={pageView} visit={visit} />
+                        <>
+                            {completeDataLoading || isDateLoading ? 
+                                <Loading />
+                                :
+                                <Table brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
+                            }
+                        </>
                     }
                 </>
             }
