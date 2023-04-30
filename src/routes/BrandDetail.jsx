@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useOutletContext, useParams } from "react-router-dom";
+import { useOutletContext, useParams, Link } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query'
 import { getBrand, getRetrieve } from "../api";
-// import Table from "../components/Table";
 import Loading from "../components/Loading";
-import Table2 from "../components/Table2";
+import Table from "../components/Table";
 
 function BrandDetail() {
     const { 
@@ -105,6 +104,9 @@ function BrandDetail() {
                         <label htmlFor="retrieve_date_to">TO</label>
                         <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
                         <button className="border-solid border-2 border-emerald-300 rounded-md w-28 h-12 text-black">조회</button> 
+                        <Link to={`/brands/${brandPk}/unlisting`}>
+                            <button className="border-solid border-2 border-red-300 rounded-md w-28 h-12 text-black">미등록 조회</button> 
+                        </Link>
                     </form>
                     {noData ? 
                         <div className="flex justify-center items-center h-screen">
@@ -117,8 +119,7 @@ function BrandDetail() {
                             {completeDataLoading || isDateLoading ? 
                                 <Loading />
                                 :
-                                // <Table brand={brand} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} setSelectedDate={setSelectedDate} eventCount={eventCount} events={events} pageView={pageView} visit={visit} />
-                                <Table2 brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
+                                <Table brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
                             }
                         </>
                     }

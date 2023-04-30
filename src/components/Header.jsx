@@ -41,7 +41,7 @@ function Header({userData, brandName}) {
                             :
                             null
                         }
-                        <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white" onClick={logOut}>Log Out</button> 
+                        <button className="border-solid border-2 rounded-md w-28 h-12 bg-purple-600 text-white" onClick={logOut}>Log Out</button>
                     </> 
                 }
             </div>

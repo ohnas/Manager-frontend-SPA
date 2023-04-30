@@ -109,6 +109,18 @@ export async function getRetrieve(brandPk, retrieveData) {
     return data;
 }
 
+export async function getUnlisting(brandPk) {
+    let response = await fetch(`${baseUrl}/retrieves/${brandPk}/unlisting`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
 export async function postSignUp(signUpData) {
     let csrftoken = getCookie('csrftoken');
     let response = await fetch(`${baseUrl}/users/create` , {
