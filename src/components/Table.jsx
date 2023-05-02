@@ -142,7 +142,10 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
             return;
         }
     }
-    function handlePageView(event) {        
+    function handleBlank(event) {
+        event.target.innerText = '';
+    }
+    function handlePageView(event) {   
         if(event.keyCode === 13){
             event.preventDefault();
             const regex = /^[0-9]*$/;
@@ -343,12 +346,12 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                 {pageViewDataLoading ?
                                     <td className="border-2 bg-gray-50">0</td>
                                     :
-                                    <td className="border-2 bg-gray-50" onKeyDown={handlePageView} id={pageViewData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>{pageViewData[date]["view"]}</td>
+                                    <td className="border-2 bg-gray-50" onClick={handleBlank} onKeyDown={handlePageView} id={pageViewData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>{pageViewData[date]["view"]}</td>
                                 }
                                 {visitDataLoading ?
                                     <td className="border-2 bg-gray-50">0</td>
                                     :
-                                    <td className="border-2 bg-gray-50" onKeyDown={handleVisit} id={visitData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>{visitData[date]["num"]}</td>
+                                    <td className="border-2 bg-gray-50" onClick={handleBlank} onKeyDown={handleVisit} id={visitData[date]["pk"]} contentEditable={true} suppressContentEditableWarning={true}>{visitData[date]["num"]}</td>
                                 }
                                 {totalAverageLoading ? 
                                     <td className="border-2 bg-gray-50">0</td>
