@@ -240,6 +240,10 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
             event.target.innerText = "▶︎";
         }
     }
+    function handleOpenAdSet(event) {
+        let selectDialog = event.target.nextElementSibling;
+        selectDialog.showModal();
+    }
     useEffect(() => {
         if(pageViewDataLoading === false && visitDataLoading === false) {
             handleTotalAverage();
@@ -621,76 +625,48 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                     <td className="border-2 bg-blue-50">US${completeData[product.name]["date"][date]["offsite_conversion_fb_pixel_initiate_checkout"].toFixed(2)}</td>
                                     <td className="border-2 bg-blue-50">US${completeData[product.name]["date"][date]["offsite_conversion_fb_pixel_add_to_cart"].toFixed(2)}</td>
                                     <td className="border-2 bg-blue-50">{completeData[product.name]["date"][date]["initiate_checkout_rate"].toFixed(2)}%</td>
-                                    <td> 보류
-                                        {/* to-do : 현재 캠페인명 = 상품명이 아니기 때문에 매칭이 되지 않고 있음 형식 정해지면 진행 adset는 dialog로 구현하기 */}
-                                        {/* <div>
-                                            <table>
-                                                <thead>
-                                                    <tr>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">광고세트 이름</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">빈도</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">비용</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">CPM</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">CTR</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">ROAS</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">CPC</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">구매</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">랜딩페이지뷰</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">링크클릭</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">결제정보추가</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-300">장바구니</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {Object.keys(completeData.facebook_data.adsets).length !== 0 ? 
-                                                            <>
-                                                                {completeData.facebook_data.adsets.map((adset, index) => (
-                                                                    <>
-                                                                        {adset.campaign_name === product.name && adset.date === date ? 
-                                                                                <tr key={index}>
-                                                                                    <td className="border-2 bg-blue-50">{adset["adset_name"]}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["reach"]}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["impressions"]}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["frequency"].toFixed(2)}</td>
-                                                                                    <td className="border-2 bg-blue-50">US${adset["spend"].toFixed(2)}</td>
-                                                                                    <td className="border-2 bg-blue-50">US${adset["cpm"].toFixed(2)}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["website_ctr"].toFixed(2)}</td>
-                                                                                    <td className="border-2 bg-blue-50">{Math.round(adset["purchase_roas"]*100)}%</td>
-                                                                                    <td className="border-2 bg-blue-50">US${adset["cost_per_unique_inline_link_click"].toFixed(2)}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["purchase"]}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["landing_page_view"]}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["link_click"]}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["add_payment_info"]}</td>
-                                                                                    <td className="border-2 bg-blue-50">{adset["add_to_cart"]}</td>
-                                                                                </tr>
-                                                                            :
-                                                                                null
-                                                                        }
-                                                                    </>
-                                                                ))}
-                                                            </>
-                                                        :
-                                                            <tr>
-                                                                <td className="border-2 bg-blue-50">0</td>
-                                                                <td className="border-2 bg-blue-50">0</td>
-                                                                <td className="border-2 bg-blue-50">0.00</td>
-                                                                <td className="border-2 bg-blue-50">US$0.00</td>
-                                                                <td className="border-2 bg-blue-50">US$0.00</td>
-                                                                <td className="border-2 bg-blue-50">0.00</td>
-                                                                <td className="border-2 bg-blue-50">0%</td>
-                                                                <td className="border-2 bg-blue-50">US$0.00</td>
-                                                                <td className="border-2 bg-blue-50">0</td>
-                                                                <td className="border-2 bg-blue-50">0</td>
-                                                                <td className="border-2 bg-blue-50">0</td>
-                                                                <td className="border-2 bg-blue-50">0</td>
-                                                                <td className="border-2 bg-blue-50">0</td>
-                                                            </tr>
-                                                    }
-                                                </tbody>
-                                            </table>
-                                        </div> */}
+                                    <td className="border-2 bg-blue-50">
+                                        {completeData["facebook_data"].length === 0 ? 
+                                            <span>없음</span>
+                                            :
+                                            <>
+                                                <span onClick={handleOpenAdSet}>보기</span>
+                                                <dialog>
+                                                    <div className="flex">
+                                                        {completeData["facebook_data"].map((adSet, index) => 
+                                                        adSet.campaign_name === product.name && adSet.date === date ? 
+                                                            <ul key={index} className="mr-10">
+                                                                <li>캠페인 이름 : {adSet.campaign_name}</li>
+                                                                <li>광고세트 이름 : {adSet.adset_name}</li>
+                                                                <li>날짜 : {adSet.date}</li>
+                                                                <li>도달수 : {adSet.reach}</li>
+                                                                <li>노출 : {adSet.impressions}</li>
+                                                                <li>빈도 : {adSet.frequency}</li>
+                                                                <li>비용 : {adSet.spend}</li>
+                                                                <li>CPM : {adSet.cpm}</li>
+                                                                <li>CTR : {adSet.website_ctr}</li>
+                                                                <li>ROAS : {adSet.purchase_roas}</li>
+                                                                <li>CPC : {adSet.cost_per_unique_inline_link_click}</li>
+                                                                <li>구매 : {adSet.purchase}</li>
+                                                                <li>랜딩페이지뷰 : {adSet.landing_page_view}</li>
+                                                                <li>링크클릭 : {adSet.link_click}</li>
+                                                                <li>결제정보추가 : {adSet.add_payment_info}</li>
+                                                                <li>장바구니 : {adSet.add_to_cart}</li>
+                                                                <li>결제시작 : {adSet.initiate_checkout}</li>
+                                                                <li>구매전환값 : {adSet.offsite_conversion_fb_pixel_purchase}</li>
+                                                                <li>결제시작전환값 : {adSet.offsite_conversion_fb_pixel_initiate_checkout}</li>
+                                                                <li>장바구니전환값 : {adSet.offsite_conversion_fb_pixel_add_to_cart}</li>
+                                                            </ul>
+                                                            :
+                                                            null
+                                                        )}
+                                                    </div>
+                                                    <form method="dialog" className="mt-5">
+                                                        <button className="text-red-400">닫기</button>
+                                                    </form>
+                                                </dialog>
+                                            </>
+                                        }
                                     </td>
                                     <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData[product.name]["date"][date]["imweb_price"])}</td>
                                     <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["date"][date]["imweb_deliv_price"])}</td>
