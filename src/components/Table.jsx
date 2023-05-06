@@ -467,6 +467,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                             <td className="border-2 bg-blue-50">US${completeData["sum"]["offsite_conversion_fb_pixel_purchase"].toFixed(2)}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["initiate_checkout"]}</td>
                             <td className="border-2 bg-blue-50">US${completeData["sum"]["offsite_conversion_fb_pixel_initiate_checkout"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">-</td>
                             <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData["sum"]["imweb_price"])}</td>
                             <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["imweb_deliv_price"])}</td>
                             <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["product_cost"])}</td>
