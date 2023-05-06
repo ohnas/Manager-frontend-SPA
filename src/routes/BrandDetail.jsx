@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getBrand, getRetrieve } from "../api";
 import Loading from "../components/Loading";
 import Table from "../components/Table";
+import ErrorPage from "../components/ErrorPage";
 
 function BrandDetail() {
     const { 
@@ -119,7 +120,13 @@ function BrandDetail() {
                             {completeDataLoading || isDateLoading ? 
                                 <Loading />
                                 :
-                                <Table brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
+                                <>
+                                {completeData === null ? 
+                                    <ErrorPage />
+                                    :
+                                    <Table brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
+                                }
+                                </>
                             }
                         </>
                     }

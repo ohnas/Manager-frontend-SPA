@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query'
 import { getMyBrand } from "../api";
 
-
 function Brand() {
     const { isLoading, data: myBrandData } = useQuery(['myBrand'], getMyBrand);
     return (

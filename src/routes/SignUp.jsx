@@ -4,7 +4,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { postSignUp } from "../api";
 
-
 function SignUp() {
     const { userData } = useOutletContext();
     const navigate = useNavigate();
