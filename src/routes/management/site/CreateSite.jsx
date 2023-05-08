@@ -16,7 +16,7 @@ function CreateSite() {
     const mutation = useMutation(postSite, 
         {
             onSuccess: () => {
-                alert("옵션 생성 완료");
+                alert("사이트 생성 완료");
                 navigate("/");
             }
         }
