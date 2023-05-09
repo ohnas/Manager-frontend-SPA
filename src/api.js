@@ -526,8 +526,8 @@ export async function postSite(siteData) {
     return data;
 }
 
-export async function getSiteList() {
-    let response = await fetch(`${baseUrl}/sites`, {
+export async function getSiteList(brandPk) {
+    let response = await fetch(`${baseUrl}/sites/${brandPk}`, {
         method : "GET",
         credentials: "include",
         headers : {
