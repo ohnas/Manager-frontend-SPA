@@ -104,6 +104,13 @@ function BrandDetail() {
                         <input {...register("dateFrom", {required:true})} name="dateFrom" id="dateFrom" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
                         <label htmlFor="retrieve_date_to">TO</label>
                         <input {...register("dateTo", {required:true})} name="dateTo" id="dateTo" type={"date"} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
+                        {/* <div className="flex flex-col">
+                            <span>날짜구간</span>
+                            <span id="yesterday" onClick={dateFilter}>어제</span>
+                            <span>최근 7일</span>
+                            <span>최근 14일</span>
+                            <span>최근 30일</span>
+                        </div> */}
                         <button className="border-solid border-2 border-emerald-300 rounded-md w-28 h-12 text-black">조회</button> 
                         <Link to={`/brands/${brandPk}/unlisting`}>
                             <button className="border-solid border-2 border-red-300 rounded-md w-28 h-12 text-black">미등록 조회</button> 

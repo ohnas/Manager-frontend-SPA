@@ -215,18 +215,34 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
             }
             totalAverageObj[date] = average
         });
+        let totalAverageValues = Object.values(totalAverageObj)
+        const result = totalAverageValues.reduce(function add(sum, currValue) {
+            return sum + currValue;
+        }, 0);
+        const totalAverage = result / totalAverageValues.length;
+        totalAverageObj["mean"] = totalAverage;
         setTotalAverage(totalAverageObj);
         setTotalAverageLoading(false);
     }
     function handleTotalImwebConversionRate() {
         let totalImwebConversionRateObj = {};
         listOfDate.forEach((date) => {
-            let rate = ((completeData["total"][date]["imweb_count"] / visitData[date]["num"]) * 100);
-            if(isNaN(rate) === true) {
-                rate = 0;
+            if (visitData[date]["num"] === 0) {
+                totalImwebConversionRateObj[date] = 0;
+            } else {
+                let rate = ((completeData["total"][date]["imweb_count"] / visitData[date]["num"]) * 100);
+                if(isNaN(rate) === true) {
+                    rate = 0;
+                }
+                totalImwebConversionRateObj[date] = rate;
             }
-            totalImwebConversionRateObj[date] = rate;
         });
+        let totalImwebConversionRateValues = Object.values(totalImwebConversionRateObj)
+        const result = totalImwebConversionRateValues.reduce(function add(sum, currValue) {
+            return sum + currValue;
+        }, 0);
+        const totalRateAverage = result / totalImwebConversionRateValues.length;
+        totalImwebConversionRateObj["mean"] = totalRateAverage;
         setTotalImwebConversionRate(totalImwebConversionRateObj);
         setTotalImwebConversionRateLoading(false);
     }
@@ -413,7 +429,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                             </tr>
                         )}
                         <tr>
-                            <td className="sticky left-0 z-50 bg-white border-2">합계</td>
+                            <td className="sticky left-0 z-50 bg-white border-2">합계 또는 평균</td>
                             {eventsCountDataLoading ?
                                 <td className="border-2 bg-red-50">0</td>
                                 :
@@ -441,30 +457,38 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                     }
                                 </>
                             }
-                            <td className="border-2 bg-gray-50">-</td>
-                            <td className="border-2 bg-gray-50">-</td>
+                            {totalAverageLoading ? 
+                                <td className="border-2 bg-gray-50">0</td>
+                                :
+                                <td className="border-2 bg-gray-50">{totalAverage["mean"].toFixed(2)}</td>
+                            }
+                            {totalImwebConversionRateLoading ? 
+                                <td className="border-2 bg-gray-50">0</td>
+                                :
+                                <td className="border-2 bg-gray-50">{totalImwebConversionRate["mean"].toFixed(2)}%</td>
+                            }
                             <td className="border-2 bg-gray-50">{completeData["imweb_nomal_order_counter"]["sum"]}</td>
                             <td className="border-2 bg-gray-50">{completeData["imweb_npay_order_counter"]["sum"]}</td>
                             <td className="border-2 bg-gray-50">{completeData["sum"]["imweb_count"]}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["reach"]}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["impressions"]}</td>
-                            <td className="border-2 bg-blue-50">{completeData["sum"]["frequency"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{completeData["mean"]["frequency"].toFixed(2)}</td>
                             <td className="border-2 bg-blue-50">US${completeData["sum"]["spend"].toFixed(2)}</td>
-                            <td className="border-2 bg-blue-50">US${completeData["sum"]["cpm"].toFixed(2)}</td>
-                            <td className="border-2 bg-blue-50">-</td>
-                            <td className="border-2 bg-blue-50">-</td>
-                            <td className="border-2 bg-blue-50">US${completeData["sum"]["cost_per_unique_inline_link_click"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">US${completeData["mean"]["cpm"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{completeData["mean"]["website_ctr"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{Math.round(completeData["mean"]["purchase_roas"]*100)}%</td>
+                            <td className="border-2 bg-blue-50">US${completeData["mean"]["cost_per_unique_inline_link_click"].toFixed(2)}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["landing_page_view"]}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["link_click"]}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["add_payment_info"]}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["add_to_cart"]}</td>
-                            <td className="border-2 bg-blue-50">US${completeData["sum"]["offsite_conversion_fb_pixel_add_to_cart"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">US${completeData["mean"]["offsite_conversion_fb_pixel_add_to_cart"].toFixed(2)}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["purchase"]}</td>
-                            <td className="border-2 bg-blue-50">-</td>
-                            <td className="border-2 bg-blue-50">US${completeData["sum"]["offsite_conversion_fb_pixel_purchase"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{completeData["mean"]["conversion_rate"].toFixed(2)}%</td>
+                            <td className="border-2 bg-blue-50">US${completeData["mean"]["offsite_conversion_fb_pixel_purchase"].toFixed(2)}</td>
                             <td className="border-2 bg-blue-50">{completeData["sum"]["initiate_checkout"]}</td>
-                            <td className="border-2 bg-blue-50">US${completeData["sum"]["offsite_conversion_fb_pixel_initiate_checkout"].toFixed(2)}</td>
-                            <td className="border-2 bg-blue-50">-</td>
+                            <td className="border-2 bg-blue-50">US${completeData["mean"]["offsite_conversion_fb_pixel_initiate_checkout"].toFixed(2)}</td>
+                            <td className="border-2 bg-blue-50">{completeData["mean"]["initiate_checkout_rate"].toFixed(2)}%</td>
                             <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData["sum"]["imweb_price"])}</td>
                             <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["imweb_deliv_price"])}</td>
                             <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["product_cost"])}</td>
@@ -479,9 +503,9 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["imweb_period_discount"])}</td>
                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["expense"])}</td>
                             <td className="border-l-4 border-r-4 border-b-4 border-purple-900 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData["sum"]["operating_profit"])}</td>
-                            <td className="border-2 bg-yellow-50">-</td>
-                            <td className="border-2 bg-yellow-50">-</td>
-                            <td className="border-2 bg-yellow-50">-</td>
+                            <td className="border-2 bg-yellow-50">{completeData["mean"]["operating_profit_rate"].toFixed(2)}%</td>
+                            <td className="border-2 bg-yellow-50">{completeData["mean"]["product_cost_rate"].toFixed(2)}%</td>
+                            <td className="border-2 bg-yellow-50">{completeData["mean"]["facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
                         </tr>
                     </tbody>
                 </table>
