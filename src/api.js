@@ -316,8 +316,8 @@ export async function postProduct(productData) {
     return data;
 }
 
-export async function getProductList() {
-    let response = await fetch(`${baseUrl}/products`, {
+export async function getProductList(brandPk) {
+    let response = await fetch(`${baseUrl}/products/${brandPk}`, {
         method : "GET",
         credentials: "include",
         headers : {
