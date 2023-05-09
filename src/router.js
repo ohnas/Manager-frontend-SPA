@@ -18,6 +18,8 @@ import UpdateProductList from "./routes/management/product/UpdateProductList";
 import UpdateProductForm from "./routes/management/product/UpdateProductForm";
 import CreateOption from "./routes/management/option/CreateOption"
 import UpdateOption from "./routes/management/option/UpdateOption"
+import UpdateOptionProductList from "./routes/management/option/UpdateOptionProductList";
+import UpdateOptionList from "./routes/management/option/UpdateOptionList";
 import UpdateOptionForm from "./routes/management/option/UpdateOptionForm";
 import CreateSite from "./routes/management/site/CreateSite"
 import UpdateSite from "./routes/management/site/UpdateSite"
@@ -97,6 +99,14 @@ const router = createBrowserRouter([
             {
                 path: "management/manageoption/update",
                 element: <UpdateOption />,
+            },
+            {
+                path: "management/manageoption/update/:brandPk/productList",
+                element: <UpdateOptionProductList />,
+            },
+            {
+                path: "management/manageoption/update/:productPk/optionList",
+                element: <UpdateOptionList />,
             },
             {
                 path: "management/manageoption/update/:optionPk",

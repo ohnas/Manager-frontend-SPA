@@ -427,8 +427,8 @@ export async function postOption(optionData) {
     return data;
 }
 
-export async function getOptionList() {
-    let response = await fetch(`${baseUrl}/products/options`, {
+export async function getOptionList(optionPk) {
+    let response = await fetch(`${baseUrl}/products/options/${optionPk}`, {
         method : "GET",
         credentials: "include",
         headers : {
