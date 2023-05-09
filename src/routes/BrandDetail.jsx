@@ -24,7 +24,7 @@ function BrandDetail() {
             refetchOnWindowFocus: false,
         }
     );
-    const { isLoading: completeDataLoading, data: completeData } = useQuery(['Retrieve', brandPk, formData], () => getRetrieve(brandPk, formData),
+    const { isLoading: completeDataLoading, data: completeData, isError: completeDataError } = useQuery(['Retrieve', brandPk, formData], () => getRetrieve(brandPk, formData),
         {
             enabled: !!formData,
             refetchOnWindowFocus: false,
@@ -128,7 +128,7 @@ function BrandDetail() {
                                 <Loading />
                                 :
                                 <>
-                                {completeData === null ? 
+                                {completeDataError ? 
                                     <ErrorPage />
                                     :
                                     <Table brandData={brandData} completeData={completeData} listOfDate={listOfDate} brandPk={brandPk} />
