@@ -680,6 +680,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                                                 <li>구매전환값 : {adSet.offsite_conversion_fb_pixel_purchase}</li>
                                                                 <li>결제시작전환값 : {adSet.offsite_conversion_fb_pixel_initiate_checkout}</li>
                                                                 <li>장바구니전환값 : {adSet.offsite_conversion_fb_pixel_add_to_cart}</li>
+                                                                <li>합계 ROAS : {adSet.sum_roas}</li>
                                                             </ul>
                                                             :
                                                             null
