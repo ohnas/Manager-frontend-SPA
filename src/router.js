@@ -14,12 +14,16 @@ import UpdateBrand from "./routes/management/brand/UpdateBrand"
 import UpdateBrandForm from "./routes/management/brand/UpdateBrandForm"
 import CreateProduct from "./routes/management/product/CreateProduct"
 import UpdateProduct from "./routes/management/product/UpdateProduct"
+import UpdateProductList from "./routes/management/product/UpdateProductList";
 import UpdateProductForm from "./routes/management/product/UpdateProductForm";
 import CreateOption from "./routes/management/option/CreateOption"
 import UpdateOption from "./routes/management/option/UpdateOption"
+import UpdateOptionProductList from "./routes/management/option/UpdateOptionProductList";
+import UpdateOptionList from "./routes/management/option/UpdateOptionList";
 import UpdateOptionForm from "./routes/management/option/UpdateOptionForm";
 import CreateSite from "./routes/management/site/CreateSite"
 import UpdateSite from "./routes/management/site/UpdateSite"
+import UpdateSiteList from "./routes/management/site/UpdateSiteList";
 import UpdateSiteForm from "./routes/management/site/UpdateSiteForm";
 
 const router = createBrowserRouter([
@@ -81,6 +85,10 @@ const router = createBrowserRouter([
                 element: <UpdateProduct />,
             },
             {
+                path: "management/manageproduct/update/:brandPk/productList",
+                element: <UpdateProductList />,
+            },
+            {
                 path: "management/manageproduct/update/:productPk",
                 element: <UpdateProductForm />,
             },
@@ -93,6 +101,14 @@ const router = createBrowserRouter([
                 element: <UpdateOption />,
             },
             {
+                path: "management/manageoption/update/:brandPk/productList",
+                element: <UpdateOptionProductList />,
+            },
+            {
+                path: "management/manageoption/update/:productPk/optionList",
+                element: <UpdateOptionList />,
+            },
+            {
                 path: "management/manageoption/update/:optionPk",
                 element: <UpdateOptionForm />,
             },
@@ -103,6 +119,10 @@ const router = createBrowserRouter([
             {
                 path: "management/managesite/update",
                 element: <UpdateSite />,
+            },
+            {
+                path: "management/managesite/update/:brandPk/siteList",
+                element: <UpdateSiteList />,
             },
             {
                 path: "management/managesite/update/:sitePk",

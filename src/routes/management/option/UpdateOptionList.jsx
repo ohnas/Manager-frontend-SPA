@@ -1,12 +1,13 @@
 import { useEffect } from "react";
-import { Link, useNavigate, useOutletContext } from "react-router-dom";
+import { Link, useNavigate, useOutletContext, useParams } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query'
-import { getBrandList } from "../../../api";
+import { getOptionList } from "../../../api";
 
-function UpdateOption() {
+function UpdateOptionList() {
     const { userData } = useOutletContext();
+    let { productPk } = useParams();
     const navigate = useNavigate();
-    const { isLoading, data: brandListData } = useQuery(['BrandList'], getBrandList,
+    const { isLoading, data: optionListData } = useQuery(['OptionList', productPk], () => getOptionList(productPk),
         {
             refetchOnWindowFocus: false,
         }
@@ -18,16 +19,16 @@ function UpdateOption() {
         }
     }, [userData]);
     return (
-        <div className="flex flex-col mt-32 justify-center items-center">
+        <div className="flex flex-col mt-6 justify-center items-center">
             {userData.is_staff ?
                 <>
                     {isLoading ? 
                         <span>Loading...</span>
                         :
                         <ul>
-                            {brandListData.map((brand) =>
-                                <Link to={`/management/manageoption/update/${brand.pk}/productList`} key={brand.pk}>
-                                    <li className="mb-10">{brand.name}</li>
+                            {optionListData.map((option) =>
+                                <Link to={`/management/manageoption/update/${option.pk}`} key={option.pk}>
+                                    <li className="mb-10">{option.name}</li>
                                 </Link>
                             )}
                         </ul>
@@ -40,4 +41,4 @@ function UpdateOption() {
     );
 }
 
-export default UpdateOption;
+export default UpdateOptionList;

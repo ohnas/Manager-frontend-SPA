@@ -1,6 +1,7 @@
 import { Link, useOutletContext } from "react-router-dom";
 import LogIn from "../components/LogIn";
 
+
 function Home() {
     const { userData } = useOutletContext();
     return (
