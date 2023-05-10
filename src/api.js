@@ -316,8 +316,8 @@ export async function postProduct(productData) {
     return data;
 }
 
-export async function getProductList() {
-    let response = await fetch(`${baseUrl}/products`, {
+export async function getProductList(brandPk) {
+    let response = await fetch(`${baseUrl}/products/${brandPk}`, {
         method : "GET",
         credentials: "include",
         headers : {
@@ -427,8 +427,8 @@ export async function postOption(optionData) {
     return data;
 }
 
-export async function getOptionList() {
-    let response = await fetch(`${baseUrl}/products/options`, {
+export async function getOptionList(optionPk) {
+    let response = await fetch(`${baseUrl}/products/options/${optionPk}`, {
         method : "GET",
         credentials: "include",
         headers : {
@@ -526,8 +526,8 @@ export async function postSite(siteData) {
     return data;
 }
 
-export async function getSiteList() {
-    let response = await fetch(`${baseUrl}/sites`, {
+export async function getSiteList(brandPk) {
+    let response = await fetch(`${baseUrl}/sites/${brandPk}`, {
         method : "GET",
         credentials: "include",
         headers : {
