@@ -183,7 +183,6 @@ function BrandDetail() {
     useEffect(() => {
         dateList();
     }, [selectedDate]);
-    console.log(formData);
     return (
         <>
             { brandDataLoading ? 
