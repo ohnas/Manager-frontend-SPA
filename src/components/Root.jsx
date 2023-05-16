@@ -10,7 +10,7 @@ function Root() {
     const [brandName, setBrandName] = useState("");
     const location = useLocation();
     useEffect(() => {
-        if(location.pathname !== "/brands") {
+        if(!location.pathname.includes("/brands/")) {
             setBrandName("");
         }
     }, [location]);
@@ -23,7 +23,7 @@ function Root() {
                     <Header userData={userData} brandName={brandName} />
                     <Outlet context={{
                                 userData: userData,
-                                brandName: [setBrandName],
+                                setBrandName,
                             }
                         } />
                     { userData.detail === "Authentication credentials were not provided." ? 

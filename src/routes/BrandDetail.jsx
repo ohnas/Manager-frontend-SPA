@@ -9,9 +9,7 @@ import ErrorPage from "../components/ErrorPage";
 
 
 function BrandDetail() {
-    const { 
-        brandName: [setBrandName],
-    } = useOutletContext();
+    const { setBrandName } = useOutletContext();
     let { brandPk } = useParams();
     const [noData, setNodata] = useState(true);
     const [formData, setFormData] = useState();
@@ -167,10 +165,10 @@ function BrandDetail() {
         setMinDate(minDayValue);
     });
     useEffect(() => {
-        if(!brandDataLoading) {
+        if(brandDataLoading === false) {
             setBrandName(brandData.name);
         }
-    }, [brandDataLoading]);
+    }, [brandDataLoading, brandPk]);
     useEffect(() => {
         maxDateVale();
         minDateVale();
