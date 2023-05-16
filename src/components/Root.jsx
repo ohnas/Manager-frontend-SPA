@@ -8,6 +8,7 @@ import Footer from "./Footer";
 function Root() {
     const { isLoading, data: userData } = useQuery(['userProfile'], getUserProfile);
     const [brandName, setBrandName] = useState("");
+    const [formData, setFormData] = useState(null);
     const location = useLocation();
     useEffect(() => {
         if(!location.pathname.includes("/brands/")) {
@@ -24,12 +25,14 @@ function Root() {
                     <Outlet context={{
                                 userData: userData,
                                 setBrandName,
+                                formData,
+                                setFormData,
                             }
                         } />
                     { userData.detail === "Authentication credentials were not provided." ? 
                         null
                         :
-                        <Footer />
+                        <Footer setFormData={setFormData} />
                     }
                 </>
             }

@@ -9,10 +9,9 @@ import ErrorPage from "../components/ErrorPage";
 
 
 function BrandDetail() {
-    const { setBrandName } = useOutletContext();
+    const { setBrandName, formData, setFormData } = useOutletContext();
     let { brandPk } = useParams();
     const [noData, setNodata] = useState(true);
-    const [formData, setFormData] = useState();
     const [selectedDate, setSelectedDate] = useState({});
     const [listOfDate, setListOfDate] = useState([]);
     const [isDateLoading, setIsDateLoading] = useState();
@@ -20,7 +19,7 @@ function BrandDetail() {
     const [minDate, setMinDate] = useState();
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const { isLoading: brandDataLoading, data: brandData } = useQuery(['Brand', brandPk], () => getBrand(brandPk),
         {
             refetchOnWindowFocus: false,
@@ -170,12 +169,21 @@ function BrandDetail() {
         }
     }, [brandDataLoading, brandPk]);
     useEffect(() => {
+        reset(
+            {
+                "saleSite":"",
+                "advertisingSite":"",
+            }
+        );
+    }, [brandPk]);
+    useEffect(() => {
         maxDateVale();
         minDateVale();
     }, []);
     useEffect(() => {
         dateList();
     }, [selectedDate]);
+    console.log(formData);
     return (
         <>
             { brandDataLoading ? 
@@ -221,7 +229,7 @@ function BrandDetail() {
                             <button className="border-solid border-2 border-red-300 rounded-md w-28 h-12 text-black">미등록 조회</button> 
                         </Link>
                     </form>
-                    {noData ? 
+                    {noData || formData === null ? 
                         <div className="flex justify-center items-center h-screen">
                             <div className="flex justify-center items-center">
                                 <span className="text-gray-400">No data.</span>
