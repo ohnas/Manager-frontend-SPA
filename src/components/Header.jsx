@@ -17,7 +17,7 @@ function Header({userData, brandName}) {
     return (
         <div className="flex justify-between h-28 items-center border-b-2">
             <Link to={"/"}>
-                <span className="text-3xl">Manager</span>
+                <span className="text-3xl">RSM</span>
             </Link>
             { brandName ? 
                     <span className="text-5xl">{brandName}</span>

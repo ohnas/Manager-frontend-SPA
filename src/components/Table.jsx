@@ -142,9 +142,6 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
             return;
         }
     }
-    function handleBlank(event) {
-        event.target.innerText = '';
-    }
     function handlePageView(event) {   
         if(event.keyCode === 13){
             event.preventDefault();
@@ -208,6 +205,9 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
         } else {
             return;
         }
+    }
+    function handleBlank(event) {
+        event.target.innerText = '';
     }
     function handleTotalAverage() {
         let totalAverageObj = {};
@@ -627,10 +627,10 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                     }
                                     <td className="border-2 bg-gray-50">{completeData[product.name]["date"][date]["imweb_count"]}</td>
                                     {product.options_set.map((option) => 
-                                        <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name][date]["option_count"]}</td>
+                                        <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name]["option_total"][date]["option_count"]}</td>
                                     )}
                                     {product.options_set.map((option) => 
-                                        <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name][date]["option_rate"].toFixed(2)}%</td>
+                                        <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name]["option_total"][date]["option_rate"].toFixed(2)}%</td>
                                     )}
                                     <td className="border-2 bg-gray-50">{completeData[product.name]["date"][date]["shipment_quantity"]}</td>
                                     <td className="border-2 bg-blue-50">{completeData[product.name]["date"][date]["reach"]}</td>
@@ -715,6 +715,93 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                     <td className="border-2 bg-yellow-50">{completeData[product.name]["date"][date]["facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
                                 </tr>
                             )}
+                           <tr>
+                                <td className="sticky left-0 z-50 bg-white border-2">합계 또는 평균</td>
+                                <td className="border-2 bg-red-50">-</td>
+                                <td className="border-2 bg-gray-50">{completeData[product.name]["sum"]["imweb_count"]}</td>
+                                {product.options_set.map((option) => 
+                                    <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name]["sum"]["option_count"]}</td>
+                                )}
+                                {product.options_set.map((option) => 
+                                    <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name]["mean"]["option_rate"].toFixed(2)}%</td>
+                                )}
+                                <td className="border-2 bg-gray-50">{completeData[product.name]["sum"]["shipment_quantity"]}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["reach"]}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["impressions"]}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["mean"]["frequency"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">US${completeData[product.name]["sum"]["spend"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">US${completeData[product.name]["mean"]["cpm"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["mean"]["website_ctr"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">{Math.round(completeData[product.name]["mean"]["purchase_roas"]*100)}%</td>
+                                <td className="border-2 bg-blue-50">US${completeData[product.name]["mean"]["cost_per_unique_inline_link_click"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["landing_page_view"]}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["link_click"]}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["add_payment_info"]}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["add_to_cart"]}</td>
+                                <td className="border-2 bg-blue-50">US${completeData[product.name]["mean"]["offsite_conversion_fb_pixel_add_to_cart"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["purchase"]}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["mean"]["conversion_rate"].toFixed(2)}%</td>
+                                <td className="border-2 bg-blue-50">US${completeData[product.name]["mean"]["offsite_conversion_fb_pixel_purchase"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["initiate_checkout"]}</td>
+                                <td className="border-2 bg-blue-50">US${completeData[product.name]["mean"]["offsite_conversion_fb_pixel_initiate_checkout"].toFixed(2)}</td>
+                                <td className="border-2 bg-blue-50">{completeData[product.name]["mean"]["initiate_checkout_rate"].toFixed(2)}%</td>
+                                <td className="border-2 bg-blue-50">
+                                    {completeData[product.name]["adset"].length === 0 ? 
+                                        <span>없음</span>
+                                        :
+                                        <>
+                                            <span onClick={handleOpenAdSet}>보기</span>
+                                            <dialog>
+                                                <div className="flex">
+                                                    {completeData[product.name]["adset"].map((adSet, index) => 
+                                                        <ul key={index} className="mr-10">
+                                                            <li>광고세트 이름 : {adSet["adset_name"]}</li>
+                                                            <li>도달수 : {adSet["sum"]["reach"]}</li>
+                                                            <li>노출 : {adSet["sum"]["impressions"]}</li>
+                                                            <li>빈도 : {adSet["mean"]["frequency"]}</li>
+                                                            <li>비용 : {adSet["sum"]["spend"]}</li>
+                                                            <li>CPM : {adSet["mean"]["cpm"]}</li>
+                                                            <li>CTR : {adSet["mean"]["website_ctr"]}</li>
+                                                            <li>ROAS : {adSet["mean"]["purchase_roas"]}</li>
+                                                            <li>CPC : {adSet["mean"]["cost_per_unique_inline_link_click"]}</li>
+                                                            <li>구매 : {adSet["sum"]["purchase"]}</li>
+                                                            <li>랜딩페이지뷰 : {adSet["sum"]["landing_page_view"]}</li>
+                                                            <li>링크클릭 : {adSet["sum"]["link_click"]}</li>
+                                                            <li>결제정보추가 : {adSet["sum"]["add_payment_info"]}</li>
+                                                            <li>장바구니 : {adSet["sum"]["add_to_cart"]}</li>
+                                                            <li>결제시작 : {adSet["sum"]["initiate_checkout"]}</li>
+                                                            <li>구매전환값 : {adSet["mean"]["offsite_conversion_fb_pixel_purchase"]}</li>
+                                                            <li>결제시작전환값 : {adSet["mean"]["offsite_conversion_fb_pixel_initiate_checkout"]}</li>
+                                                            <li>장바구니전환값 : {adSet["mean"]["offsite_conversion_fb_pixel_add_to_cart"]}</li>
+                                                            <li>합계 ROAS : {adSet["mean"]["sum_roas"]}</li>
+                                                        </ul>
+                                                    )}
+                                                </div>
+                                                <form method="dialog" className="mt-5">
+                                                    <button className="text-red-400">닫기</button>
+                                                </form>
+                                            </dialog>
+                                        </>
+                                    }
+                                </td>
+                                <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(completeData[product.name]["sum"]["imweb_price"])}</td>
+                                <td className="border-2 bg-rose-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["imweb_deliv_price"])}</td>
+                                <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["product_cost"])}</td>
+                                <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["product_profit"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["logistic_fee"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["sale_expense"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["facebook_ad_expense_krw"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["imweb_coupon"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["imweb_point"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["imweb_membership_discount"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["imweb_price_sale"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["imweb_period_discount"])}</td>
+                                <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["expense"])}</td>
+                                <td className="border-l-4 border-r-4 border-b-2 border-purple-900 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW'}).format(completeData[product.name]["sum"]["operating_profit"])}</td>
+                                <td className="border-2 bg-yellow-50">{completeData[product.name]["mean"]["operating_profit_rate"].toFixed(2)}%</td>
+                                <td className="border-2 bg-yellow-50">{completeData[product.name]["mean"]["product_cost_rate"].toFixed(2)}%</td>
+                                <td className="border-2 bg-yellow-50">{completeData[product.name]["mean"]["facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query'
 import { getBrands } from "../api";
 
-function Footer() {
+function Footer({ setFormData }) {
     const { isLoading, data: brandsData } = useQuery(['brands'], getBrands, 
         {
             refetchOnWindowFocus: false,
@@ -12,6 +12,7 @@ function Footer() {
     const { register, handleSubmit } = useForm();
     const navigate = useNavigate();
     function onSubmit(data) {
+        setFormData(null);
         navigate(`/brands/${data.brand}`);
     }
     return (
