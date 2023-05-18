@@ -322,7 +322,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">전환율</th>
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">아임웹 주문</th>
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">네이버페이 주문</th>
-                            <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
+                            <th className="border-2 border-slate-400 px-8 bg-gray-300">주문 상품 합</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">빈도</th>
