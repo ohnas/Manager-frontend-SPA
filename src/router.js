@@ -4,6 +4,7 @@ import NotFound from "./routes/NotFound";
 import Home from "./routes/Home";
 import Brand from "./routes/Brand";
 import BrandDetail from "./routes/BrandDetail";
+import MonthlyTable from "./routes/MonthlyTable";
 import Unlisting from "./routes/Unlisting";
 import SignUp from "./routes/SignUp";
 import Management from "./routes/Management";
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
             {
                 path: "brands/:brandPk",
                 element: <BrandDetail />,
+            },
+            {
+                path: "brands/:brandPk/monthly",
+                element: <MonthlyTable />,
             },
             {
                 path: "brands/:brandPk/unlisting",
