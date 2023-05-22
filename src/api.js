@@ -121,6 +121,42 @@ export async function getProductMonthRetrieve(brandPk, retrieveData) {
     return data;
 }
 
+export async function getPageMonthRetrieve(brandPk, retrieveData) {
+    let response = await fetch(`${baseUrl}/pages/${brandPk}/monthly?monthFrom=${retrieveData.monthFrom}&monthTo=${retrieveData.monthTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getVisitMonthRetrieve(brandPk, retrieveData) {
+    let response = await fetch(`${baseUrl}/visits/${brandPk}/monthly?monthFrom=${retrieveData.monthFrom}&monthTo=${retrieveData.monthTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getBrandMonthRetrieve(brandPk, retrieveData) {
+    let response = await fetch(`${baseUrl}/brands/${brandPk}/monthly?monthFrom=${retrieveData.monthFrom}&monthTo=${retrieveData.monthTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
 export async function getUnlisting(brandPk) {
     let response = await fetch(`${baseUrl}/retrieves/${brandPk}/unlisting`, {
         method : "GET",
