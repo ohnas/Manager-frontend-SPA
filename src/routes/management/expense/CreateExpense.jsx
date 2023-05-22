@@ -59,8 +59,8 @@ function CreateExpense() {
                         <form onSubmit={handleSubmit(createExpense)} className="flex flex-col justify-center items-center">
                             <label htmlFor="description">기타 비용 내용</label>
                             <input {...register("description", {required: true})} id="description" type="text" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
-                            <label htmlFor="expenseByHand">비용</label>
-                            <input {...register("expenseByHand", {required: true})} id="expenseByHand" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
+                            <label htmlFor="expense_by_hand">비용</label>
+                            <input {...register("expense_by_hand", {required: true})} id="expense_by_hand" type="number" className="border-2 rounded-md w-72 border-gray-200 mb-10" />
                             <label htmlFor="date">날짜</label>
                             <input {...register("date", {required: true})} id="date" type="date" min="2023-01-01" max={maxDate} className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center" />
                             <select {...register("brand", {required: true})} id="brand" className="border-2 rounded-md w-72 border-gray-200 mb-10 text-center">

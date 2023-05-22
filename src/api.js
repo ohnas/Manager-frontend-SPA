@@ -679,6 +679,57 @@ export async function getExpenseList(brandPk) {
     return data;
 }
 
+export async function getExpenseDetail(expensePk) {
+    let response = await fetch(`${baseUrl}/brands/update/expense/${expensePk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putExpenseDetail(expensePk, updateData) {
+    if(updateData.description === "") {
+        delete updateData.description;
+    }
+    if(updateData.expense_by_hand === "") {
+        delete updateData.expense_by_hand;
+    }
+    if(updateData.date === "") {
+        delete updateData.date;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/update/expense/${expensePk}` , {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(updateData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteExpenseDetail(expensePk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/update/expense/${expensePk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}
+
 export async function getEventsCount(brandPk, listOfDate) {
     let response = await fetch(`${baseUrl}/events/${brandPk}/count?dateFrom=${listOfDate[0]}&dateTo=${listOfDate[listOfDate.length - 1]}`, {
         method : "GET",
