@@ -100,6 +100,10 @@ function MonthlyTable() {
         let selectDialog = event.target.nextElementSibling;
         selectDialog.showModal();
     }
+    function handleOpenMissingDayList(event) {
+        let selectDialog = event.target.nextElementSibling;
+        selectDialog.showModal();
+    }
     useEffect(() => {
         if(brandDataLoading === false) {
             setBrandName(brandData.name);
@@ -177,6 +181,7 @@ function MonthlyTable() {
                                                 <thead>
                                                     <tr>
                                                         <th className="border-2 border-slate-400 px-24 py-2 sticky left-0 z-50 bg-white">날짜</th>
+                                                        <th className="border-2 border-slate-400 px-8 bg-red-400">미반영 날짜 목록</th>
                                                         {brandData.product_set.map((product) =>
                                                             <th key={product.pk} className="border-2 border-slate-400 px-16 bg-gray-300">{product.name} 판매량</th>
                                                         )}
@@ -215,6 +220,25 @@ function MonthlyTable() {
                                                     {listOfMonth.map((month, index) => 
                                                         <tr key={index}>
                                                             <td className="sticky left-0 z-50 bg-white border-2">{month}월</td>
+                                                            <td className="border-2 bg-red-50">
+                                                                {brandMonthData[month]["missing_day_list"].length === 0 ? 
+                                                                    <span>없음</span>
+                                                                    :
+                                                                    <>
+                                                                        <span onClick={handleOpenMissingDayList}>보기</span>
+                                                                        <dialog>
+                                                                            <div>
+                                                                                {brandMonthData[month]["missing_day_list"].map((day, index) =>  
+                                                                                    <li key={index}>{day}</li>
+                                                                                )}
+                                                                            </div>
+                                                                            <form method="dialog" className="mt-5">
+                                                                                <button className="text-red-400">닫기</button>
+                                                                            </form>
+                                                                        </dialog>
+                                                                    </>
+                                                                }
+                                                            </td>
                                                             {brandData.product_set.map((product) => 
                                                                 <td key={product.pk} className="border-2 bg-gray-50">{productMonthData[product.name][month]["sum_product_quantity"]}</td>
                                                             )}
