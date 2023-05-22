@@ -96,6 +96,10 @@ function MonthlyTable() {
         setTotalImwebConversionRate(totalImwebConversionRateObj);
         setTotalImwebConversionRateLoading(false);
     }
+    function handleOpenExpenseByHand(event) {
+        let selectDialog = event.target.nextElementSibling;
+        selectDialog.showModal();
+    }
     useEffect(() => {
         if(brandDataLoading === false) {
             setBrandName(brandData.name);
@@ -240,7 +244,29 @@ function MonthlyTable() {
                                                             <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_product_cost"])}</td>
                                                             <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_product_profit"])}</td>
                                                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_facebook_ad_expense_krw"])}</td>
-                                                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_expense_by_hand"])}</td>
+                                                            <td className="border-2 bg-green-50">
+                                                                {brandMonthData[month]["brand_month_expense_by_hand_list"].length === 0 ? 
+                                                                    <span>₩0</span>
+                                                                    :
+                                                                    <>
+                                                                        <span onClick={handleOpenExpenseByHand} className="text-blue-500">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_expense_by_hand"])}</span>
+                                                                        <dialog>
+                                                                            <div>
+                                                                                {brandMonthData[month]["brand_month_expense_by_hand_list"].map((expense, index) =>  
+                                                                                    <ul key={index} className="flex items-center justify-center">
+                                                                                        <li className="border-2 bg-gray-100 w-36 h-10 rounded-md mr-4 mb-4 pt-1">{expense.date}</li>
+                                                                                        <li className="border-2 bg-gray-100 w-36 h-10 rounded-md mr-4 mb-4 pt-1">{expense.description}</li>
+                                                                                        <li className="border-2 bg-gray-100 w-36 h-10 rounded-md mr-4 mb-4 pt-1">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(expense.expense_by_hand)}</li>
+                                                                                    </ul>
+                                                                                )}
+                                                                            </div>
+                                                                            <form method="dialog" className="mt-5">
+                                                                                <button className="text-red-400">닫기</button>
+                                                                            </form>
+                                                                        </dialog>
+                                                                    </>
+                                                                }
+                                                            </td>
                                                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["total_expense"])}</td>
                                                             <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_operating_profit"])}</td>
                                                             <td className="border-2 bg-yellow-50">{brandMonthData[month]["brand_month_data"]["total_facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
