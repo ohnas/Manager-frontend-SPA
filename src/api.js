@@ -667,6 +667,18 @@ export async function postExpense(expenseData) {
     return data;
 }
 
+export async function getExpenseList(brandPk) {
+    let response = await fetch(`${baseUrl}/brands/expense/list/${brandPk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
 export async function getEventsCount(brandPk, listOfDate) {
     let response = await fetch(`${baseUrl}/events/${brandPk}/count?dateFrom=${listOfDate[0]}&dateTo=${listOfDate[listOfDate.length - 1]}`, {
         method : "GET",
