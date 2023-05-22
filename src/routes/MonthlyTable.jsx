@@ -14,6 +14,7 @@ function MonthlyTable() {
     const [maxMonth, setMaxMonth] = useState();
     const [selectedMonth, setSelectedMonth] = useState(null);
     const [listOfMonth, setListOfMonth] = useState([]);
+    const [totalImwebConversionRateLoading, setTotalImwebConversionRateLoading] = useState(true);
     const [totalImwebConversionRate, setTotalImwebConversionRate] = useState({});
     const { isLoading: brandDataLoading, data: brandData } = useQuery(['Brand', brandPk], () => getBrand(brandPk),
         {
@@ -93,6 +94,7 @@ function MonthlyTable() {
             }
         });
         setTotalImwebConversionRate(totalImwebConversionRateObj);
+        setTotalImwebConversionRateLoading(false);
     }
     useEffect(() => {
         if(brandDataLoading === false) {
@@ -196,6 +198,7 @@ function MonthlyTable() {
                                                         <th className="border-2 border-slate-400 px-8 bg-fuchsia-400">총 원가</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-indigo-400">총 상품이익</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-green-400">총 광고비</th>
+                                                        <th className="border-2 border-slate-400 px-8 bg-green-400">기타 비용</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-green-400">총 비용</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-indigo-400">총 영업이익</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-yellow-400">광고비율</th>
@@ -225,7 +228,11 @@ function MonthlyTable() {
                                                             )}
                                                             <td className="border-2 bg-blue-50">{pageMonthData[month]}</td>
                                                             <td className="border-2 bg-blue-50">{visitMonthData[month]}</td>
-                                                            <td className="border-2 bg-blue-50">{totalImwebConversionRate[month].toFixed(2)}%</td>
+                                                            {totalImwebConversionRateLoading ? 
+                                                                <td className="border-2 bg-blue-50">0</td>
+                                                                :
+                                                                <td className="border-2 bg-blue-50">{totalImwebConversionRate[month].toFixed(2)}%</td>
+                                                            }
                                                             <td className="border-2 bg-blue-50">{brandMonthData[month]["brand_month_data"]["sum_imweb_nomal_order_counter"]}</td>
                                                             <td className="border-2 bg-blue-50">{brandMonthData[month]["brand_month_data"]["sum_imweb_npay_order_counter"]}</td>
                                                             <td className="border-2 bg-blue-50">{brandMonthData[month]["brand_month_data"]["sum_imweb_count"]}</td>
@@ -233,6 +240,7 @@ function MonthlyTable() {
                                                             <td className="border-2 bg-fuchsia-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_product_cost"])}</td>
                                                             <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_product_profit"])}</td>
                                                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_facebook_ad_expense_krw"])}</td>
+                                                            <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_expense_by_hand"])}</td>
                                                             <td className="border-2 bg-green-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["total_expense"])}</td>
                                                             <td className="border-2 bg-indigo-50">{new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(brandMonthData[month]["brand_month_data"]["sum_operating_profit"])}</td>
                                                             <td className="border-2 bg-yellow-50">{brandMonthData[month]["brand_month_data"]["total_facebook_ad_expense_krw_rate"].toFixed(2)}%</td>
