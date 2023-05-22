@@ -640,6 +640,33 @@ export async function deleteSiteDetail(sitePk) {
     }
 }
 
+export async function getAllBrandListByExpense() {
+    let response = await fetch(`${baseUrl}/brands/create/expense`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function postExpense(expenseData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/create/expense` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(expenseData),
+    });
+    let data = await response.json();
+    return data;
+}
+
 export async function getEventsCount(brandPk, listOfDate) {
     let response = await fetch(`${baseUrl}/events/${brandPk}/count?dateFrom=${listOfDate[0]}&dateTo=${listOfDate[listOfDate.length - 1]}`, {
         method : "GET",
