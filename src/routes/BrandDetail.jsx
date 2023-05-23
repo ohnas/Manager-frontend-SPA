@@ -190,7 +190,7 @@ function BrandDetail() {
                 :
                 <>
                     <form onSubmit={handleSubmit(onSubmit)} className="flex items-center justify-evenly mt-5" >
-                        <select {...register("saleSite", {required:true})} name="saleSite" className="border-2 rounded-md w-72 border-gray-200 text-center">
+                        <select {...register("saleSite", {required:true})} name="saleSite" className="border-2 rounded-md w-64 border-gray-200 text-center">
                             <option value="">Choose a sale site</option>
                             { brandData.site_set.map((site) => (
                                 site.kind === "sale_site" ? 
@@ -199,7 +199,7 @@ function BrandDetail() {
                                     null
                             ))}
                         </select>
-                        <select {...register("advertisingSite", {required:true})} name="advertisingSite" className="border-2 rounded-md w-72 border-gray-200 text-center">
+                        <select {...register("advertisingSite", {required:true})} name="advertisingSite" className="border-2 rounded-md w-64 border-gray-200 text-center">
                             <option value="">Choose an advertising site</option>
                             { brandData.site_set.map((site) => (
                                 site.kind === "advertising_site" ? 
@@ -209,9 +209,9 @@ function BrandDetail() {
                             ))}
                         </select>
                         <label htmlFor="dateFrom">FROM</label>
-                        <input {...register("dateFrom")} onChange={handleDateFrom} value={dateFrom} name="dateFrom" id="dateFrom" type={"date"} min={minDate} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
+                        <input {...register("dateFrom")} onChange={handleDateFrom} value={dateFrom} name="dateFrom" id="dateFrom" type={"date"} min={minDate} max={maxDate} className="border-2 rounded-md w-48 border-gray-200 text-center -ml-5" />
                         <label htmlFor="retrieve_date_to">TO</label>
-                        <input {...register("dateTo")} onChange={handleDateTo} value={dateTo} name="dateTo" id="dateTo" type={"date"} min={minDate} max={maxDate} className="border-2 rounded-md w-56 border-gray-200 text-center -ml-5" />
+                        <input {...register("dateTo")} onChange={handleDateTo} value={dateTo} name="dateTo" id="dateTo" type={"date"} min={minDate} max={maxDate} className="border-2 rounded-md w-48 border-gray-200 text-center -ml-5" />
                         <div className="flex flex-col">
                             <div className="flex flex-row items-center justify-between mb-2">
                                 <span id="today" onClick={dateFilter} className="border-b-2 text-xs text-center">오늘</span>
@@ -224,6 +224,9 @@ function BrandDetail() {
                             </div>
                         </div>
                         <button className="border-solid border-2 border-emerald-300 rounded-md w-28 h-12 text-black">조회</button> 
+                        <Link to={`/brands/${brandPk}/monthly`}>
+                            <button className="border-solid border-2 border-blue-300 rounded-md w-28 h-12 text-black">월별 조회</button> 
+                        </Link>
                         <Link to={`/brands/${brandPk}/unlisting`}>
                             <button className="border-solid border-2 border-red-300 rounded-md w-28 h-12 text-black">미등록 조회</button> 
                         </Link>

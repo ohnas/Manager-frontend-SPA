@@ -66,6 +66,17 @@ function Management() {
                                 </Link>
                             </ul>
                         </div>
+                        <div className="flex flex-col items-center mb-14">
+                            <span className="text-2xl mb-5">기타 비용</span>
+                            <ul className="flex justify-between items-center w-32">
+                                <Link to={"/management/manageexpense/create"}>
+                                    <li className="text-gray-400 hover:border-b-2 border-purple-400">create</li>
+                                </Link>
+                                <Link to={"/management/manageexpense/update"}>
+                                    <li className="text-gray-400 hover:border-b-2 border-purple-400">update</li>
+                                </Link>
+                            </ul>
+                        </div>
                     </div>
                 :
                     null

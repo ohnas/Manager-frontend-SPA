@@ -4,6 +4,7 @@ import NotFound from "./routes/NotFound";
 import Home from "./routes/Home";
 import Brand from "./routes/Brand";
 import BrandDetail from "./routes/BrandDetail";
+import MonthlyTable from "./routes/MonthlyTable";
 import Unlisting from "./routes/Unlisting";
 import SignUp from "./routes/SignUp";
 import Management from "./routes/Management";
@@ -25,6 +26,10 @@ import CreateSite from "./routes/management/site/CreateSite"
 import UpdateSite from "./routes/management/site/UpdateSite"
 import UpdateSiteList from "./routes/management/site/UpdateSiteList";
 import UpdateSiteForm from "./routes/management/site/UpdateSiteForm";
+import CreateExpense from "./routes/management/expense/CreateExpense";
+import UpdateExpense from "./routes/management/expense/UpdateExpense";
+import UpdateExpenseList from "./routes/management/expense/UpdateExpenseList";
+import UpdateExpenseForm from "./routes/management/expense/UpdateExpenseForm";
 
 const router = createBrowserRouter([
     {
@@ -43,6 +48,10 @@ const router = createBrowserRouter([
             {
                 path: "brands/:brandPk",
                 element: <BrandDetail />,
+            },
+            {
+                path: "brands/:brandPk/monthly",
+                element: <MonthlyTable />,
             },
             {
                 path: "brands/:brandPk/unlisting",
@@ -127,6 +136,22 @@ const router = createBrowserRouter([
             {
                 path: "management/managesite/update/:sitePk",
                 element: <UpdateSiteForm />,
+            },
+            {
+                path: "management/manageexpense/create",
+                element: <CreateExpense />,
+            },
+            {
+                path: "management/manageexpense/update",
+                element: <UpdateExpense />,
+            },
+            {
+                path: "management/manageexpense/update/:brandPk/expenseList",
+                element: <UpdateExpenseList />,
+            },
+            {
+                path: "management/manageexpense/update/:expensePk",
+                element: <UpdateExpenseForm />,
             },
         ]
     }

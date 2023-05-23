@@ -109,6 +109,54 @@ export async function getRetrieve(brandPk, retrieveData) {
     return data;
 }
 
+export async function getProductMonthRetrieve(brandPk, retrieveData) {
+    let response = await fetch(`${baseUrl}/products/${brandPk}/monthly?monthFrom=${retrieveData.monthFrom}&monthTo=${retrieveData.monthTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getPageMonthRetrieve(brandPk, retrieveData) {
+    let response = await fetch(`${baseUrl}/pages/${brandPk}/monthly?monthFrom=${retrieveData.monthFrom}&monthTo=${retrieveData.monthTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getVisitMonthRetrieve(brandPk, retrieveData) {
+    let response = await fetch(`${baseUrl}/visits/${brandPk}/monthly?monthFrom=${retrieveData.monthFrom}&monthTo=${retrieveData.monthTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getBrandMonthRetrieve(brandPk, retrieveData) {
+    let response = await fetch(`${baseUrl}/brands/${brandPk}/monthly?monthFrom=${retrieveData.monthFrom}&monthTo=${retrieveData.monthTo}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
 export async function getUnlisting(brandPk) {
     let response = await fetch(`${baseUrl}/retrieves/${brandPk}/unlisting`, {
         method : "GET",
@@ -580,6 +628,96 @@ export async function putSiteDetail(sitePk, updateData) {
 export async function deleteSiteDetail(sitePk) {
     let csrftoken = getCookie('csrftoken');
     let response = await fetch(`${baseUrl}/sites/update/${sitePk}`, {
+        method : "DELETE",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+    });
+    if(response.ok) {
+        return;
+    }
+}
+
+export async function getAllBrandListByExpense() {
+    let response = await fetch(`${baseUrl}/brands/create/expense`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function postExpense(expenseData) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/create/expense` , {
+        method : "POST",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(expenseData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getExpenseList(brandPk) {
+    let response = await fetch(`${baseUrl}/brands/expense/list/${brandPk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function getExpenseDetail(expensePk) {
+    let response = await fetch(`${baseUrl}/brands/update/expense/${expensePk}`, {
+        method : "GET",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+        },
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function putExpenseDetail(expensePk, updateData) {
+    if(updateData.description === "") {
+        delete updateData.description;
+    }
+    if(updateData.expense_by_hand === "") {
+        delete updateData.expense_by_hand;
+    }
+    if(updateData.date === "") {
+        delete updateData.date;
+    }
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/update/expense/${expensePk}` , {
+        method : "PUT",
+        credentials: "include",
+        headers : {
+            'Content-Type': 'application/json',
+            "X-CSRFToken": csrftoken,
+        },
+        body : JSON.stringify(updateData),
+    });
+    let data = await response.json();
+    return data;
+}
+
+export async function deleteExpenseDetail(expensePk) {
+    let csrftoken = getCookie('csrftoken');
+    let response = await fetch(`${baseUrl}/brands/update/expense/${expensePk}`, {
         method : "DELETE",
         credentials: "include",
         headers : {

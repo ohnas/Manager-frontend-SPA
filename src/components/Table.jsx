@@ -322,7 +322,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">전환율</th>
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">아임웹 주문</th>
                             <th className="border-2 border-slate-400 px-8 bg-gray-300">네이버페이 주문</th>
-                            <th className="border-2 border-slate-400 px-8 bg-gray-300">주문</th>
+                            <th className="border-2 border-slate-400 px-8 bg-gray-300">주문 상품 합</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
                             <th className="border-2 border-slate-400 px-8 bg-blue-300">빈도</th>
@@ -432,7 +432,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                             </tr>
                         )}
                         <tr>
-                            <td className="sticky left-0 z-50 bg-white border-2">합계 또는 평균</td>
+                            <td className="sticky left-0 z-50 bg-white border-2">합 또는 평균</td>
                             {eventsCountDataLoading ?
                                 <td className="border-2 bg-red-50">0</td>
                                 :
@@ -563,6 +563,8 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                 {product.options_set.map((option) =>
                                     <th key={option.pk} className="border-2 border-slate-400 px-16 bg-gray-300">{option.name} 판매율</th>
                                 )}
+                                <th className="border-2 border-slate-400 px-8 bg-gray-300">판매</th>
+                                <th className="border-2 border-slate-400 px-8 bg-gray-300">증정</th>
                                 <th className="border-2 border-slate-400 px-8 bg-gray-300">총수량</th>
                                 <th className="border-2 border-slate-400 px-8 bg-blue-300">도달수</th>
                                 <th className="border-2 border-slate-400 px-8 bg-blue-300">노출</th>
@@ -632,6 +634,8 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                     {product.options_set.map((option) => 
                                         <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name]["option_total"][date]["option_rate"].toFixed(2)}%</td>
                                     )}
+                                    <td className="border-2 bg-gray-50">{completeData[product.name]["date"][date]["product_quantity"]}</td>
+                                    <td className="border-2 bg-gray-50">{completeData[product.name]["date"][date]["product_gift_quantity"]}</td>
                                     <td className="border-2 bg-gray-50">{completeData[product.name]["date"][date]["shipment_quantity"]}</td>
                                     <td className="border-2 bg-blue-50">{completeData[product.name]["date"][date]["reach"]}</td>
                                     <td className="border-2 bg-blue-50">{completeData[product.name]["date"][date]["impressions"]}</td>
@@ -668,12 +672,12 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                                                 <li>날짜 : {adSet.date}</li>
                                                                 <li>도달수 : {adSet.reach}</li>
                                                                 <li>노출 : {adSet.impressions}</li>
-                                                                <li>빈도 : {adSet.frequency}</li>
-                                                                <li>비용 : {adSet.spend}</li>
-                                                                <li>CPM : {adSet.cpm}</li>
-                                                                <li>CTR : {adSet.website_ctr}</li>
-                                                                <li>ROAS : {adSet.purchase_roas}</li>
-                                                                <li>CPC : {adSet.cost_per_unique_inline_link_click}</li>
+                                                                <li>빈도 : {adSet.frequency.toFixed(2)}</li>
+                                                                <li>비용 : {adSet.spend.toFixed(2)}</li>
+                                                                <li>CPM : {adSet.cpm.toFixed(2)}</li>
+                                                                <li>CTR : {adSet.website_ctr.toFixed(2)}</li>
+                                                                <li>ROAS : {Math.round(adSet.purchase_roas*100)}%</li>
+                                                                <li>CPC : {adSet.cost_per_unique_inline_link_click.toFixed(2)}</li>
                                                                 <li>구매 : {adSet.purchase}</li>
                                                                 <li>랜딩페이지뷰 : {adSet.landing_page_view}</li>
                                                                 <li>링크클릭 : {adSet.link_click}</li>
@@ -683,7 +687,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                                                 <li>구매전환값 : {adSet.offsite_conversion_fb_pixel_purchase}</li>
                                                                 <li>결제시작전환값 : {adSet.offsite_conversion_fb_pixel_initiate_checkout}</li>
                                                                 <li>장바구니전환값 : {adSet.offsite_conversion_fb_pixel_add_to_cart}</li>
-                                                                <li>합계 ROAS : {adSet.sum_roas}</li>
+                                                                <li>합계 ROAS : {adSet.sum_roas.toFixed(2)}%</li>
                                                             </ul>
                                                             :
                                                             null
@@ -716,7 +720,7 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                 </tr>
                             )}
                            <tr>
-                                <td className="sticky left-0 z-50 bg-white border-2">합계 또는 평균</td>
+                                <td className="sticky left-0 z-50 bg-white border-2">합 또는 평균</td>
                                 <td className="border-2 bg-red-50">-</td>
                                 <td className="border-2 bg-gray-50">{completeData[product.name]["sum"]["imweb_count"]}</td>
                                 {product.options_set.map((option) => 
@@ -725,6 +729,8 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                 {product.options_set.map((option) => 
                                     <td key={option.pk} className="border-2 bg-gray-50">{completeData[product.name]["options"][option.name]["mean"]["option_rate"].toFixed(2)}%</td>
                                 )}
+                                <td className="border-2 bg-gray-50">{completeData[product.name]["sum"]["product_quantity"]}</td>
+                                <td className="border-2 bg-gray-50">{completeData[product.name]["sum"]["product_gift_quantity"]}</td>
                                 <td className="border-2 bg-gray-50">{completeData[product.name]["sum"]["shipment_quantity"]}</td>
                                 <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["reach"]}</td>
                                 <td className="border-2 bg-blue-50">{completeData[product.name]["sum"]["impressions"]}</td>
@@ -758,22 +764,22 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                                             <li>광고세트 이름 : {adSet["adset_name"]}</li>
                                                             <li>도달수 : {adSet["sum"]["reach"]}</li>
                                                             <li>노출 : {adSet["sum"]["impressions"]}</li>
-                                                            <li>빈도 : {adSet["mean"]["frequency"]}</li>
-                                                            <li>비용 : {adSet["sum"]["spend"]}</li>
-                                                            <li>CPM : {adSet["mean"]["cpm"]}</li>
-                                                            <li>CTR : {adSet["mean"]["website_ctr"]}</li>
-                                                            <li>ROAS : {adSet["mean"]["purchase_roas"]}</li>
-                                                            <li>CPC : {adSet["mean"]["cost_per_unique_inline_link_click"]}</li>
+                                                            <li>빈도 : {adSet["mean"]["frequency"].toFixed(2)}</li>
+                                                            <li>비용 : {adSet["sum"]["spend"].toFixed(2)}</li>
+                                                            <li>CPM : {adSet["mean"]["cpm"].toFixed(2)}</li>
+                                                            <li>CTR : {adSet["mean"]["website_ctr"].toFixed(2)}</li>
+                                                            <li>ROAS : {Math.round(adSet["mean"]["purchase_roas"]*100)}%</li>
+                                                            <li>CPC : {adSet["mean"]["cost_per_unique_inline_link_click"].toFixed(2)}</li>
                                                             <li>구매 : {adSet["sum"]["purchase"]}</li>
                                                             <li>랜딩페이지뷰 : {adSet["sum"]["landing_page_view"]}</li>
                                                             <li>링크클릭 : {adSet["sum"]["link_click"]}</li>
                                                             <li>결제정보추가 : {adSet["sum"]["add_payment_info"]}</li>
                                                             <li>장바구니 : {adSet["sum"]["add_to_cart"]}</li>
                                                             <li>결제시작 : {adSet["sum"]["initiate_checkout"]}</li>
-                                                            <li>구매전환값 : {adSet["mean"]["offsite_conversion_fb_pixel_purchase"]}</li>
-                                                            <li>결제시작전환값 : {adSet["mean"]["offsite_conversion_fb_pixel_initiate_checkout"]}</li>
-                                                            <li>장바구니전환값 : {adSet["mean"]["offsite_conversion_fb_pixel_add_to_cart"]}</li>
-                                                            <li>합계 ROAS : {adSet["mean"]["sum_roas"]}</li>
+                                                            <li>구매전환값 : {adSet["sum"]["offsite_conversion_fb_pixel_purchase"]}</li>
+                                                            <li>결제시작전환값 : {adSet["sum"]["offsite_conversion_fb_pixel_initiate_checkout"]}</li>
+                                                            <li>장바구니전환값 : {adSet["sum"]["offsite_conversion_fb_pixel_add_to_cart"]}</li>
+                                                            <li>합계 ROAS : {adSet["mean"]["sum_roas"].toFixed(2)}%</li>
                                                         </ul>
                                                     )}
                                                 </div>
