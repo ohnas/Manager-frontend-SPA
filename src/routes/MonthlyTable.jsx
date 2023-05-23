@@ -202,7 +202,7 @@ function MonthlyTable() {
                                                         <th className="border-2 border-slate-400 px-8 bg-blue-400">전환율</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-blue-400">아임웹 주문</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-blue-400">네이버페이 주문</th>
-                                                        <th className="border-2 border-slate-400 px-8 bg-blue-400">총 주문</th>
+                                                        <th className="border-2 border-slate-400 px-8 bg-blue-400">총 주문 수량의 합</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-rose-400">총 매출</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-fuchsia-400">총 원가</th>
                                                         <th className="border-2 border-slate-400 px-8 bg-indigo-400">총 상품이익</th>
