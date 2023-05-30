@@ -667,27 +667,174 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                                         {completeData["facebook_data"].map((adSet, index) => 
                                                         adSet.campaign_name === product.name && adSet.date === date ? 
                                                             <ul key={index} className="mr-10">
-                                                                <li>캠페인 이름 : {adSet.campaign_name}</li>
-                                                                <li>광고세트 이름 : {adSet.adset_name}</li>
-                                                                <li>날짜 : {adSet.date}</li>
-                                                                <li>도달수 : {adSet.reach}</li>
-                                                                <li>노출 : {adSet.impressions}</li>
-                                                                <li>빈도 : {adSet.frequency.toFixed(2)}</li>
-                                                                <li>비용 : {adSet.spend.toFixed(2)}</li>
-                                                                <li>CPM : {adSet.cpm.toFixed(2)}</li>
-                                                                <li>CTR : {adSet.website_ctr.toFixed(2)}</li>
-                                                                <li>ROAS : {Math.round(adSet.purchase_roas*100)}%</li>
-                                                                <li>CPC : {adSet.cost_per_unique_inline_link_click.toFixed(2)}</li>
-                                                                <li>구매 : {adSet.purchase}</li>
-                                                                <li>랜딩페이지뷰 : {adSet.landing_page_view}</li>
-                                                                <li>링크클릭 : {adSet.link_click}</li>
-                                                                <li>결제정보추가 : {adSet.add_payment_info}</li>
-                                                                <li>장바구니 : {adSet.add_to_cart}</li>
-                                                                <li>결제시작 : {adSet.initiate_checkout}</li>
-                                                                <li>구매전환값 : {adSet.offsite_conversion_fb_pixel_purchase}</li>
-                                                                <li>결제시작전환값 : {adSet.offsite_conversion_fb_pixel_initiate_checkout}</li>
-                                                                <li>장바구니전환값 : {adSet.offsite_conversion_fb_pixel_add_to_cart}</li>
-                                                                <li>합계 ROAS : {adSet.sum_roas.toFixed(2)}%</li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>캠페인 이름</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.campaign_name}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>광고세트 이름</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.adset_name}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>날짜</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.date}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>도달수</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.reach}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>노출</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.impressions}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>빈도</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.frequency.toFixed(2)}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>비용</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.spend.toFixed(2)}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>CPM</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.cpm.toFixed(2)}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>CTR</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.website_ctr.toFixed(2)}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>ROAS</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{Math.round(adSet.purchase_roas*100)}%</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>CPC</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.cost_per_unique_inline_link_click.toFixed(2)}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>구매</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.purchase}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>랜딩페이지뷰</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.landing_page_view}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>링크클릭</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.link_click}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>결제정보추가</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.add_payment_info}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>장바구니</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.add_to_cart}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>결제시작</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.initiate_checkout}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>구매전환값</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.offsite_conversion_fb_pixel_purchase}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>결제시작전환값</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.offsite_conversion_fb_pixel_initiate_checkout}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>장바구니전환값</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.offsite_conversion_fb_pixel_add_to_cart}</span>
+                                                                    </div>
+                                                                </li>
+                                                                <li className="flex items-center w-96 mb-1">
+                                                                    <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                        <span>합계 ROAS</span>
+                                                                    </div>
+                                                                    <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                        <span>{adSet.sum_roas.toFixed(2)}%</span>
+                                                                    </div>
+                                                                </li>
                                                             </ul>
                                                             :
                                                             null
@@ -761,25 +908,158 @@ function Table({ brandData, completeData, listOfDate, brandPk}) {
                                                 <div className="flex">
                                                     {completeData[product.name]["adset"].map((adSet, index) => 
                                                         <ul key={index} className="mr-10">
-                                                            <li>광고세트 이름 : {adSet["adset_name"]}</li>
-                                                            <li>도달수 : {adSet["sum"]["reach"]}</li>
-                                                            <li>노출 : {adSet["sum"]["impressions"]}</li>
-                                                            <li>빈도 : {adSet["mean"]["frequency"].toFixed(2)}</li>
-                                                            <li>비용 : {adSet["sum"]["spend"].toFixed(2)}</li>
-                                                            <li>CPM : {adSet["mean"]["cpm"].toFixed(2)}</li>
-                                                            <li>CTR : {adSet["mean"]["website_ctr"].toFixed(2)}</li>
-                                                            <li>ROAS : {Math.round(adSet["mean"]["purchase_roas"]*100)}%</li>
-                                                            <li>CPC : {adSet["mean"]["cost_per_unique_inline_link_click"].toFixed(2)}</li>
-                                                            <li>구매 : {adSet["sum"]["purchase"]}</li>
-                                                            <li>랜딩페이지뷰 : {adSet["sum"]["landing_page_view"]}</li>
-                                                            <li>링크클릭 : {adSet["sum"]["link_click"]}</li>
-                                                            <li>결제정보추가 : {adSet["sum"]["add_payment_info"]}</li>
-                                                            <li>장바구니 : {adSet["sum"]["add_to_cart"]}</li>
-                                                            <li>결제시작 : {adSet["sum"]["initiate_checkout"]}</li>
-                                                            <li>구매전환값 : {adSet["sum"]["offsite_conversion_fb_pixel_purchase"]}</li>
-                                                            <li>결제시작전환값 : {adSet["sum"]["offsite_conversion_fb_pixel_initiate_checkout"]}</li>
-                                                            <li>장바구니전환값 : {adSet["sum"]["offsite_conversion_fb_pixel_add_to_cart"]}</li>
-                                                            <li>합계 ROAS : {adSet["mean"]["sum_roas"].toFixed(2)}%</li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>광고세트 이름</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["adset_name"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>도달수</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["reach"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>노출</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["impressions"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>빈도</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["mean"]["frequency"].toFixed(2)}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>비용</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["spend"].toFixed(2)}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>CPM</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["mean"]["cpm"].toFixed(2)}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>CTR</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["mean"]["website_ctr"].toFixed(2)}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>ROAS</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{Math.round(adSet["mean"]["purchase_roas"]*100)}%</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>CPC</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["mean"]["cost_per_unique_inline_link_click"].toFixed(2)}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>구매</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["purchase"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>랜딩페이지뷰</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["landing_page_view"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>링크클릭</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["link_click"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>결제정보추가</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["add_payment_info"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>장바구니</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["add_to_cart"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>결제시작</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["initiate_checkout"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>구매전환값</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["offsite_conversion_fb_pixel_purchase"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>결제시작전환값</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["offsite_conversion_fb_pixel_initiate_checkout"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>장바구니전환값</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["sum"]["offsite_conversion_fb_pixel_add_to_cart"]}</span>
+                                                                </div>
+                                                            </li>
+                                                            <li className="flex items-center w-96 mb-1">
+                                                                <div className="w-52 bg-blue-300 py-1 rounded-l-md">
+                                                                    <span>합계 ROAS</span>
+                                                                </div>
+                                                                <div className="w-72 bg-blue-50 py-1 rounded-r-md">
+                                                                    <span>{adSet["mean"]["sum_roas"].toFixed(2)}%</span>
+                                                                </div>
+                                                            </li>
                                                         </ul>
                                                     )}
                                                 </div>
