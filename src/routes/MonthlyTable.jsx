@@ -138,7 +138,7 @@ function MonthlyTable() {
                     {noData ? 
                         <div className="flex justify-center items-center h-screen">
                             <div className="flex justify-center items-center">
-                                <span className="text-gray-400">No data.</span>
+                                <span className="text-red-500">No data.</span>
                             </div>
                         </div>
                         :
